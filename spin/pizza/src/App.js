@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 
+/* navbar includes login */
 function Navbar() {
   return (
     <nav>
@@ -12,6 +13,7 @@ function Navbar() {
   );
 }
 
+/* styling items on the left hand side */
 function Item(props) {
   return (
     <div className="item" style={{ backgroundColor: props.color }}>
@@ -25,14 +27,17 @@ function Order() {
     <div className="order-box">
       <div className='items'>
         <div className="item-box">
-          <Item name="Sauce" color="gray" />
-          <Item name="Cheese" color="gray" />
-          <Item name="Topping" color="gray" />
-          <Item name="Drizzle" color="gray" />
-          <Item name="Drink" color="gray" />
-          <Item name="Dough" color="gray" />
-          <Item name="Seasonal" color="gray" />
+          <Item name="Sauce" color="black" />
+          <Item name="Cheese" color="black" />
+          <Item name="Topping" color="black" />
+          <Item name="Drizzle" color="black" />
+          <Item name="Drink" color="black" />
+          <Item name="Dough" color="black" />
+          <Item name="Seasonal" color="black" />
         </div>
+      </div>
+      <div className="options">
+
       </div>
     </div>
   );

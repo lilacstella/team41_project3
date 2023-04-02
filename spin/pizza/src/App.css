@@ -59,6 +59,7 @@ nav {
   display: flex;
   height: 100%;
   flex-direction: column;
+  color: rgba(240, 248, 255, 0.653);
 }
 
 .item {
@@ -69,7 +70,6 @@ nav {
   justify-content: center;
   align-items: center;
   text-align: center;
-  color:
 }
 
 .item h2 {
