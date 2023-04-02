@@ -186,3 +186,31 @@ def get_max_order():
             connection.close()
             print("PostgreSQL connection is closed")
 
+#order json passed as list of orderitem dicts
+def process_order(orderjson):
+    connection = None
+    try:
+        connection = psycopg2.connect(user="csce315331_team_41_master",
+                                       password="goldfishwithnuts",
+                                       host="csce-315-db.engr.tamu.edu",
+                                       database="csce315331_team_41")
+        cursor = connection.cursor()
+        order_dict = json.load(orderjson)
+        #update orderhistory
+        order_history_info = order_dict["orderhistory"]
+        order_history_query = "INSERT INTO order_history VALUES (%d, %f, '%s', '%s', %d)"
+        order_history_tuple = (order_history_info["ordernumber"], order_history_info["total"], order_history_info["paymentform"], order_history_info["orderedat"], order_history_info["employeeid"])
+        cursor.execute(order_history_query,order_history_tuple)
+
+        #update item
+        for item in order_dict["orderitems"]:
+            
+
+        #update inventory
+        #update ivnentory from item
+
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
