@@ -12,12 +12,48 @@ function Navbar() {
   );
 }
 
+function Item(props) {
+  return (
+    <div className="item" style={{ backgroundColor: props.color }}>
+      <h2>{props.name}</h2>
+    </div>
+  );
+}
+
+function Order() {
+  return (
+    <div className="order-box">
+      <div className='items'>
+        <div className="item-box">
+          <Item name="Sauce" color="gray" />
+          <Item name="Cheese" color="gray" />
+          <Item name="Topping" color="gray" />
+          <Item name="Drizzle" color="gray" />
+          <Item name="Drink" color="gray" />
+          <Item name="Dough" color="gray" />
+          <Item name="Seasonal" color="gray" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Cart() {
+  return (
+    <div className="cart-box">
+      Cart
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <div className="App">
       <Navbar />
-      <h1>Hello, World!</h1>
-      <p>This is a gray page.</p>
+      <div className="box-container">
+        {Order()}
+        {Cart()}
+      </div>
     </div>
   );
 }

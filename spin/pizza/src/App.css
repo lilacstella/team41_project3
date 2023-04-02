@@ -4,7 +4,6 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Added to position login button on the right */
 }
 
 .left-nav {
@@ -30,4 +29,63 @@ nav {
   cursor: pointer;
   background-color: gray;
   color: white;
+}
+
+.order-box {
+  width: 1075px;
+  background-color: lightgray;
+  float: left;
+  height: 100%;
+
+}
+
+.cart-box {
+  width: 550px;
+  background-color: lightgray;
+  float: left;
+  height: 100%;
+}
+
+.box-container {
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 100vh;
+}
+
+.item-box {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.item {
+  width: 150px;
+  height: 90px;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color:
+}
+
+.item h2 {
+  font-size: 1.5em;
+  color: white;
+}
+
+.item:hover {
+  cursor: pointer;
+}
+
+.App {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
 }
