@@ -8,17 +8,12 @@ nav {
 }
 
 nav h1{
-  font-size: 55px;
+  font-size: 3.5em;
   color: black;
 }
 
 .left-nav {
   margin-left: 75px;
-}
-
-.left-nav p {
-  font-size: 3em;
-  color: white;
 }
 
 .login-btn {
@@ -29,6 +24,7 @@ nav h1{
   background-color: white;
   color: black;
   font-size: 1.5em;
+  font-weight: bold;
 }
 
 .login-btn:hover {

@@ -37,7 +37,6 @@ function Order() {
         </div>
       </div>
       <div className="options">
-
       </div>
     </div>
   );
