@@ -48,6 +48,7 @@ def get_menus():
             saucesdata = {"saucename": row[0]}
             sauces_list.append(saucesdata)
         menu_results["sauces"] = sauces_list
+
         #add cheeses
         select_cheeses = "SELECT InventoryItem FROM Inventory_t WHERE Category='Cheese'"
         cursor.execute(select_cheeses)
@@ -57,6 +58,7 @@ def get_menus():
             cheesedata = {"cheesename": row[0]}
             cheeses_list.append(cheesedata)
         menu_results["cheese"] = cheeses_list
+
         #add toppings 
         select_toppings = "SELECT InventoryItem FROM Inventory_t WHERE Category LIKE '%Topping%'"
         cursor.execute(select_toppings)
@@ -83,7 +85,6 @@ def get_menus():
         prices_list = cursor.fetchone()
         price = {"price": float(prices_list[0])}
         menu_results["fountaindrink"] = price
-
 
         # add all drinks
         select_drinks = "SELECT m.menuitem, m.price FROM menu_t m INNER JOIN inventory_t i ON m.menuitem = i.inventoryitem WHERE i.category = 'Drink';"
@@ -134,51 +135,21 @@ def get_menus():
         price = {"price": float(multitoppizzaprice[0])}
         menu_results["multitoppingpizzaprice"] = price
 
+        #max line number
+        select_max_line = "SELECT MAX(LineNumber) FROM OrderItem_T;"
+        cursor.execute(select_max_line)
+        maxline = cursor.fetchone()
+        maxlinejson = {"maxlinenum": maxline[0]}
+        menu_results["maxline"] = maxlinejson
+
+        #max order number
+        select_max_order = "SELECT MAX(OrderNumber) FROM OrderItem_T;"
+        cursor.execute(select_max_order)
+        maxorder = cursor.fetchone()
+        maxorderjson = {"maxordernum": maxorder[0]}
+        menu_results["maxorder"] = maxorderjson
+
         return menu_results
-
-    finally:
-        if connection:
-            cursor.close()
-            connection.close()
-            print("PostgreSQL connection is closed")
-
-#returns max line number in JSON
-def get_max_line():
-    connection = None
-    try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                       password="goldfishwithnuts",
-                                       host="csce-315-db.engr.tamu.edu",
-                                       database="csce315331_team_41")
-        cursor = connection.cursor()
-        select_max = "SELECT MAX(LineNumber) FROM OrderItem_T;"
-        cursor.execute(select_max)
-        result = cursor.fetchone()
-        maxline = {"linenum": result[0]}
-        # Return as a JSON string
-        return json.dumps(maxline)
-
-    finally:
-        if connection:
-            cursor.close()
-            connection.close()
-            print("PostgreSQL connection is closed")
-
-#returns max order number in JSON
-def get_max_order():
-    connection = None
-    try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                       password="goldfishwithnuts",
-                                       host="csce-315-db.engr.tamu.edu",
-                                       database="csce315331_team_41")
-        cursor = connection.cursor()
-        select_max = "SELECT MAX(OrderNumber) FROM OrderItem_T;"
-        cursor.execute(select_max)
-        result = cursor.fetchone()
-        maxorder = {"ordernum": result[0]}
-        # Return as a JSON string
-        return json.dumps(maxorder)
 
     finally:
         if connection:
@@ -202,8 +173,28 @@ def process_order(orderjson):
         order_history_tuple = (order_history_info["ordernumber"], order_history_info["total"], order_history_info["paymentform"], order_history_info["orderedat"], order_history_info["employeeid"])
         cursor.execute(order_history_query,order_history_tuple)
 
-        #update item
+        
         for item in order_dict["orderitems"]:
+            #add item to orderitem
+            query = "INSERT INTO orderitem_t VALUES (%d, %d, '%s', '%s', '%s', %s'%s');"
+            itemtuple = (item["linenumber"], item["ordernumber"], item["itemname"], item["sauce"], item["cheese"], item["topping1"], item["topping2"], item["topping3"], item["topping4"],item["drizzle"])
+            #remove from inventory
+            #pizza
+            if(item["type"] == "Pizza"):
+                updatesauce = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
+                updatecheese = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
+                updatedrizzle = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
+                if(item["topping1"] != None):
+                    print()
+                if(item["topping2"] != None):
+                    print()
+                if(item["topping3"] != None):
+                    print()
+                if(item["topping4"] != None):
+                    print()
+            else:
+                updateinvother = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
+
             
 
         #update inventory
