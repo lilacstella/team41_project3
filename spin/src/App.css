@@ -1,3 +1,4 @@
+/* Navigation */
 nav {
   height: 150px;
   background-color: #e7b449;
@@ -32,66 +33,7 @@ nav h1{
   background-color: rgb(233, 233, 233);
 }
 
-.order-box {
-  width: 60vw;
-  background-color: white;
-  float: left;
-  height: 100%;
-  overflow-y: scroll;
-}
-
-.cart-box {
-  width: 35vw;
-  background-color: white;
-  float: left;
-  height: 100%;
-  overflow-y: scroll;
-}
-
-.cart-box h1 {
-  text-align: center;
-  font-size: 20;
-}
-
-.box-container {
-  overflow: hidden;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: stretch;
-  height: 80vh;
-  border-bottom: 5px solid black;
-
-}
-
-.item-box {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  color: rgba(240, 248, 255, 0.653);
-}
-
-.item {
-  width: 150px;
-  height: 90px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: black;
-  background-color: #e7b449;
-  border-bottom: 3px solid #d3a43e;
-}
-
-.item h2 {
-  font-size: 1.5em;
-}
-
-.item:hover {
-  cursor: pointer;
-  background-color: #f8db9c;
-}
-
+/* Overall window */
 .App {
   height: 100%;
 }

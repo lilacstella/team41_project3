@@ -1,0 +1,35 @@
+.tab-box {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    color: rgba(240, 248, 255, 0.653);
+}
+
+.tabs {
+    width: 150px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: black;
+    background-color: #e7b449;
+    border-bottom: 3px solid #d3a43e;
+}
+
+.tabs h2 {
+    font-size: 1.5em;
+}
+
+.tabs:hover {
+    cursor: pointer;
+    background-color: #f8db9c;
+}
+
+.order-box {
+    width: 60vw;
+    background-color: white;
+    float: left;
+    height: 100%;
+    overflow-y: scroll;
+}
