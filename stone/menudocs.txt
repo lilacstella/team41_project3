@@ -15,6 +15,8 @@ menu["multitoppingpizzaprice"] returns json with price of 2-4 topping pizza
 menu["maxline"] returns maxlinenum
 menu["maxorder"] returns maxorder
 
+run json.dumps(menu[insert_name_here]) to get it in json form
+
 
 REQUIREMENTS FOR ORDER HISTORY
 process_order:
