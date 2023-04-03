@@ -1,4 +1,7 @@
-#returns max line number in JSON
+import psycopg2
+import json
+
+#returns inventory in JSON
 def get_current_inventory():
     connection = None
     try:
@@ -26,3 +29,50 @@ def get_current_inventory():
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
+
+def restock_all():
+    connection = None
+    try:
+        connection = psycopg2.connect(user="csce315331_team_41_master",
+                                       password="goldfishwithnuts",
+                                       host="csce-315-db.engr.tamu.edu",
+                                       database="csce315331_team_41")
+        cursor = connection.cursor()
+        restock_inventory = "UPDATE Inventory_t SET Quantity = 500"
+        cursor.execute(restock_inventory)
+        connection.commit()
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+def restock_item(restock_json): 
+    connection = None
+    try:
+        connection = psycopg2.connect(user="csce315331_team_41_master",
+                                       password="goldfishwithnuts",
+                                       host="csce-315-db.engr.tamu.edu",
+                                       database="csce315331_team_41")
+        cursor = connection.cursor()
+        restock_json_dict = json.loads(restock_json)
+        # Update the inventory with the specified item and restock amount using a parameterized query
+        restock_query = "UPDATE Inventory_t SET Quantity = %s WHERE InventoryItem = %s"
+        for item_data in restock_json_dict:
+            inventory_item = item_data['InventoryItem']
+            restock_amount = item_data['Quantity']
+            cursor.execute(restock_query, (restock_amount, inventory_item))
+            connection.commit()
+            
+    except (Exception, psycopg2.Error) as error:
+        print("Error while connecting to PostgreSQL", error)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+#restock_all()
+restock = '[{"InventoryItem": "Carboard Boxes","Quantity": 10000}]'
+
+restock_item(restock)
