@@ -6,7 +6,7 @@ function Navbar() {
   return (
     <nav>
       <div className="left-nav">
-        <p>Spin N' Stone</p>
+        <h1>Spin N' Stone</h1>
       </div>
       <button className="login-btn">Login</button>
     </nav>
@@ -27,13 +27,13 @@ function Order() {
     <div className="order-box">
       <div className='items'>
         <div className="item-box">
-          <Item name="Sauce" color="black" />
-          <Item name="Cheese" color="black" />
-          <Item name="Topping" color="black" />
-          <Item name="Drizzle" color="black" />
-          <Item name="Drink" color="black" />
-          <Item name="Dough" color="black" />
-          <Item name="Seasonal" color="black" />
+          <Item name="Sauce" />
+          <Item name="Cheese" />
+          <Item name="Topping" />
+          <Item name="Drizzle" />
+          <Item name="Drink" />
+          <Item name="Dough" />
+          <Item name="Seasonal" />
         </div>
       </div>
       <div className="options">
@@ -46,7 +46,7 @@ function Order() {
 function Cart() {
   return (
     <div className="cart-box">
-      Cart
+      <h1>Cart</h1>
     </div>
   );
 }
