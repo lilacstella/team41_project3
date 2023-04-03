@@ -1,6 +1,7 @@
 import psycopg2
 import json
 
+#for later login stuff????
 def get_employees():
     connection = None
     try:
@@ -169,39 +170,81 @@ def process_order(orderjson):
         order_dict = json.load(orderjson)
         #update orderhistory
         order_history_info = order_dict["orderhistory"]
-        order_history_query = "INSERT INTO order_history VALUES (%d, %f, '%s', '%s', %d)"
+        order_history_query = "INSERT INTO order_history VALUES (%s, %s, %s, %s, %s);"
         order_history_tuple = (order_history_info["ordernumber"], order_history_info["total"], order_history_info["paymentform"], order_history_info["orderedat"], order_history_info["employeeid"])
         cursor.execute(order_history_query,order_history_tuple)
 
         
         for item in order_dict["orderitems"]:
             #add item to orderitem
-            query = "INSERT INTO orderitem_t VALUES (%d, %d, '%s', '%s', '%s', %s'%s');"
+            query = "INSERT INTO orderitem_t VALUES (%s, %s, %s, %s, %s, %s,%s, %s, %s, %s);"
             itemtuple = (item["linenumber"], item["ordernumber"], item["itemname"], item["sauce"], item["cheese"], item["topping1"], item["topping2"], item["topping3"], item["topping4"],item["drizzle"])
-            #remove from inventory
+            cursor.execute(query, itemtuple)
+            #remove stuff from inventory
             #pizza
-            if(item["type"] == "Pizza"):
-                updatesauce = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
-                updatecheese = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
-                updatedrizzle = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
-                if(item["topping1"] != None):
-                    print()
-                if(item["topping2"] != None):
-                    print()
-                if(item["topping3"] != None):
-                    print()
-                if(item["topping4"] != None):
-                    print()
+            if(item["itemname"] == "1 Topping Pizza" or item["itemname"] == "Original Cheese Pizza" or item["itemname"] == "2-4 Topping Pizza"):
+                #doughs
+                updatedough = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                doughtuple = (item["dough"],)
+                cursor.execute(updatedough, doughtuple)
+                #boxes
+                updatebox = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = 'Carboard Boxes';"
+                cursor.execute(updatebox)
+                #sauce
+                updatesauce = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s;"
+                saucetuple = (item["sauce"],)
+                cursor.execute(updatesauce, saucetuple)
+                #cheese
+                updatecheese = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s;"
+                cheesetuple = (item["cheese"],)
+                cursor.execute(updatecheese, cheesetuple)
+                #drizzle
+                updatedrizzle = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s;"
+                drizzletuple = (item["drizzle"],)
+                cursor.execute(updatedrizzle, drizzletuple)
+                #toppings
+                updatetopping1 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                toppingtuple1 = (item["topping1"],)
+                cursor.execute(updatetopping1, toppingtuple1)
+                updatetopping2 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                toppingtuple2 = (item["topping2"],)
+                cursor.execute(updatetopping2, toppingtuple2)
+                updatetopping3 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                toppingtuple3 = (item["topping3"],)
+                cursor.execute(updatetopping3, toppingtuple3)
+                updatetopping4 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                toppingtuple4 = (item["topping4"],)
+                cursor.execute(updatetopping4, toppingtuple4)
+            #fountain drink
+            elif(item["itemname"] == "Fountain Drink"):
+                updatecups = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = 'Cups';"
+                cursor.execute(updatecups)
+            #drink
             else:
-                updateinvother = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
-
+                updateinvother = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s;"
+                othertuple = (item["itemname"],)
+                cursor.execute(updateinvother, othertuple)
             
-
-        #update inventory
-        #update ivnentory from item
-
+            connection.commit()
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
+
+# connection = None
+# try:        
+#     connection = psycopg2.connect(user="csce315331_team_41_master",
+#                                        password="goldfishwithnuts",
+#                                        host="csce-315-db.engr.tamu.edu",
+#                                        database="csce315331_team_41")
+#     cursor = connection.cursor()
+#     updatetopping = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
+#     toppingtuple = (None,)
+#     cursor.execute(updatetopping)
+#     connection.commit()
+# finally:
+#     if connection:
+#         cursor.close()
+#         connection.close()
+#         print("PostgreSQL connection is closed")
