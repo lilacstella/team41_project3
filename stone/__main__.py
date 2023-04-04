@@ -25,7 +25,7 @@ def inventory():
         return jsonify(get_current_inventory())
     elif request.method == 'POST':
         json_data = request.get_json()
-        if(not json_data):
+        if(not json_data or json_data is None):
             restock_all()
             return jsonify({'success restockall': True})
         else:
