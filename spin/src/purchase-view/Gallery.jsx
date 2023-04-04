@@ -1,5 +1,58 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import './Gallery.css';
+
+// maintaining aspect ratio of the image
+const AspectRatio = (props) => {
+    const { ratio = 1 / 1, ...otherProps } = props;
+
+    return (
+        <div
+            className="aspect-ratio"
+            style={{ paddingTop: `${100 / ratio}%` }}
+            {...otherProps}
+        />
+    );
+};
+
+const Image = (props) => {
+    return (
+        <div
+            style={{
+                backgroundImage: `url('ivan-torres-MQUqbmszGGM-unsplash.jpg')`,
+                backgroundSize: "cover",
+            }}
+        />
+    );
+};
+
+const Palette = (props) => {
+    return (
+        <figure className="palette">
+            <AspectRatio>
+                <Image angle={135} {...props} />
+            </AspectRatio>
+            <figcaption className="palette__caption">
+                props.name
+            </figcaption>
+        </figure>
+    );
+};
+
+const Palettes = (props) => {
+    const { palettes } = props;
+
+    return (
+        <div className="palettes">
+            {palettes.map((palette) => (
+                <Palette key={palette.toString()} {...palette} />
+            ))}
+        </div>
+    );
+};
+
+const Grid = (props) => {
+    return <div className="grid" {...props} />;
+};
 
 /* styling tabs on the left hand side */
 function Tab(props) {
@@ -29,9 +82,13 @@ function Navigation() {
 
 // can be changed to be list view or grid view
 function MenuItems() {
+    const palettes = ["Zesty Red", "Alfredo", "Spicy Red"]; 
+
     return (
         <div className="gallery">
-            <p>hi</p>
+            <Grid>
+                <Palettes palettes={palettes} />
+            </Grid>
         </div>
     );
 }
