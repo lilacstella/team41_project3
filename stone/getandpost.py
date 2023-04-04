@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/inventory', methods=['GET', 'POST_ALL', 'POST'])
 
-def inventory();
+def inventory():
     if request.method == 'GET':
         return jsonify(get_current_inventory(request.args))
     elif request.method == 'POST_ALL':
