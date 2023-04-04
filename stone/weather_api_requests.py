@@ -13,5 +13,6 @@ def get_weather():
 
         with open('weather_data.json', 'w') as f:
             json.dump(weather_data, f)
+        return(weather_data)
     else:
         print('Failed to get weather data.')
