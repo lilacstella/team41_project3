@@ -22,14 +22,14 @@ app = Flask(__name__)
 
 def inventory():
     if request.method == 'GET':
-        return jsonify(get_current_inventory(request.args))
-    elif request.method == 'POST_ALL':
-        return jsonify(restock_all())
+        return jsonify(get_current_inventory())
     elif request.method == 'POST':
         json_data = request.get_json()
         if(json_data is None):
-            return jsonify({"error": "Invalid JSON"})
-        return jsonify(restock_items(request.get_json()))
+            restock_all()
+            return jsonify({'success': True})
+        restock_items(request.get_json())
+        return jsonify({'success': True})
 
 #weather
 @app.route('/weather', methods=['GET'])
@@ -40,4 +40,5 @@ def weather():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
 

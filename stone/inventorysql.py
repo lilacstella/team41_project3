@@ -17,7 +17,7 @@ def get_current_inventory():
         for row in inventory:
             inventorydata = {"InventoryItem": row[0], 
                                 "Category": row[1], 
-                                "Quantity": row[2], 
+                                "Quantity": float(row[2]), 
                                 "Units": row[3], 
                                 "StorageLocation": row[4]}
             inventory_list.append(inventorydata)
