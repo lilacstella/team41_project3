@@ -47,7 +47,7 @@ def restock_all():
             connection.close()
             print("PostgreSQL connection is closed")
 
-def restock_item(restock_json): 
+def restock_items(restock_json): 
     connection = None
     try:
         connection = psycopg2.connect(user="csce315331_team_41_master",
@@ -71,8 +71,3 @@ def restock_item(restock_json):
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-
-#restock_all()
-restock = '[{"InventoryItem": "Carboard Boxes","Quantity": 10000}]'
-
-restock_item(restock)
