@@ -4,11 +4,77 @@
     width: 80vw;
     justify-content: center;
     align-items: center;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     position: absolute;
     right: 0;
 }
 
 .display-box h1{
     text-align: center;
+}
+
+.container {
+    /* position: absolute; */
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 5%; */
+    /* top: 50%; */
+    /* left: 50%; */
+    max-height: 60vh;
+    max-width: 80vw;
+    width:fit-content;
+    overflow-y: scroll;
+    /* -webkit-transform: translate(-50%, -50%); */
+    /* transform: translate(-50%, -50%); */
+    flex-direction: row;
+}
+
+table {
+    width: 800px;
+    height: 800px;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow-y: scroll;
+}
+
+th,
+td {
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: black;
+}
+
+th {
+    text-align: left;
+}
+
+thead th {
+    background-color: #55608f;
+}
+
+tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+tbody td {
+    position: relative;
+}
+
+tbody td:hover:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -9999px;
+    bottom: -9999px;
+    background-color: rgba(255, 255, 255, 0.2);
+    z-index: -1;
+}
+
+button.inven{
+    height: 80px;
+    width: 150px;
+    align-items: center;
+    justify-content: center;
 }
