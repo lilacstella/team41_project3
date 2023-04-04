@@ -25,11 +25,12 @@ def inventory():
         return jsonify(get_current_inventory())
     elif request.method == 'POST':
         json_data = request.get_json()
-        if(json_data is None):
+        if(not json_data):
             restock_all()
-            return jsonify({'success': True})
-        restock_items(request.get_json())
-        return jsonify({'success': True})
+            return jsonify({'success restockall': True})
+        else:
+            restock_items(request.get_json())
+            return jsonify({'success restock': True})
 
 #weather
 @app.route('/weather', methods=['GET'])

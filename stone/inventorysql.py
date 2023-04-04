@@ -55,18 +55,32 @@ def restock_items(restock_json):
                                        host="csce-315-db.engr.tamu.edu",
                                        database="csce315331_team_41")
         cursor = connection.cursor()
-        restock_json_dict = json.loads(restock_json)
+        restock_json_dict = restock_json
         # Update the inventory with the specified item and restock amount using a parameterized query
         restock_query = "UPDATE Inventory_t SET Quantity = %s WHERE InventoryItem = %s"
-        for item_data in restock_json_dict:
+        for item_data in restock_json_dict.values():
             inventory_item = item_data['InventoryItem']
             restock_amount = item_data['Quantity']
+            print(inventory_item)
+            print(restock_amount)
             cursor.execute(restock_query, (restock_amount, inventory_item))
             connection.commit()
-            
-    except (Exception, psycopg2.Error) as error:
-        print("Error while connecting to PostgreSQL", error)
     finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+connection = None
+try:
+        connection = psycopg2.connect(user="csce315331_team_41_master",
+                                       password="goldfishwithnuts",
+                                       host="csce-315-db.engr.tamu.edu",
+                                       database="csce315331_team_41")
+        cursor = connection.cursor()
+        cursor.execute("UPDATE Inventory_t SET Quantity = 15000 WHERE InventoryItem = 'Pepperoni'")
+        connection.commit()
+finally:
         if connection:
             cursor.close()
             connection.close()
