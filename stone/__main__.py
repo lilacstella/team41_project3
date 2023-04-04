@@ -1,16 +1,19 @@
 from flask import Flask, request, jsonify
 
-from stone.example_feature import example_get, example_post
+from menusql import get_menus, process_order
 
 app = Flask(__name__)
 
-
-@app.route('/example', methods=['GET', 'POST'])
+@app.route('/menu', methods=['GET', 'POST'])
 def example():
     if request.method == 'GET':
-        return jsonify(example_get(request.args))
+        return jsonify(get_menus())
     elif request.method == 'POST':
-        return jsonify(example_post(request.get_json()))
+        json_data = request.get_json()
+        if(json_data is None):
+            return jsonify({"error": "Invalid JSON"})
+        process_order(json_data)
+        return jsonify({'success': True})
 
 
 if __name__ == '__main__':

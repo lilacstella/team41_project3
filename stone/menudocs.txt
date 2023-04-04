@@ -20,6 +20,7 @@ run json.dumps(menu[insert_name_here]) to get it in json form
 
 REQUIREMENTS FOR ORDER HISTORY
 process_order:
+just pass in the filepath to the json formatted as described
 order["orderhistory"]
     needs to contain a dict with keys: "ordernumber", "total", "paymentform", "orderedat", "employeeid"
 
@@ -27,3 +28,42 @@ list of items in order["orderitems"]
     each item in orderitems needs to contain: "linenumber", "ordernumber", "itemname", "sauce", "cheese", "topping1", "topping2", "topping3", "topping4", "drizzle", "dough"
 if it is something like a fountain drink, drink, or random item (like cookie) you can leave all of the things that would go with pizza blank (or as None in python not sure what it is for other languages) - sauce, cheese, topping1-4, drizzle, dough
 basically info to go in order_history, orderitem_t, and inventory
+
+here is a sample json i used to pass in to test
+{
+    "orderhistory": {
+        "ordernumber": 54993,
+        "total": 25.99,
+        "paymentform": "credit",
+        "orderedat": "2022-12-31 23:59:59",
+        "employeeid": 1
+    },
+    "orderitems": [
+        {
+            "linenumber": 1000000,
+            "ordernumber": 54993,
+            "itemname": "2-4 Topping Pizza",
+            "dough": "Regular Dough",
+            "sauce": "pesto",
+            "cheese": "House Blend",
+            "topping1": "Pepperoni",
+            "topping2": "Black Olives",
+            "topping3": null,
+            "topping4": null,
+            "drizzle": "Oregano"
+        },
+        {
+            "linenumber": 1000001,
+            "ordernumber": 54993,
+            "itemname": "Fountain Drink",
+            "dough": null,
+            "sauce": null,
+            "cheese": null,
+            "topping1": null,
+            "topping2": null,
+            "topping3": null,
+            "topping4": null,
+            "drizzle": null
+        }
+    ]
+}

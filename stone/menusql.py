@@ -159,7 +159,7 @@ def get_menus():
             print("PostgreSQL connection is closed")
 
 #order json passed as list of orderitem dicts
-def process_order(orderjson):
+def process_order(json_file):
     connection = None
     try:
         connection = psycopg2.connect(user="csce315331_team_41_master",
@@ -167,12 +167,13 @@ def process_order(orderjson):
                                        host="csce-315-db.engr.tamu.edu",
                                        database="csce315331_team_41")
         cursor = connection.cursor()
-        order_dict = json.load(orderjson)
+        order_dict = json_file #not sure why it doesn't need to load json??? but it works??
         #update orderhistory
         order_history_info = order_dict["orderhistory"]
         order_history_query = "INSERT INTO order_history VALUES (%s, %s, %s, %s, %s);"
         order_history_tuple = (order_history_info["ordernumber"], order_history_info["total"], order_history_info["paymentform"], order_history_info["orderedat"], order_history_info["employeeid"])
         cursor.execute(order_history_query,order_history_tuple)
+        connection.commit()
 
         
         for item in order_dict["orderitems"]:
@@ -184,7 +185,7 @@ def process_order(orderjson):
             #pizza
             if(item["itemname"] == "1 Topping Pizza" or item["itemname"] == "Original Cheese Pizza" or item["itemname"] == "2-4 Topping Pizza"):
                 #doughs
-                updatedough = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                updatedough = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
                 doughtuple = (item["dough"],)
                 cursor.execute(updatedough, doughtuple)
                 #boxes
@@ -203,16 +204,16 @@ def process_order(orderjson):
                 drizzletuple = (item["drizzle"],)
                 cursor.execute(updatedrizzle, drizzletuple)
                 #toppings
-                updatetopping1 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                updatetopping1 = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
                 toppingtuple1 = (item["topping1"],)
                 cursor.execute(updatetopping1, toppingtuple1)
-                updatetopping2 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                updatetopping2 = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
                 toppingtuple2 = (item["topping2"],)
                 cursor.execute(updatetopping2, toppingtuple2)
-                updatetopping3 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                updatetopping3 = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
                 toppingtuple3 = (item["topping3"],)
                 cursor.execute(updatetopping3, toppingtuple3)
-                updatetopping4 = "UPDATE intventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
+                updatetopping4 = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
                 toppingtuple4 = (item["topping4"],)
                 cursor.execute(updatetopping4, toppingtuple4)
             #fountain drink
@@ -231,20 +232,45 @@ def process_order(orderjson):
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-
-# connection = None
-# try:        
-#     connection = psycopg2.connect(user="csce315331_team_41_master",
-#                                        password="goldfishwithnuts",
-#                                        host="csce-315-db.engr.tamu.edu",
-#                                        database="csce315331_team_41")
-#     cursor = connection.cursor()
-#     updatetopping = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = '%s';"
-#     toppingtuple = (None,)
-#     cursor.execute(updatetopping)
-#     connection.commit()
-# finally:
-#     if connection:
-#         cursor.close()
-#         connection.close()
-#         print("PostgreSQL connection is closed")
+#test for process_order
+# test_dict = {
+#     "orderhistory": {
+#         "ordernumber": 54993,
+#         "total": 25.99,
+#         "paymentform": "credit",
+#         "orderedat": "2022-12-31 23:59:59",
+#         "employeeid": 1
+#     },
+#     "orderitems": [
+#         {
+#             "linenumber": 1000000,
+#             "ordernumber": 54993,
+#             "itemname": "2-4 Topping Pizza",
+#             "dough": "Regular Dough",
+#             "sauce": "pesto",
+#             "cheese": "House Blend",
+#             "topping1": "Pepperoni",
+#             "topping2": "Black Olives",
+#             "topping3": None,
+#             "topping4": None,
+#             "drizzle": "Oregano"
+#         },
+#         {
+#             "linenumber": 1000001,
+#             "ordernumber": 54993,
+#             "itemname": "Fountain Drink",
+#             "dough": None,
+#             "sauce": None,
+#             "cheese": None,
+#             "topping1": None,
+#             "topping2": None,
+#             "topping3": None,
+#             "topping4": None,
+#             "drizzle": None
+#         }
+#     ]
+# }
+# with open("test.json", "w") as outfile:
+#     json.dump(test_dict, outfile)
+# process_order("test.json")
+#print(get_menus())
