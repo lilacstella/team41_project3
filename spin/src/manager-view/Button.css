@@ -1,0 +1,20 @@
+.button{
+    width: 170px;
+    height: 70px;
+    background-color: white;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 3px solid lightgray;
+}
+
+.button h1{
+    font-size: 25px;
+    color: black;
+}
+
+.button:hover{
+    cursor: pointer;
+    background-color: rgb(233, 233, 233);
+}
