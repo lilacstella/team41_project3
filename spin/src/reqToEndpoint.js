@@ -3,47 +3,40 @@
 // fetch is able to talk to the front-end
 
 // weather, inventory, menu
-
-function retrieveExampleData() {
-    const url = '/example';
-    
-    return fetch(url)
+  function retrieveExampleData() {
+    return fetch('/example')
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         return data;
       })
-      .catch(error => {
-        console.error(error);
-      });
+      .catch(error => console.error(error));
   }
-
-function getMenu() {
-    const url = '/menu';
-    const options = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-    return fetch(url, options)
+  function retrieveMenuData() {
+    return fetch('/menu')
       .then(response => response.json())
       .then(data => {
-        return data.ex;
-      });
+        console.log(data);
+        return data;
+      })
+      .catch(error => console.error(error));
   }
-
-  function getInventory() {
-    const url = '/inventory';
-    const options = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-    return fetch(url, options)
+  function retrieveInventoryData() {
+    return fetch('/inventory')
       .then(response => response.json())
       .then(data => {
-        return data.ex;
-      });
+        console.log(data);
+        return data;
+      })
+      .catch(error => console.error(error));
   }
-  
+
+  function retrieveWeatherData() {
+    return fetch('/weather')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        return data;
+      })
+      .catch(error => console.error(error));
+  }
