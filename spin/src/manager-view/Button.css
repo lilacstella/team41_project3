@@ -1,9 +1,14 @@
+.button-box{
+    height: 100%;
+    overflow-y: scroll;
+}
+
 .button{
-    width: 170px;
+    width: 185px;
     height: 70px;
     background-color: white;
-    flex-direction: row;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     border-right: 3px solid lightgray;
@@ -17,4 +22,10 @@
 .button:hover{
     cursor: pointer;
     background-color: rgb(233, 233, 233);
+}
+
+.button.disabled{
+    background-color: lightgray;
+    cursor:not-allowed;
+    
 }

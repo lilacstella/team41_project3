@@ -1,4 +1,14 @@
 .display-box{
     background-color: white;
-    height: 80%;
+    height: 80vh;
+    width: 80vw;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+}
+
+.display-box h1{
+    text-align: center;
 }

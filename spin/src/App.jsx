@@ -17,7 +17,7 @@ export default function App() {
 
   if (!showPurchaseView) {
     displayText = "Manager View";
-    buttonText = "Return";
+    buttonText = "Back";
   }
 
   return (
