@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from menusql import get_menus, process_order
+from stone.menusql import get_menus, process_order
 
 app = Flask(__name__)
 
