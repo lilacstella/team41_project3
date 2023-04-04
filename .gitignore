@@ -2,6 +2,9 @@
 venv/
 __pycache__/
 
+# secrets
+.env
+
 # IDE
 .vscode/
 .idea/
