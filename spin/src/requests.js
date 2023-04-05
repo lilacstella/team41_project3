@@ -19,8 +19,8 @@ export async function retrieveMenuData() {
 export async function retrieveInventoryData() {
     try {
         const response = await fetch('http://localhost:5000/inventory');
-        const data = await response.json();
-        console.log(data);
+        const data = response.json();
+        // console.log(data);
         return data;
     } catch (error) {
         return console.error(error);

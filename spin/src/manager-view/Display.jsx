@@ -3,7 +3,13 @@ import fakeData from './MOCK_DATA.json'
 import {useTable} from 'react-table'
 import Button from './Button';
 import './Display.css';
+import { retrieveInventoryData } from '../requests';
+import { useState, useEffect } from 'react';
+import Table from 'react-bootstrap/Table';
+import useSWR from 'swr';
+import axios from 'axios';
 
+const fetcher = (url) => axios.get(url).then(res => res.data);
 
 export default function Display(props) {
     return (
@@ -31,68 +37,47 @@ export default function Display(props) {
     );
 }
 
-function Inventory(){
-    const data = React.useMemo(() => fakeData, [])
-    const columns = React.useMemo(
-        () => [{
-            Header: "ID",
-            accessor: "id",
-        }, {
-            Header: "First Name",
-            accessor: "first_name",
-        }, {
-            Header: "Last Name",
-            accessor: "last_name", 
-        }, {
-            Header: "Email",
-            accessor: "email",
-        }, {
-            Header: "Gender",
-            accessor: "gender",
-        }, {
-            Header: "University",
-            accessor: "university"
-        }, ], 
-        []
-    );
+function Inventory( ){
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('http://localhost:5000/inventory', fetcher);
+    if (error) {
+      console.error(error);
+    }
 
-    const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable({columns, data});
+    // console.log(data);
+
+    if(isLoading || error || data === undefined){
+        return;
+    }
+    const processedData = JSON.parse(data);
+    
+    // console.log(thing);
 
     return(
         <div>
             <h1>Inventory</h1>
             <div className='container'>
-                <table {...getTableProps()}>
-                <thead>
-                    {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                        <th {...column.getHeaderProps()}>
-                            {column.render("Header")}
-                        </th>
-                        ))}
-                    </tr>
+            <Table striped bordered hover>
+            <thead>
+                <tr>
+                {Object.keys(processedData[0]).map((key) => (
+                    <th key={key}>{key}</th>
+                ))}
+                </tr>
+            </thead>
+            <tbody>
+                {processedData.map((item, index) => (
+                    <tr key={index}>
+                    {Object.keys(item).map((key) => (
+                        <td key={key}>{item[key]}</td>
                     ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {rows.map((row) => {
-                    prepareRow(row);
-                    return (
-                        <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => (
-                            <td {...cell.getCellProps()}> {cell.render("Cell")} </td>
-                        ))}
-                        </tr>
-                    );
-                    })}
-                </tbody>
-                </table>
+                    </tr>
+                ))}
+            </tbody>
+            </Table>
             </div>
             <button className="inven">Restock</button>
         </div>
-
-        
-
     )
 }
 
