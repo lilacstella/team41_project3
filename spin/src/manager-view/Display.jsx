@@ -1,10 +1,5 @@
 import React from 'react';
-import fakeData from './MOCK_DATA.json'
-import {useTable} from 'react-table'
-import Button from './Button';
 import './Display.css';
-import { retrieveInventoryData } from '../requests';
-import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import useSWR from 'swr';
 import axios from 'axios';
@@ -51,7 +46,7 @@ function Inventory( ){
     }
     const processedData = JSON.parse(data);
     
-    // console.log(thing);
+    // console.log(processedData);
 
     return(
         <div>
