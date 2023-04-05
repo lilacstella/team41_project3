@@ -64,7 +64,7 @@ const Grid = (props) => {
 /* styling tabs on the left hand side */
 function Tab(props) {
     return (
-        <div className="tabs" style={{ backgroundColor: props.color }}>
+        <div className="tabs" style={{ backgroundColor: props.color }} onClick={props.switchTab}>
             <h2>{props.name}</h2>
         </div>
     );
@@ -72,16 +72,36 @@ function Tab(props) {
 
 // can be hidden in server view
 function Navigation() {
+    // handling the click for each
+    const handleClick = (param) => {
+        if (param === 'sauce') {
+            console.log('sauce');
+        } else if (param === 'cheese') {
+            console.log('cheese');
+        } else if (param === 'topping') {
+            console.log('topping');
+        } else if (param === 'drizzle') {
+            console.log('drizzle');
+        } else if (param === 'drink') {
+            console.log('drink');
+        } else if (param === 'dough') {
+            console.log('dough');
+        } else if (param === 'seasonal') {
+            console.log('seasonal');
+        } else {
+            console.log('welcome, customer!');
+        }
+    }
     return (
         <div className='tabs'>
             <div className="tab-box">
-                <Tab name="Sauce" />
-                <Tab name="Cheese" />
-                <Tab name="Topping" />
-                <Tab name="Drizzle" />
-                <Tab name="Drink" />
-                <Tab name="Dough" />
-                <Tab name="Seasonal" />
+                <Tab name="Sauce" switchTab={() => handleClick('sauce')}/>
+                <Tab name="Cheese" switchTab={() => handleClick('cheese')}/>
+                <Tab name="Topping" switchTab={() => handleClick('topping')}/>
+                <Tab name="Drizzle" switchTab={() => handleClick('drizzle')}/>
+                <Tab name="Drink" switchTab={() => handleClick('drink')}/>
+                <Tab name="Dough" switchTab={() => handleClick('dough')}/>
+                <Tab name="Seasonal" switchTab={() => handleClick('seasonal')}/>
             </div>
         </div>
     );
@@ -108,3 +128,4 @@ export default function MenuView() {
         </div>
     );
 };
+
