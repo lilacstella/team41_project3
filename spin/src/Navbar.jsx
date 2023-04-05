@@ -32,7 +32,7 @@ function WeatherAPIDisplay(){
         return;
 
     var weather = JSON.parse(data);
-    console.log(weather)
+    // console.log(weather)
 
     var text = 'Temperature at ' + weather['location']['name'] + ", " + weather['location']['region'] + 
                ' is ' + weather['current']['temperature'] + '°C, ' + weather['current']['weather_descriptions'][0]
