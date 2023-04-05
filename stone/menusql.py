@@ -149,7 +149,7 @@ def get_menus():
         maxorder = cursor.fetchone()
         maxorderjson = {"maxordernum": maxorder[0]}
         menu_results["maxorder"] = maxorderjson
-
+        print(menu_results)
         return menu_results
 
     finally:
