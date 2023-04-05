@@ -1,5 +1,6 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import './Gallery.css';
+import { retrieveMenuData } from '../requests';
 
 // maintaining aspect ratio of the image
 const AspectRatio = (props) => {
@@ -25,26 +26,32 @@ const Image = (props) => {
     );
 };
 
-const Palette = (props) => {
+const ItemBox = (props) => {
+    const testFunction = () => {
+        console.log(props.itemName);
+        retrieveMenuData();
+    }
+
+
     return (
-        <figure className="palette">
+        <figure className="item-box" onClick={testFunction}>
             <AspectRatio>
-                <Image angle={135} {...props} />
+                <Image {...props} />
             </AspectRatio>
-            <figcaption className="palette__caption">
-                props.name
+            <figcaption className="item-box-caption">
+                {props.itemName}
             </figcaption>
         </figure>
     );
 };
 
-const Palettes = (props) => {
-    const { palettes } = props;
+const ItemBoxes = (props) => {
+    const { itemNames } = props;
 
     return (
-        <div className="palettes">
-            {palettes.map((palette) => (
-                <Palette key={palette.toString()} {...palette} />
+        <div className="item-boxes">
+            {itemNames.map((itemName) => (
+                <ItemBox itemName={itemName} />
             ))}
         </div>
     );
@@ -82,12 +89,12 @@ function Navigation() {
 
 // can be changed to be list view or grid view
 function MenuItems() {
-    const palettes = ["Zesty Red", "Alfredo", "Spicy Red"]; 
+    const itemNames = ["Original Cheese Pizza", "One Topping Pizza", "Two to Four Topping Pizza"]; 
 
     return (
         <div className="gallery">
             <Grid>
-                <Palettes palettes={palettes} />
+                <ItemBoxes itemNames={itemNames} />
             </Grid>
         </div>
     );
@@ -99,5 +106,5 @@ export default function MenuView() {
             <Navigation />
             <MenuItems />
         </div>
-    )
-}
+    );
+};
