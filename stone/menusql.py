@@ -50,7 +50,7 @@ def get_menus():
         for row in sauces:
             saucesdata = {"saucename": row[0]}
             sauces_list.append(saucesdata)
-        menu_results["sauces"] = sauces_list
+        menu_results["sauce"] = sauces_list
 
         # add cheeses
         select_cheeses = "SELECT InventoryItem FROM Inventory_t WHERE Category='Cheese'"
@@ -70,7 +70,7 @@ def get_menus():
         for row in toppings:
             toppingdata = {"toppingname": row[0]}
             toppings_list.append(toppingdata)
-        menu_results["toppings"] = toppings_list
+        menu_results["topping"] = toppings_list
 
         # add drizzles
         select_drizzles = "SELECT InventoryItem FROM Inventory_t WHERE Category='Drizzle'"
@@ -80,32 +80,32 @@ def get_menus():
         for row in drizzles:
             drizzledata = {"drizzlename": row[0]}
             drizzles_list.append(drizzledata)
-        menu_results["drizzles"] = drizzles_list
+        menu_results["drizzle"] = drizzles_list
 
         # add fountain drink prices
         select_fountaindrink = "SELECT price FROM menu_t WHERE menuitem = 'Fountain Drink'"
         cursor.execute(select_fountaindrink)
         prices_list = cursor.fetchone()
         price = {"price": float(prices_list[0])}
-        menu_results["fountaindrink"] = price
+        menu_results["fountain-drink"] = price
 
         # add all drinks
         select_drinks = "SELECT m.menuitem, m.price FROM menu_t m INNER JOIN inventory_t i ON m.menuitem = i.inventoryitem WHERE i.category = 'Drink';"
         cursor.execute(select_drinks)
         drinks = cursor.fetchall()
-        menu_results["drinks"] = []
+        menu_results["drink"] = []
         for row in drinks:
             drinksdata = {"drinkname": row[0], "price": float(row[1])}
-            menu_results["drinks"].append(drinksdata)
+            menu_results["drink"].append(drinksdata)
 
         # add all doughs
         select_doughs = "SELECT m.menuitem, m.price FROM menu_t m INNER JOIN inventory_t i ON m.menuitem = i.inventoryitem WHERE i.category = 'Dough'"
         cursor.execute(select_doughs)
         doughs = cursor.fetchall()
-        menu_results["doughs"] = []
+        menu_results["dough"] = []
         for row in doughs:
             doughdata = {"doughname": row[0], "price": float(row[1])}
-            menu_results["doughs"].append(doughdata)
+            menu_results["dough"].append(doughdata)
 
         # add all seasonal items
         select_seasonal = "SELECT m.menuitem, m.price FROM menu_t m INNER JOIN inventory_t i ON m.menuitem = i.inventoryitem WHERE i.category = 'Seasonal'"
@@ -122,35 +122,35 @@ def get_menus():
         cursor.execute(select_cheese_pizza)
         cheesepizzaprice = cursor.fetchone()
         price = {"price": float(cheesepizzaprice[0])}
-        menu_results["cheesepizzaprice"] = price
+        menu_results["cheese-pizza-price"] = price
 
         # one topping
         select_one_topping_pizza = "SELECT price FROM menu_t WHERE menuitem = '1 Topping Pizza'"
         cursor.execute(select_one_topping_pizza)
         onetoppizzaprice = cursor.fetchone()
         price = {"price": float(onetoppizzaprice[0])}
-        menu_results["onetoppingpizzaprice"] = price
+        menu_results["one-topping-pizza-price"] = price
 
         # 4 topping
         select_multi_topping_pizza = "SELECT price FROM menu_t WHERE menuitem = '2-4 Topping Pizza'"
         cursor.execute(select_multi_topping_pizza)
         multitoppizzaprice = cursor.fetchone()
         price = {"price": float(multitoppizzaprice[0])}
-        menu_results["multitoppingpizzaprice"] = price
+        menu_results["multi-topping-pizza-price"] = price
 
         # max line number
         select_max_line = "SELECT MAX(LineNumber) FROM OrderItem_T;"
         cursor.execute(select_max_line)
         maxline = cursor.fetchone()
         maxlinejson = {"maxlinenum": maxline[0]}
-        menu_results["maxline"] = maxlinejson
+        menu_results["max-line"] = maxlinejson
 
         # max order number
         select_max_order = "SELECT MAX(OrderNumber) FROM OrderItem_T;"
         cursor.execute(select_max_order)
         maxorder = cursor.fetchone()
         maxorderjson = {"maxordernum": maxorder[0]}
-        menu_results["maxorder"] = maxorderjson
+        menu_results["max-order"] = maxorderjson
         print(menu_results)
         return menu_results
 
