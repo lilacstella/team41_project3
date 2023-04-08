@@ -1,5 +1,6 @@
-import psycopg2
 import json
+
+import psycopg2
 
 
 # for later login stuff????
@@ -48,7 +49,7 @@ def get_menus():
         sauces = cursor.fetchall()
         sauces_list = []
         for row in sauces:
-            saucesdata = {"saucename": row[0]}
+            saucesdata = {"sauce-name": row[0]}
             sauces_list.append(saucesdata)
         menu_results["sauce"] = sauces_list
 
@@ -58,7 +59,7 @@ def get_menus():
         cheeses = cursor.fetchall()
         cheeses_list = []
         for row in cheeses:
-            cheesedata = {"cheesename": row[0]}
+            cheesedata = {"cheese-name": row[0]}
             cheeses_list.append(cheesedata)
         menu_results["cheese"] = cheeses_list
 
@@ -68,7 +69,7 @@ def get_menus():
         toppings = cursor.fetchall()
         toppings_list = []
         for row in toppings:
-            toppingdata = {"toppingname": row[0]}
+            toppingdata = {"topping-name": row[0]}
             toppings_list.append(toppingdata)
         menu_results["topping"] = toppings_list
 
@@ -78,7 +79,7 @@ def get_menus():
         drizzles = cursor.fetchall()
         drizzles_list = []
         for row in drizzles:
-            drizzledata = {"drizzlename": row[0]}
+            drizzledata = {"drizzle-name": row[0]}
             drizzles_list.append(drizzledata)
         menu_results["drizzle"] = drizzles_list
 
@@ -95,7 +96,7 @@ def get_menus():
         drinks = cursor.fetchall()
         menu_results["drink"] = []
         for row in drinks:
-            drinksdata = {"drinkname": row[0], "price": float(row[1])}
+            drinksdata = {"drink-name": row[0], "price": float(row[1])}
             menu_results["drink"].append(drinksdata)
 
         # add all doughs
@@ -104,7 +105,7 @@ def get_menus():
         doughs = cursor.fetchall()
         menu_results["dough"] = []
         for row in doughs:
-            doughdata = {"doughname": row[0], "price": float(row[1])}
+            doughdata = {"dough-name": row[0], "price": float(row[1])}
             menu_results["dough"].append(doughdata)
 
         # add all seasonal items
@@ -113,7 +114,7 @@ def get_menus():
         seasonal = cursor.fetchall()
         menu_results["seasonal"] = []
         for row in seasonal:
-            seasonaldata = {"seasonalname": row[0], "price": float(row[1])}
+            seasonaldata = {"seasonal-name": row[0], "price": float(row[1])}
             menu_results["seasonal"].append(seasonaldata)
 
         # add all prices
@@ -184,14 +185,15 @@ def process_order(json_file):
             # add item to orderitem
             query = "INSERT INTO orderitem_t VALUES (%s, %s, %s, %s, %s, %s,%s, %s, %s, %s);"
             itemtuple = (
-                item["linenumber"], item["ordernumber"], item["itemname"], item["sauce"], item["cheese"],
+                item["line-number"], item["order-number"], item["item-name"], item["sauce"], item["cheese"],
                 item["topping1"],
                 item["topping2"], item["topping3"], item["topping4"], item["drizzle"])
             cursor.execute(query, itemtuple)
             # remove stuff from inventory
             # pizza
-            if (item["itemname"] == "1 Topping Pizza" or item["itemname"] == "Original Cheese Pizza" or item[
-                "itemname"] == "2-4 Topping Pizza"):
+            if (item["item-name"] == "1 Topping Pizza" or item["item-name"] == "Original Cheese Pizza" or
+                    item["item-name"] == "2-4 Topping Pizza"):
+
                 # doughs
                 updatedough = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
                 doughtuple = (item["dough"],)
@@ -225,13 +227,13 @@ def process_order(json_file):
                 toppingtuple4 = (item["topping4"],)
                 cursor.execute(updatetopping4, toppingtuple4)
             # fountain drink
-            elif (item["itemname"] == "Fountain Drink"):
+            elif (item["item-name"] == "Fountain Drink"):
                 updatecups = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = 'Cups';"
                 cursor.execute(updatecups)
             # drink
             else:
                 updateinvother = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s;"
-                othertuple = (item["itemname"],)
+                othertuple = (item["item-name"],)
                 cursor.execute(updateinvother, othertuple)
 
             connection.commit()
