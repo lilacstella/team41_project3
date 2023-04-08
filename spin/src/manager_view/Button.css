@@ -1,31 +1,23 @@
-.button-box{
-    height: 100%;
-    overflow-y: scroll;
-}
-
-.button{
+.manager-button{
     width: 185px;
     height: 70px;
     background-color: white;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-    border-right: 3px solid lightgray;
+    justify-content: center;
 }
 
-.button h1{
+.manager-button>h1{
     font-size: 25px;
     color: black;
 }
 
-.button:hover{
+.manager-button:hover{
     cursor: pointer;
     background-color: rgb(233, 233, 233);
 }
 
-.button.disabled{
+.manager-button.disabled{
     background-color: lightgray;
     cursor:not-allowed;
-    
 }

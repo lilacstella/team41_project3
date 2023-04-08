@@ -1,0 +1,31 @@
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 19.5vh;
+    background-color: #e7b449;
+    justify-content: space-between;
+    border-bottom: .5vh solid black;
+}
+
+nav>h1 {
+    font-size: 3.5em;
+    color: black;
+}
+
+nav>button {
+    width: 150px;
+    height: 65px;
+    margin-left: 40px;
+    margin-right: 75px;
+    background-color: white;
+    color: black;
+    font-size: 1.5em;
+    font-weight: bold;
+    border: none;
+}
+
+nav>button:hover {
+    cursor: pointer;
+    background-color: rgb(233, 233, 233);
+}
