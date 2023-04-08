@@ -1,6 +1,10 @@
 import React from 'react';
+import useSWR from 'swr';
+import axios from 'axios';
 import './Gallery.css';
-import { retrieveMenuData } from '../requests';
+
+const fetcher = (url) => axios.get(url).then(res => res.data);
+
 
 // maintaining aspect ratio of the image
 const AspectRatio = (props) => {
@@ -16,6 +20,7 @@ const AspectRatio = (props) => {
 };
 
 const Image = (props) => {
+    // using props for url in the future
     return (
         <div
             style={{
@@ -28,8 +33,8 @@ const Image = (props) => {
 
 const ItemBox = (props) => {
     const testFunction = () => {
-        console.log(props.itemName);
-        retrieveMenuData();
+        // console.log(props.itemName);
+
     }
 
 
@@ -46,19 +51,54 @@ const ItemBox = (props) => {
 };
 
 const ItemBoxes = (props) => {
-    const { itemNames } = props;
-
+    const { itemNames, category } = props;
+    // console.log(itemNames);
     return (
         <div className="item-boxes">
-            {itemNames.map((itemName) => (
-                <ItemBox itemName={itemName} />
-            ))}
+            {
+                // itemName is Object{"category-name": }
+                itemNames.map((itemName) => (
+                    <ItemBox itemName={itemName[category + "-name"]} />
+                ))
+            }
         </div>
     );
 };
 
 const Grid = (props) => {
     return <div className="grid" {...props} />;
+};
+
+
+// can be changed to be list view or grid view
+function MenuItems(props) {
+    const { itemNames, category } = props;
+    // console.log(category);
+    return (
+        <div className="gallery">
+            <Grid>
+                <ItemBoxes itemNames={itemNames} category={category} />
+            </Grid>
+        </div>
+    );
+}
+
+export default function MenuView() {
+    const { data, error, isLoading } = useSWR('http://localhost:5000/menu', fetcher);
+    var select = 'topping';
+    if (error || isLoading)
+        return;
+
+    const handleClick = (param) => {
+        select = param;
+    };
+
+    return (
+        <div className="order-box">
+            <Navigation handleClick={handleClick} />
+            <MenuItems itemNames={data[select]} category={select} />
+        </div>
+    );
 };
 
 /* styling tabs on the left hand side */
@@ -71,61 +111,20 @@ function Tab(props) {
 }
 
 // can be hidden in server view
-function Navigation() {
+function Navigation(props) {
     // handling the click for each
-    const handleClick = (param) => {
-        if (param === 'sauce') {
-            console.log('sauce');
-        } else if (param === 'cheese') {
-            console.log('cheese');
-        } else if (param === 'topping') {
-            console.log('topping');
-        } else if (param === 'drizzle') {
-            console.log('drizzle');
-        } else if (param === 'drink') {
-            console.log('drink');
-        } else if (param === 'dough') {
-            console.log('dough');
-        } else if (param === 'seasonal') {
-            console.log('seasonal');
-        } else {
-            console.log('welcome, customer!');
-        }
-    }
+
     return (
         <div className='tabs'>
             <div className="tab-box">
-                <Tab name="Sauce" switchTab={() => handleClick('sauce')}/>
-                <Tab name="Cheese" switchTab={() => handleClick('cheese')}/>
-                <Tab name="Topping" switchTab={() => handleClick('topping')}/>
-                <Tab name="Drizzle" switchTab={() => handleClick('drizzle')}/>
-                <Tab name="Drink" switchTab={() => handleClick('drink')}/>
-                <Tab name="Dough" switchTab={() => handleClick('dough')}/>
-                <Tab name="Seasonal" switchTab={() => handleClick('seasonal')}/>
+                <Tab name="Sauce" switchTab={() => props.handleClick('sauce')} />
+                <Tab name="Cheese" switchTab={() => props.handleClick('cheese')} />
+                <Tab name="Topping" switchTab={() => props.handleClick('topping')} />
+                <Tab name="Drizzle" switchTab={() => props.handleClick('drizzle')} />
+                <Tab name="Drink" switchTab={() => props.handleClick('drink')} />
+                <Tab name="Dough" switchTab={() => props.handleClick('dough')} />
+                <Tab name="Seasonal" switchTab={() => props.handleClick('seasonal')} />
             </div>
         </div>
     );
 }
-
-// can be changed to be list view or grid view
-function MenuItems() {
-    const itemNames = ["Original Cheese Pizza", "One Topping Pizza", "Two to Four Topping Pizza"]; 
-
-    return (
-        <div className="gallery">
-            <Grid>
-                <ItemBoxes itemNames={itemNames} />
-            </Grid>
-        </div>
-    );
-}
-
-export default function MenuView() {
-    return (
-        <div className="order-box">
-            <Navigation />
-            <MenuItems />
-        </div>
-    );
-};
-
