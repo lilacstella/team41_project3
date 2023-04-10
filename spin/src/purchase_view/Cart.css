@@ -6,6 +6,7 @@
     height: 80%;
     position: absolute;
     right: 0;
+    border-left: 5px solid black;
 }
 
 .cart-box h1 {
@@ -35,6 +36,6 @@
     width: 70px;
 }
 
-.button-cart + .button-cart{
+.button-cart+.button-cart{
     margin-left: 20px;
 }

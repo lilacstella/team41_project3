@@ -2,37 +2,40 @@ import React from 'react';
 import './Cart.css';
 
 
-export default function Cart() {
+export default function Cart(props) {
     return (
         <div className="cart-box">
             <h1>Cart</h1>
 
-            <OrderList/>
+            <OrderList order={props.order} />
 
             <div className='button-container'>
-                <AddButton/>
-                <CheckoutButton/>
+                <AddButton />
+                <CheckoutButton />
             </div>
         </div>
     );
 }
 
-function AddButton(){
-    return(
+function AddButton() {
+    return (
         <button className='button-cart'>Add</button>
     );
 }
 
-function CheckoutButton(){
-    return(
+function CheckoutButton() {
+    return (
         <button className='button-cart'>Checkout</button>
     );
 }
 
-function OrderList(){
-    return(
+function OrderList(props) {
+    const { order } = props;
+    return (
         <div className='orders-container'>
-            <p>test</p>
+            {
+                order.map((item) => (<p>{item}</p>))
+            }
         </div>
     );
 }

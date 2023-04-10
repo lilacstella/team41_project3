@@ -20,25 +20,25 @@ export default function Navbar(props) {
     );
 }
 
-export function WeatherAPIDisplay() {
-    return <h2>hi</h2>;
-}
-
-// function WeatherAPIDisplay(){
-//     const { data, error, isLoading } = useSWR('http://localhost:5000/weather', fetcher);
-//     if (error) {
-//       console.error(error);
-//     }
-
-//     // if(isLoading)
-//         return;
-
-//     var weather = JSON.parse(data);
-//     // console.log(weather)
-
-//     var text = 'Temperature at ' + weather['location']['name'] + ", " + weather['location']['region'] + 
-//                ' is ' + weather['current']['temperature'] + '°C, ' + weather['current']['weather_descriptions'][0]
-//     return(
-//         <h2>{text}</h2>
-//     )
+// export function WeatherAPIDisplay() {
+//     return <h2>hi</h2>;
 // }
+
+function WeatherAPIDisplay(){
+    const { data, error, isLoading } = useSWR('http://localhost:5000/weather', fetcher);
+    if (error) {
+      console.error(error);
+    }
+
+    if(isLoading)
+        return;
+
+    var weather = JSON.parse(data);
+    // console.log(weather)
+
+    var text = 'Temperature at ' + weather['location']['name'] + ", " + weather['location']['region'] + 
+               ' is ' + weather['current']['temperature'] + '°C, ' + weather['current']['weather_descriptions'][0]
+    return(
+        <h2>{text}</h2>
+    )
+}

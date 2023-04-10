@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import Nav from './Nav';
 import ManagerView from './manager_view/ManagerView';
+import PurchaseView from './purchase_view/PurchaseView';
 
 function App() {
   const [showPurchaseView, setShowPurchaseView] = useState(true);
@@ -21,7 +22,7 @@ function App() {
     <div>
       <Nav login={toggleView} displayText={displayText} buttonText={buttonText} />
       <div>
-        {showPurchaseView ? <h1>hi</h1> : <ManagerView />}
+        {showPurchaseView ? <PurchaseView /> : <ManagerView />}
       </div>
     </div>
   );
