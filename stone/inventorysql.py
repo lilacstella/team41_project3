@@ -70,18 +70,3 @@ def restock_items(restock_json):
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-
-connection = None
-try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                       password="goldfishwithnuts",
-                                       host="csce-315-db.engr.tamu.edu",
-                                       database="csce315331_team_41")
-        cursor = connection.cursor()
-        cursor.execute("UPDATE Inventory_t SET Quantity = 15000 WHERE InventoryItem = 'Pepperoni'")
-        connection.commit()
-finally:
-        if connection:
-            cursor.close()
-            connection.close()
-            print("PostgreSQL connection is closed")

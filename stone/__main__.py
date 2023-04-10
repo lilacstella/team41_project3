@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 from stone.inventorysql import get_current_inventory, restock_all, restock_items
 from stone.weather_api_requests import get_weather
 from stone.menusql import get_menus, process_order
+from stone.zreportsql import get_zreport, post_eodinv
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -43,6 +44,16 @@ def weather():
     if request.method == 'GET':
         return jsonify(get_weather())
 
+@app.route('/zreport', methods=['GET', 'POST'])
+@cross_origin(origins="http://localhost:3000", methods=["GET", "POST"])
+def zreport():
+    if request.method == 'GET':
+        return jsonify(get_zreport())
+    elif request.method == 'POST':
+        if(post_eodinv()):
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False})
 
 if __name__ == '__main__':
     app.run(debug=True)
