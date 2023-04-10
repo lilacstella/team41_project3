@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from stone.inventorysql import get_current_inventory, restock_all, restock_items
-from stone.weather_api_requests import get_weather
+from stone.weather import get_weather
 from stone.menusql import get_menus, process_order
 
 app = Flask(__name__)
@@ -11,7 +11,6 @@ cors = CORS(app)
 @app.route('/menu', methods=['GET', 'POST'])
 @cross_origin(origins="http://localhost:3000", methods=["GET", "POST"])
 def menu():
-    print('hi')
     if request.method == 'GET':
         return jsonify(get_menus())
     elif request.method == 'POST':
