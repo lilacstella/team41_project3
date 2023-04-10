@@ -37,7 +37,7 @@ function WeatherAPIDisplay(){
     // console.log(weather)
 
     var text = 'Temperature at ' + weather['location']['name'] + ", " + weather['location']['region'] + 
-               ' is ' + weather['current']['temperature'] + '°C, ' + weather['current']['weather_descriptions'][0]
+               ' is ' + weather['current']['temperature'] + '°F, ' + weather['current']['weather_descriptions'][0]
     return(
         <h2>{text}</h2>
     )

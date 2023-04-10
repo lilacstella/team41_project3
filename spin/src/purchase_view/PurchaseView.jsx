@@ -5,13 +5,41 @@ import './PurchaseView.css';
 
 export default function PurchaseView() {
     const [currView, setCurrView] = useState('sauce');
-    const [order, setOrder] = useState(['']);
+    const [pizza, setPizza] = useState({'topping': []});
+    const [order, setOrder] = useState([]);
+
+    const addToOrder = (item) => {
+        console.log(item + " " + currView);
+        if (['sauce', 'cheese', 'dough', 'topping', 'drizzle'].includes(currView)) {
+            if (currView === 'topping') {
+                if (pizza['topping'].length >= 4)
+                    return;
+                else
+                    setPizza({...pizza, 'topping' : [...pizza['topping'], item]});
+            }
+            else
+                setPizza({ ...pizza, [currView]: item });
+        } else {
+            setOrder([...order, item]);
+        }
+        console.log(order);
+        console.log(pizza);
+    }
+
+    const addPizzaToOrder = () => {
+        setOrder([...order, pizza]);
+        setPizza({'topping': []});
+    }
+
+    const clearOrder = () => {
+        setOrder([]);
+    }
 
     return (
         <div className="purchase-frame">
             <Navigation handleClick={setCurrView}/>
-            <MenuGallery view={currView} order={order} setOrder={setOrder}/>
-            <Cart order={order}/>
+            <MenuGallery view={currView} order={order} addToOrder={addToOrder}/>
+            <Cart order={order} pizza={pizza} add={addPizzaToOrder} clear={clearOrder}/>
         </div>
     )
 }

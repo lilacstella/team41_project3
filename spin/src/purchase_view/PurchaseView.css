@@ -2,6 +2,7 @@
     overflow: hidden;
     display: flex;
     height: 80vh;
+    background-color: #e7b449;
 }   
 
 .purchase-view-tab-frame {

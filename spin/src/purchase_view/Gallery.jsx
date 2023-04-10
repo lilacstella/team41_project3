@@ -5,7 +5,6 @@ import './Gallery.css';
 
 const fetcher = (url) => axios.get(url).then(res => res.data);
 
-
 // maintaining aspect ratio of the image
 const AspectRatio = (props) => {
     const { ratio = 1 / 1, ...otherProps } = props;
@@ -32,9 +31,10 @@ const Image = (props) => {
 };
 
 const ItemBox = (props) => {
-    const {itemName, order, setOrder} = props;
+    // highlight item if it is in the order
+    const {itemName, order, addToOrder} = props;
     const select = () => {
-        setOrder([...order, itemName]);
+        addToOrder(itemName);
     }
 
 
@@ -51,14 +51,14 @@ const ItemBox = (props) => {
 };
 
 const ItemBoxes = (props) => {
-    const { itemNames, category, order, setOrder } = props;
+    const { itemNames, category, order, addToOrder } = props;
 
     return (
         <div className="menu-item-box-frame">
             {
                 // itemName is Object{"category-name": }
                 itemNames.map((itemName) => (
-                    <ItemBox itemName={itemName[category + "-name"]} order={order} setOrder={setOrder}/>
+                    <ItemBox itemName={itemName[category + "-name"]} order={order} addToOrder={addToOrder}/>
                 ))
             }
         </div>
@@ -72,12 +72,12 @@ const Grid = (props) => {
 
 // can be changed to be list view or grid view
 function MenuItems(props) {
-    const { itemNames, category, order, setOrder } = props;
+    const { itemNames, category, order, addToOrder } = props;
 
     return (
         <div className="gallery">
             <Grid>
-                <ItemBoxes itemNames={itemNames} category={category} order={order} setOrder={setOrder}/>
+                <ItemBoxes itemNames={itemNames} category={category} order={order} addToOrder={addToOrder}/>
             </Grid>
         </div>
     );
@@ -85,16 +85,14 @@ function MenuItems(props) {
 
 export default function MenuGallery(props) {
     // sauce, topping, cheese, drizzle, drink, dough, seasonal
-    const { view, order, setOrder } = props;
+    const { view, order, addToOrder } = props;
     const { data, error, isLoading } = useSWR('http://localhost:5000/menu', fetcher);
     if (error || isLoading)
         return;
 
-    console.log(view);
-    
     return (
         <div className="order-box">
-            <MenuItems itemNames={data[view]} category={view} order={order} setOrder={setOrder}/>
+            <MenuItems itemNames={data[view]} category={view} order={order} addToOrder={addToOrder}/>
         </div>
     );
 };
