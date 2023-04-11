@@ -4,6 +4,7 @@ from stone.inventorysql import get_current_inventory, restock_all, restock_items
 from stone.weather import get_weather
 from stone.menusql import get_menus, process_order
 from stone.whatsellssql import get_what_sells
+from stone.xreportsql import get_xreport
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -51,6 +52,12 @@ def whatsells():
         if json_data is None:
             return jsonify({"error": "Invalid JSON"})
         return jsonify(get_what_sells(request.get_json()))
+
+@app.route('/xreport', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def xreport():
+    if request.method == 'GET':
+        return jsonify(get_xreport())
 
 if __name__ == '__main__':
     app.run(debug=True)
