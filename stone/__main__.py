@@ -50,7 +50,7 @@ def whatsells():
         json_data = request.get_json()
         if json_data is None:
             return jsonify({"error": "Invalid JSON"})
-        return what_sells(request.get_json())
+        return jsonify(what_sells(request.get_json()))
 
 if __name__ == '__main__':
     app.run(debug=True)
