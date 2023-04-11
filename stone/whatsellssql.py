@@ -1,7 +1,7 @@
 import psycopg2
 import json
 
-def what_sells(what_sells_json): 
+def get_what_sells(what_sells_json): 
     connection = None
     try:
         connection = psycopg2.connect(user="csce315331_team_41_master",

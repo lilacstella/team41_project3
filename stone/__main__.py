@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from stone.inventorysql import get_current_inventory, restock_all, restock_items
 from stone.weather import get_weather
 from stone.menusql import get_menus, process_order
-from stone.whatsellssql import what_sells
+from stone.whatsellssql import get_what_sells
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -50,7 +50,7 @@ def whatsells():
         json_data = request.get_json()
         if json_data is None:
             return jsonify({"error": "Invalid JSON"})
-        return jsonify(what_sells(request.get_json()))
+        return jsonify(get_what_sells(request.get_json()))
 
 if __name__ == '__main__':
     app.run(debug=True)
