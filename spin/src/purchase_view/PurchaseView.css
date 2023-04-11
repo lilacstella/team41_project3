@@ -1,0 +1,35 @@
+.purchase-frame {
+    overflow: hidden;
+    display: flex;
+    height: 80vh;
+    background-color: #e7b449;
+}   
+
+.purchase-view-tab-frame {
+    display: flex;
+    height: 100%;
+    overflow-y: scroll;
+    flex-direction: column;
+    color: rgba(240, 248, 255, 0.653);
+}
+
+.purchase-view-tab {
+    width: 150px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: black;
+    background-color: #e7b449;
+    border-bottom: 3px solid #d3a43e;
+}
+
+.purchase-view-tab>h2 {
+    font-size: 1.5em;
+}
+
+.purchase-view-tab:hover {
+    cursor: pointer;
+    background-color: #f8db9c;
+}

@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import Navbar from './Navbar';
-import PurchaseView from './purchase-view/PurchaseView';
-import ManagerView from './manager-view/ManagerView';
-import './App.css';
+import {useState} from 'react';
+import Nav from './Nav';
+import ManagerView from './manager_view/ManagerView';
+import PurchaseView from './purchase_view/PurchaseView';
 
-
-export default function App() {
+function App() {
   const [showPurchaseView, setShowPurchaseView] = useState(true);
   
   const toggleView = () => {
@@ -21,11 +19,13 @@ export default function App() {
   }
 
   return (
-    <div className="App">
-      <Navbar login={toggleView} displayText={displayText} buttonText={buttonText} />
-      <div className="app-box">
+    <div>
+      <Nav login={toggleView} displayText={displayText} buttonText={buttonText} />
+      <div>
         {showPurchaseView ? <PurchaseView /> : <ManagerView />}
       </div>
     </div>
   );
 }
+
+export default App;

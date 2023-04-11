@@ -1,23 +1,26 @@
-.display-box{
-    background-color: white;
+.manager-view-display-frame{ 
+    /* background-color: white;
     height: 80vh;
     width: 80vw;
     justify-content: center;
     align-items: center;
-    /* overflow-y: scroll; */
+    overflow-y: scroll;
     position: absolute;
-    right: 0;
-}
+    right: 0; */
+    height: 100%;
+    width: 80vw;
+    border-left: 5px solid black;
+} 
 
-.display-box h1{
+.manager-view-display-frame h1{
     text-align: center;
 }
 
-.container {
+.table-container {
     /* position: absolute; */
     justify-content: center;
     align-items: center;
-    /* margin-left: 5%; */
+    margin-left: 5%;
     /* top: 50%; */
     /* left: 50%; */
     max-height: 60vh;
@@ -29,50 +32,49 @@
     flex-direction: row;
 }
 
-table {
+.table-container table {
     width: 800px;
     height: 800px;
     border-collapse: collapse;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    overflow-y: scroll;
 }
 
-th,
-td {
+.table-container th,
+.table-container td {
     padding: 15px;
     background-color: rgba(255, 255, 255, 0.2);
     color: black;
 }
 
-th {
+.table-container th {
     text-align: left;
 }
 
-thead th {
-    background-color: #55608f;
+.table-container thead th {
+    background-color: orange;
 }
 
-tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+.table-container tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-tbody td {
+.table-container tbody td {
     position: relative;
 }
 
-tbody td:hover:before {
+.table-container tbody td:hover:before {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
     top: -9999px;
     bottom: -9999px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.05);
     z-index: -1;
 }
 
-button.inven{
+button.inventory-button{
     height: 80px;
     width: 150px;
     align-items: center;

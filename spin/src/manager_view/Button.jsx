@@ -1,8 +1,9 @@
 import "./Button.css";
 
 export default function Button(props) {
+    // tells the parent component what view to display
     const handleClick = () => {
-        props.view();
+        props.view(props.buttonText.toLowerCase().replace(" ", "-"));
     };
 
     return (
