@@ -16,6 +16,10 @@
     text-align: center;
 }
 
+.manager-view-display-frame h2{
+    text-align: center;
+}
+
 .inventory-frame {
     display: flex;
 }

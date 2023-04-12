@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import axios from 'axios';
 import { DropdownButton } from 'react-bootstrap';
+import Form from "react-bootstrap/Form";
 
 const fetcher = (url) => axios.get(url).then(res => res.data);
 
@@ -65,26 +66,7 @@ function Inventory() {
         <div>
             <h1>Inventory</h1>
             <div className="inventory-frame">
-                <div className='table-container'>
-                    <Table className="striped bordered hover">
-                        <thead>
-                            <tr>
-                                {Object.keys(processedData[0]).map((key) => (
-                                    <th key={key}>{key}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {processedData.map((item, index) => (
-                                <tr key={index}>
-                                    {Object.keys(item).map((key) => (
-                                        <td key={key}>{item[key]}</td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
+                <DataTable processedData={processedData}/>
                 <div>
                     <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
                     <div>
@@ -105,8 +87,33 @@ function XReport() {
 }
 
 function ZReport() {
+    const [selectedItem, setSelectedItem] = useState('');
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('http://localhost:5000/zreport', fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    if (data.paymentdata.length === 0 || data.salesdata.length === 0){
+        return (
+            <div>
+                <h1>Z Report</h1>
+                <h2>There are no data for today.</h2>
+            </div>
+        )
+    }
+
+    const processedData = JSON.parse(data);
+
     return (
-        <h1>Z Report</h1>
+        <div>
+            <h1>Z Report</h1>
+            <DataTable processedData={processedData}/>
+        </div>
     )
 }
 
@@ -117,8 +124,35 @@ function Prices() {
 }
 
 function SalesReport() {
+    const [selectedItem, setSelectedItem] = useState('');
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('http://localhost:5000/salesreport', fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    const handleClick = () => {
+        if (data.paymentdata.length === 0 || data.salesdata.length === 0){
+            return;
+        }
+
+        const processedData = JSON.parse(data);
+        return <DataTable processedData={processedData}/>
+    }
+
     return (
-        <h1>Sales Report</h1>
+        <div>
+            <h1>Sales Report</h1>
+            <Form.Control type="date">From: </Form.Control>
+            <Form.Control type="date">To: </Form.Control>
+            <Button variant="outline-success">Submit</Button>
+        </div>
+        
+
     )
 }
 
@@ -137,5 +171,30 @@ function RestockReport() {
 function WhatSells() {
     return (
         <h1>What Sells</h1>
+    )
+}
+
+function DataTable(props) {
+    return (
+        <div className='table-container'>
+            <Table className="striped bordered hover">
+                <thead>
+                    <tr>
+                        {Object.keys(props.processedData[0]).map((key) => (
+                            <th key={key}>{key}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {props.processedData.map((item, index) => (
+                        <tr key={index}>
+                            {Object.keys(item).map((key) => (
+                                <td key={key}>{item[key]}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </div>
     )
 }
