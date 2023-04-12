@@ -1,6 +1,6 @@
 import json
 import psycopg2
-from datetime import date
+from datetime import date, datetime
 
 def get_zreport():
     connection = None
@@ -10,9 +10,10 @@ def get_zreport():
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
-        todaysdate = date.today()
-        todaystr = todaysdate.strftime("%Y-%m-%d")
-        zreportquery = "select c.menuitem, c.countitem as quantity, ROUND(c.countitem * price, 2) as totalsales  from menu_t m inner join (select menuitem, count(menuitem) as countitem from orderitem_t i inner join(select ordernumber from order_history where date(orderedat)  = '" + todaystr  + "')h on h.ordernumber = i.ordernumber  group by menuitem) c on m.menuitem = c.menuitem"
+        maxdatequery = "select max(date) from inventory_history;"
+        cursor.execute(maxdatequery)
+        maxdate = str(cursor.fetchone()[0])
+        zreportquery = "select c.menuitem, c.countitem as quantity, ROUND(c.countitem * price, 2) as totalsales  from menu_t m inner join (select menuitem, count(menuitem) as countitem from orderitem_t i inner join(select ordernumber from order_history where orderedat  > '" + maxdate + "')h on h.ordernumber = i.ordernumber  group by menuitem) c on m.menuitem = c.menuitem"
         cursor.execute(zreportquery)
         zreporttable = cursor.fetchall()
 
@@ -23,7 +24,7 @@ def get_zreport():
             saleslist.append(salesdata)
         zreportdict["salesdata"] = saleslist
 
-        zreportpaymenttype = "select paymentform, sum(total) as totalsales from order_history where date(orderedat) = '" + todaystr +  "' group by paymentform;"
+        zreportpaymenttype = "select paymentform, sum(total) as totalsales from order_history where orderedat > '" + maxdate +  "' group by paymentform;"
         cursor.execute(zreportpaymenttype)
         zreportpayment = cursor.fetchall()
         paymentlist = []
@@ -35,7 +36,6 @@ def get_zreport():
         zreportdict["paymentdata"] = paymentlist
         zreportdict["total"] = str(total)
 
-        print(zreportdict)
         return zreportdict
     finally:
         if connection:
@@ -56,7 +56,7 @@ def post_eodinv():
         dailyinv = cursor.fetchall()
 
         insert_inv_history = "INSERT INTO inventory_history (date, inventory_item, quantity, units) VALUES (%s, %s, %s, %s)"
-        current_date = date.today()
+        current_date = datetime.now()
         for item in dailyinv:
             cursor.execute(insert_inv_history, (current_date, item[0], item[1], item[2]))
 
