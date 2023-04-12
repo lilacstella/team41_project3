@@ -46,6 +46,7 @@ function Inventory() {
     if (isLoading || error || data === undefined) {
         return;
     }
+
     const processedData = JSON.parse(data);
 
     const restockAll = () => {
@@ -98,7 +99,7 @@ function ZReport() {
         return;
     }
 
-    if (data.paymentdata.length === 0 || data.salesdata.length === 0){
+    if (data.salesdata.length === 0){
         return (
             <div>
                 <h1>Z Report</h1>
@@ -107,12 +108,11 @@ function ZReport() {
         )
     }
 
-    const processedData = JSON.parse(data);
-
     return (
         <div>
             <h1>Z Report</h1>
-            <DataTable processedData={processedData}/>
+            <DataTable processedData={data.salesdata}/>
+            <h2>Total: ${data.total}</h2>
         </div>
     )
 }
