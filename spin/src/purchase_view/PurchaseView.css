@@ -1,7 +1,7 @@
 .purchase-frame {
     overflow: hidden;
     display: flex;
-    height: 80vh;
+    height: 81vh;
     background-color: #e7b449;
 }   
 
@@ -27,6 +27,7 @@
 
 .purchase-view-tab>h2 {
     font-size: 1.5em;
+    font-weight: bold;
 }
 
 .purchase-view-tab:hover {

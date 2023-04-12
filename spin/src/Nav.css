@@ -11,13 +11,15 @@ nav {
 nav>h1 {
     font-size: 3.5em;
     color: black;
+    font-weight: bold;
+    margin-left: 5%;
 }
 
 nav>button {
     width: 150px;
     height: 65px;
-    margin-left: 40px;
-    margin-right: 75px;
+    /* margin-left: 40px; */
+    margin-right: 5%;
     background-color: white;
     color: black;
     font-size: 1.5em;

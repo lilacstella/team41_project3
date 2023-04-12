@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MenuGallery from './Gallery';
+import axios from 'axios';
 import Cart from './Cart';
 import './PurchaseView.css';
 
@@ -31,7 +32,8 @@ export default function PurchaseView() {
         setPizza({'topping': []});
     }
 
-    const clearOrder = () => {
+    const checkoutOrder = () => {
+        axios.post('http://localhost:5000/menu', order);
         setOrder([]);
     }
 
@@ -39,7 +41,7 @@ export default function PurchaseView() {
         <div className="purchase-frame">
             <Navigation handleClick={setCurrView}/>
             <MenuGallery view={currView} order={order} addToOrder={addToOrder}/>
-            <Cart order={order} pizza={pizza} add={addPizzaToOrder} clear={clearOrder}/>
+            <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder}/>
         </div>
     )
 }
