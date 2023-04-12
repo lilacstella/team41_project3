@@ -42,6 +42,16 @@ def get_menus():
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
+
+        #get images
+        select_img = "SELECT * FROM item_images"
+        cursor.execute(select_img)
+        img = cursor.fetchall()
+        imgdict = {}
+        for row in img:
+            imgdict[row[0]] = row[1]
+        
+
         menu_results = {}
         # add sauces
         select_sauces = "SELECT InventoryItem FROM Inventory_t WHERE Category='Sauce'"
@@ -49,7 +59,11 @@ def get_menus():
         sauces = cursor.fetchall()
         sauces_list = []
         for row in sauces:
-            saucesdata = {"sauce-name": row[0]}
+            try:
+                image = imgdict[row[0]]
+            except KeyError:
+                image = None
+            saucesdata = {"sauce-name": row[0], "image" :image}
             sauces_list.append(saucesdata)
         menu_results["sauce"] = sauces_list
 
@@ -59,7 +73,11 @@ def get_menus():
         cheeses = cursor.fetchall()
         cheeses_list = []
         for row in cheeses:
-            cheesedata = {"cheese-name": row[0]}
+            try:
+                image = imgdict[row[0]]
+            except KeyError:
+                image = None
+            cheesedata = {"cheese-name": row[0], "image" : image}
             cheeses_list.append(cheesedata)
         menu_results["cheese"] = cheeses_list
 
@@ -69,7 +87,11 @@ def get_menus():
         toppings = cursor.fetchall()
         toppings_list = []
         for row in toppings:
-            toppingdata = {"topping-name": row[0]}
+            try:
+                image = imgdict[row[0]]
+            except KeyError:
+                image = None
+            toppingdata = {"topping-name": row[0], "image": image}
             toppings_list.append(toppingdata)
         menu_results["topping"] = toppings_list
 
@@ -79,7 +101,11 @@ def get_menus():
         drizzles = cursor.fetchall()
         drizzles_list = []
         for row in drizzles:
-            drizzledata = {"drizzle-name": row[0]}
+            try:
+                image = imgdict[row[0]]
+            except KeyError:
+                image = None
+            drizzledata = {"drizzle-name": row[0], "image": image}
             drizzles_list.append(drizzledata)
         menu_results["drizzle"] = drizzles_list
 
@@ -87,7 +113,11 @@ def get_menus():
         select_fountaindrink = "SELECT price FROM menu_t WHERE menuitem = 'Fountain Drink'"
         cursor.execute(select_fountaindrink)
         prices_list = cursor.fetchone()
-        price = {"price": float(prices_list[0])}
+        try:
+            image = imgdict[prices_list[0]]
+        except KeyError:
+            image = None
+        price = {"price": float(prices_list[0]), "image": image}
         menu_results["fountain-drink"] = price
 
         # add all drinks
@@ -96,7 +126,11 @@ def get_menus():
         drinks = cursor.fetchall()
         menu_results["drink"] = []
         for row in drinks:
-            drinksdata = {"drink-name": row[0], "price": float(row[1])}
+            try:
+                image = imgdict[row[0]]
+            except KeyError:
+                image = None
+            drinksdata = {"drink-name": row[0], "price": float(row[1]), "image": image}
             menu_results["drink"].append(drinksdata)
 
         # add all doughs
@@ -105,7 +139,11 @@ def get_menus():
         doughs = cursor.fetchall()
         menu_results["dough"] = []
         for row in doughs:
-            doughdata = {"dough-name": row[0], "price": float(row[1])}
+            try:
+                image = imgdict[row[0]]
+            except KeyError:
+                image = None
+            doughdata = {"dough-name": row[0], "price": float(row[1]), "image": image}
             menu_results["dough"].append(doughdata)
 
         # add all seasonal items
@@ -114,7 +152,11 @@ def get_menus():
         seasonal = cursor.fetchall()
         menu_results["seasonal"] = []
         for row in seasonal:
-            seasonaldata = {"seasonal-name": row[0], "price": float(row[1])}
+            try:
+                image = imgdict[row[0]]
+            except KeyError:
+                image = None
+            seasonaldata = {"seasonal-name": row[0], "price": float(row[1]), "image": image}
             menu_results["seasonal"].append(seasonaldata)
 
         # add all prices
@@ -122,36 +164,35 @@ def get_menus():
         select_cheese_pizza = "SELECT price FROM menu_t WHERE menuitem = 'Original Cheese Pizza'"
         cursor.execute(select_cheese_pizza)
         cheesepizzaprice = cursor.fetchone()
-        price = {"price": float(cheesepizzaprice[0])}
+        try:
+            image = imgdict["Original Cheese Pizza"]
+        except KeyError:
+            image = None
+        price = {"price": float(cheesepizzaprice[0]), "image": image}
         menu_results["cheese-pizza-price"] = price
 
         # one topping
         select_one_topping_pizza = "SELECT price FROM menu_t WHERE menuitem = '1 Topping Pizza'"
         cursor.execute(select_one_topping_pizza)
         onetoppizzaprice = cursor.fetchone()
-        price = {"price": float(onetoppizzaprice[0])}
+        try:
+            image = imgdict["1 Topping Pizza"]
+        except KeyError:
+            image = None
+        price = {"price": float(onetoppizzaprice[0]), "image": image}
         menu_results["one-topping-pizza-price"] = price
 
         # 4 topping
         select_multi_topping_pizza = "SELECT price FROM menu_t WHERE menuitem = '2-4 Topping Pizza'"
         cursor.execute(select_multi_topping_pizza)
         multitoppizzaprice = cursor.fetchone()
-        price = {"price": float(multitoppizzaprice[0])}
+        try:
+            image = imgdict["2-4 Topping Pizza"]
+        except KeyError:
+            image = None
+        price = {"price": float(multitoppizzaprice[0]), "image": image}
         menu_results["multi-topping-pizza-price"] = price
 
-        # # max line number
-        # select_max_line = "SELECT MAX(LineNumber) FROM OrderItem_T;"
-        # cursor.execute(select_max_line)
-        # maxline = cursor.fetchone()
-        # maxlinejson = {"maxlinenum": maxline[0]}
-        # menu_results["max-line"] = maxlinejson
-
-        # # max order number
-        # select_max_order = "SELECT MAX(OrderNumber) FROM OrderItem_T;"
-        # cursor.execute(select_max_order)
-        # maxorder = cursor.fetchone()
-        # maxorderjson = {"maxordernum": maxorder[0]}
-        # menu_results["max-order"] = maxorderjson
         return menu_results
 
     finally:
@@ -257,3 +298,27 @@ def process_order(json_file):
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
+
+
+# connection = None
+# try:
+#         connection = psycopg2.connect(user="csce315331_team_41_master",
+#                                       password="goldfishwithnuts",
+#                                       host="csce-315-db.engr.tamu.edu",
+#                                       database="csce315331_team_41")
+#         cursor = connection.cursor()
+#         select_fountaindrink = "SELECT * FROM item_images"
+#         cursor.execute(select_fountaindrink)
+#         dumb = cursor.fetchall()
+#         imgdict = {}
+#         for row in dumb:
+#             imgdict[row[0]] = row[1]
+
+#         print(imgdict)
+            
+
+# finally:
+#         if connection:
+#             cursor.close()
+#             connection.close()
+#             print("PostgreSQL connection is closed")
