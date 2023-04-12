@@ -298,27 +298,3 @@ def process_order(json_file):
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-
-
-# connection = None
-# try:
-#         connection = psycopg2.connect(user="csce315331_team_41_master",
-#                                       password="goldfishwithnuts",
-#                                       host="csce-315-db.engr.tamu.edu",
-#                                       database="csce315331_team_41")
-#         cursor = connection.cursor()
-#         select_fountaindrink = "SELECT * FROM item_images"
-#         cursor.execute(select_fountaindrink)
-#         dumb = cursor.fetchall()
-#         imgdict = {}
-#         for row in dumb:
-#             imgdict[row[0]] = row[1]
-
-#         print(imgdict)
-            
-
-# finally:
-#         if connection:
-#             cursor.close()
-#             connection.close()
-#             print("PostgreSQL connection is closed")
