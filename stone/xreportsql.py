@@ -13,9 +13,7 @@ def get_xreport():
         todaysdate = date.today()
         todaystr = todaysdate.strftime("%Y-%m-%d")
 
-        xreportquery = ("select c.menuitem, c.countitem as quantity, ROUND(c.countitem * price, 2) as totalsales  from menu_t m inner join "
-                    + "(select menuitem, count(menuitem) as countitem from orderitem_t i inner join(select ordernumber from order_history where date(orderedat)  = '"
-                    + todaystr + "')h on h.ordernumber = i.ordernumber  group by menuitem) c on m.menuitem = c.menuitem")
+        xreportquery = "select c.menuitem, c.countitem as quantity, ROUND(c.countitem * price, 2) as totalsales  from menu_t m inner join (select menuitem, count(menuitem) as countitem from orderitem_t i inner join(select ordernumber from order_history where date(orderedat)  = '" + todaystr  + "')h on h.ordernumber = i.ordernumber  group by menuitem) c on m.menuitem = c.menuitem"
         cursor.execute(xreportquery)
         xreporttable = cursor.fetchall()
 
