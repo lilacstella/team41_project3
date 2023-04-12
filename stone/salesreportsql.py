@@ -10,8 +10,8 @@ def get_sales(date1, date2):
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
-        date1str = date1#.strftime("%Y-%m-%d")
-        date2str = date2#.strftime("%Y-%m-%d")
+        date1str = date1
+        date2str = date2
         query = query = """
     SELECT c.menuitem, ROUND(c.countitem * m.price, 2) AS totalsales
     FROM menu_t m
@@ -29,9 +29,15 @@ def get_sales(date1, date2):
         params = (date1str, date2str)
         cursor.execute(query, params)
         results = cursor.fetchall()
+        salesreportdict = {}
+        salesreportlist = []
+        total  = 0
         for row in results:
-            #parse through and add to list
-        return results
+            salesreportlist.append({"itemname" : row[0], "itemsales": str(row[1])})
+            total += row[1]
+        salesreportdict["salesreport"] = salesreportlist
+        salesreportdict["totalsales"] = str(total)
+        return salesreportdict
 
     finally:
         if connection:
@@ -39,5 +45,3 @@ def get_sales(date1, date2):
             connection.close()
             print("PostgreSQL connection is closed")
 
-results = get_sales("2000-08-22", "2022-08-22")
-print(results)
