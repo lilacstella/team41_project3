@@ -13,7 +13,6 @@ cors = CORS(app)
 @app.route('/menu', methods=['GET', 'POST'])
 @cross_origin(origins="http://localhost:3000", methods=["GET", "POST"])
 def menu():
-    print('hi')
     if request.method == 'GET':
         return jsonify(get_menus())
     elif request.method == 'POST':

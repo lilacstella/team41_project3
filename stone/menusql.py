@@ -139,20 +139,19 @@ def get_menus():
         price = {"price": float(multitoppizzaprice[0])}
         menu_results["multi-topping-pizza-price"] = price
 
-        # max line number
-        select_max_line = "SELECT MAX(LineNumber) FROM OrderItem_T;"
-        cursor.execute(select_max_line)
-        maxline = cursor.fetchone()
-        maxlinejson = {"maxlinenum": maxline[0]}
-        menu_results["max-line"] = maxlinejson
+        # # max line number
+        # select_max_line = "SELECT MAX(LineNumber) FROM OrderItem_T;"
+        # cursor.execute(select_max_line)
+        # maxline = cursor.fetchone()
+        # maxlinejson = {"maxlinenum": maxline[0]}
+        # menu_results["max-line"] = maxlinejson
 
-        # max order number
-        select_max_order = "SELECT MAX(OrderNumber) FROM OrderItem_T;"
-        cursor.execute(select_max_order)
-        maxorder = cursor.fetchone()
-        maxorderjson = {"maxordernum": maxorder[0]}
-        menu_results["max-order"] = maxorderjson
-        print(menu_results)
+        # # max order number
+        # select_max_order = "SELECT MAX(OrderNumber) FROM OrderItem_T;"
+        # cursor.execute(select_max_order)
+        # maxorder = cursor.fetchone()
+        # maxorderjson = {"maxordernum": maxorder[0]}
+        # menu_results["max-order"] = maxorderjson
         return menu_results
 
     finally:
@@ -172,27 +171,42 @@ def process_order(json_file):
                                       database="csce315331_team_41")
         cursor = connection.cursor()
         order_dict = json_file  # not sure why it doesn't need to load json??? but it works??
+
+        # max line number
+        select_max_line = "SELECT MAX(LineNumber) FROM OrderItem_T;"
+        cursor.execute(select_max_line)
+        maxline = cursor.fetchone()[0]
+        maxline += 1
+
+        # max order number
+        select_max_order = "SELECT MAX(OrderNumber) FROM order_history;"
+        cursor.execute(select_max_order)
+        maxorder = cursor.fetchone()[0]
+        maxorder += 1
+
         # update orderhistory
         order_history_info = order_dict["orderhistory"]
         order_history_query = "INSERT INTO order_history VALUES (%s, %s, %s, %s, %s);"
         order_history_tuple = (
-            order_history_info["ordernumber"], order_history_info["total"], order_history_info["paymentform"],
+            str(maxorder), order_history_info["total"], order_history_info["paymentform"],
             order_history_info["orderedat"], order_history_info["employeeid"])
         cursor.execute(order_history_query, order_history_tuple)
         connection.commit()
+
+        
 
         for item in order_dict["orderitems"]:
             # add item to orderitem
             query = "INSERT INTO orderitem_t VALUES (%s, %s, %s, %s, %s, %s,%s, %s, %s, %s);"
             itemtuple = (
-                item["line-number"], item["order-number"], item["item-name"], item["sauce"], item["cheese"],
+                str(maxline), str(maxorder), item["itemname"], item["sauce"], item["cheese"],
                 item["topping1"],
                 item["topping2"], item["topping3"], item["topping4"], item["drizzle"])
             cursor.execute(query, itemtuple)
             # remove stuff from inventory
             # pizza
-            if (item["item-name"] == "1 Topping Pizza" or item["item-name"] == "Original Cheese Pizza" or
-                    item["item-name"] == "2-4 Topping Pizza"):
+            if (item["itemname"] == "1 Topping Pizza" or item["itemname"] == "Original Cheese Pizza" or
+                    item["itemname"] == "2-4 Topping Pizza"):
 
                 # doughs
                 updatedough = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s"
@@ -227,60 +241,19 @@ def process_order(json_file):
                 toppingtuple4 = (item["topping4"],)
                 cursor.execute(updatetopping4, toppingtuple4)
             # fountain drink
-            elif (item["item-name"] == "Fountain Drink"):
+            elif (item["itemname"] == "Fountain Drink"):
                 updatecups = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = 'Cups';"
                 cursor.execute(updatecups)
             # drink
             else:
                 updateinvother = "UPDATE inventory_t SET Quantity = Quantity - 1 WHERE inventoryitem = %s;"
-                othertuple = (item["item-name"],)
+                othertuple = (item["itemname"],)
                 cursor.execute(updateinvother, othertuple)
 
             connection.commit()
+            maxline += 1
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-# test for process_order
-# test_dict = {
-#     "orderhistory": {
-#         "ordernumber": 54993,
-#         "total": 25.99,
-#         "paymentform": "credit",
-#         "orderedat": "2022-12-31 23:59:59",
-#         "employeeid": 1
-#     },
-#     "orderitems": [
-#         {
-#             "linenumber": 1000000,
-#             "ordernumber": 54993,
-#             "itemname": "2-4 Topping Pizza",
-#             "dough": "Regular Dough",
-#             "sauce": "pesto",
-#             "cheese": "House Blend",
-#             "topping1": "Pepperoni",
-#             "topping2": "Black Olives",
-#             "topping3": None,
-#             "topping4": None,
-#             "drizzle": "Oregano"
-#         },
-#         {
-#             "linenumber": 1000001,
-#             "ordernumber": 54993,
-#             "itemname": "Fountain Drink",
-#             "dough": None,
-#             "sauce": None,
-#             "cheese": None,
-#             "topping1": None,
-#             "topping2": None,
-#             "topping3": None,
-#             "topping4": None,
-#             "drizzle": None
-#         }
-#     ]
-# }
-# with open("test.json", "w") as outfile:
-#     json.dump(test_dict, outfile)
-# process_order("test.json")
-# print(get_menus())
