@@ -44,6 +44,14 @@ function Inventory() {
     }
     const processedData = JSON.parse(data);
 
+    const restockAll = () => {
+        // send a post request to inventory end point
+        axios.post('http://localhost:5000/inventory', {}
+        ).then((res) => {
+            console.log(res);
+        })
+    };
+
     return (
         <div>
             <h1>Inventory</h1>
@@ -67,7 +75,7 @@ function Inventory() {
                     </tbody>
                 </Table>
             </div>
-            <button className="inventory-button">Restock</button>
+            <button className="inventory-button" onClick={restockAll}>Restock</button>
         </div>
     )
 }
