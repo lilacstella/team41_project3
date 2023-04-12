@@ -62,7 +62,7 @@ function OrderList(props) {
     // console.log(order);
     return (
         <div className='cart-order-list'>
-            <h1>Cart</h1>
+            <h2>Cart</h2>
             {
                 order.map((item) => {
                     if (typeof item === 'object') {
