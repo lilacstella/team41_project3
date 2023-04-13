@@ -36,7 +36,6 @@ export default function Display(props) {
 }
 
 function Inventory() {
-    const [selectedItem, setSelectedItem] = useState('');
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('http://localhost:5000/inventory', fetcher);
     if (error) {
@@ -88,7 +87,6 @@ function XReport() {
 }
 
 function ZReport() {
-    const [selectedItem, setSelectedItem] = useState('');
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('http://localhost:5000/zreport', fetcher);
     if (error) {
@@ -107,6 +105,7 @@ function ZReport() {
             </div>
         )
     }
+    console.log(data);
 
     return (
         <div>
@@ -123,33 +122,55 @@ function Prices() {
     )
 }
 
-function SalesReport() {
-    const [selectedItem, setSelectedItem] = useState('');
-    // fetch information from endpoint
-    const { data, error, isLoading } = useSWR('http://localhost:5000/salesreport', fetcher);
-    if (error) {
-        console.error(error);
-    }
+function SalesReportTable(props){
+    const { data, error, isLoading } = useSWR(`http://localhost:5000/salesreport?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
+        if (error) {
+            console.error(error);
+        }
 
-    if (isLoading || error || data === undefined) {
-        return;
-    }
-
-    const handleClick = () => {
-        if (data.paymentdata.length === 0 || data.salesdata.length === 0){
+        if (isLoading || error || data === undefined) {
             return;
         }
 
-        const processedData = JSON.parse(data);
-        return <DataTable processedData={processedData}/>
+        if (data.salesreport.length == 0){
+            return(
+                <div>
+                    <h2>No data for this time.</h2>
+                </div>
+            )
+        }
+
+        console.log(data);
+        return (
+            <div>
+                <DataTable processedData={data.salesreport}/>
+                <h2>total: ${data.totalsales}</h2>
+            </div>
+        
+        )
+}
+
+function SalesReport() {
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+    const handleClick = () => {
+        setDates({"fromDate" : document.querySelector('#fromDate').value, 
+                  "toDate" : document.querySelector('#toDate').value});
+
+        setDisplayTable(true);
     }
+    
+    console.log(dates.fromDate);
+    console.log(dates.toDate);
 
     return (
         <div>
+            <div class=""></div>
             <h1>Sales Report</h1>
-            <Form.Control type="date">From: </Form.Control>
-            <Form.Control type="date">To: </Form.Control>
-            <Button variant="outline-success">Submit</Button>
+            from: <Form.Control id="fromDate" type="date"></Form.Control>
+            to: <Form.Control id ="toDate" type="date"></Form.Control>
+            <Button variant="outline-success" onClick={handleClick}>Submit</Button>
+            {displayTable?<SalesReportTable fromDate={encodeURIComponent(dates.fromDate)} toDate={encodeURIComponent(dates.toDate)}/> : null}
         </div>
         
 
