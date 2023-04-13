@@ -3,6 +3,8 @@ from flask_cors import CORS, cross_origin
 from stone.inventorysql import get_current_inventory, restock_all, restock_items
 from stone.weather import get_weather
 from stone.menusql import get_menus, process_order
+from stone.whatsellssql import get_what_sells
+from stone.xreportsql import get_xreport
 from stone.zreportsql import get_zreport, post_eodinv
 from stone.salesreportsql import get_sales
 
@@ -44,6 +46,21 @@ def weather():
     if request.method == 'GET':
         return jsonify(get_weather())
 
+@app.route('/whatsells', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def whatsells():
+    if request.method == 'GET':
+        json_data = request.get_json()
+        if json_data is None:
+            return jsonify({"error": "Invalid JSON"})
+        return jsonify(get_what_sells(request.get_json()))
+
+@app.route('/xreport', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def xreport():
+    if request.method == 'GET':
+        return jsonify(get_xreport())
+        
 @app.route('/zreport', methods=['GET', 'POST'])
 @cross_origin(origins="http://localhost:3000", methods=["GET", "POST"])
 def zreport():
@@ -62,7 +79,7 @@ def salesreport():
         date1 = request.args.get('date1')
         date2 = request.args.get('date2')
         return jsonify(get_sales(date1, date2))
-    
+
 
 if __name__ == '__main__':
     app.run(debug=True)
