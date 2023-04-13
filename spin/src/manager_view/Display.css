@@ -90,3 +90,18 @@ button.inventory-button{
     align-items: center;
     justify-content: center;
 }
+
+.sales-container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    flex-direction: row;
+}
+
+.forms{
+    margin-left: 20px;
+    margin-right:20px;
+    width: 170px !important;
+}

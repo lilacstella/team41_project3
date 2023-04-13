@@ -97,6 +97,7 @@ function ZReport() {
         return;
     }
 
+    // checks for empty queries and doesn't display table
     if (data.salesdata.length === 0){
         return (
             <div>
@@ -122,6 +123,7 @@ function Prices() {
     )
 }
 
+// setting up the table for SalesReport
 function SalesReportTable(props){
     const { data, error, isLoading } = useSWR(`http://localhost:5000/salesreport?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
         if (error) {
@@ -132,6 +134,7 @@ function SalesReportTable(props){
             return;
         }
 
+        // checks for empty query
         if (data.salesreport.length == 0){
             return(
                 <div>
@@ -140,7 +143,7 @@ function SalesReportTable(props){
             )
         }
 
-        console.log(data);
+        // console.log(data);
         return (
             <div>
                 <DataTable processedData={data.salesreport}/>
@@ -151,8 +154,11 @@ function SalesReportTable(props){
 }
 
 function SalesReport() {
+    // use states so that variables get updated thoughout
     const [displayTable, setDisplayTable] = useState(false);
     const [dates, setDates] = useState({});
+
+    // handles the button click
     const handleClick = () => {
         setDates({"fromDate" : document.querySelector('#fromDate').value, 
                   "toDate" : document.querySelector('#toDate').value});
@@ -165,12 +171,14 @@ function SalesReport() {
 
     return (
         <div>
-            <div class=""></div>
             <h1>Sales Report</h1>
-            from: <Form.Control id="fromDate" type="date"></Form.Control>
-            to: <Form.Control id ="toDate" type="date"></Form.Control>
-            <Button variant="outline-success" onClick={handleClick}>Submit</Button>
-            {displayTable?<SalesReportTable fromDate={encodeURIComponent(dates.fromDate)} toDate={encodeURIComponent(dates.toDate)}/> : null}
+            <div class="sales-container">
+                from: <Form.Control className="forms" id="fromDate" type="date"></Form.Control>
+                to: <Form.Control className="forms" id ="toDate" type="date"></Form.Control>
+                <Button variant="outline-success" onClick={handleClick}>Submit</Button>
+            </div>
+            {displayTable?<SalesReportTable fromDate={encodeURIComponent(dates.fromDate)} 
+                                            toDate={encodeURIComponent(dates.toDate)}/> : null}
         </div>
         
 
