@@ -5,6 +5,7 @@ from stone.weather import get_weather
 from stone.menusql import get_menus, process_order
 from stone.zreportsql import get_zreport, post_eodinv
 from stone.salesreportsql import get_sales
+from stone.restockreportsql import get_low_inventory
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -62,6 +63,12 @@ def salesreport():
         date1 = request.args.get('date1')
         date2 = request.args.get('date2')
         return jsonify(get_sales(date1, date2))
+    
+@app.route('/restockreport', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def restockreport():
+    if request.method == 'GET':
+        return jsonify(get_low_inventory())
     
 
 if __name__ == '__main__':
