@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Display.css';
 import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import axios from 'axios';
+import { DropdownButton } from 'react-bootstrap';
 
 const fetcher = (url) => axios.get(url).then(res => res.data);
 
@@ -33,6 +35,7 @@ export default function Display(props) {
 }
 
 function Inventory() {
+    const [selectedItem, setSelectedItem] = useState('');
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('http://localhost:5000/inventory', fetcher);
     if (error) {
@@ -44,30 +47,53 @@ function Inventory() {
     }
     const processedData = JSON.parse(data);
 
+    const restockAll = () => {
+        axios.post('http://localhost:5000/inventory', {}
+        ).then((res) => {
+            console.log(res);
+        })
+    };
+
+    const setQuantity = () => {
+        axios.post('http://localhost:5000/inventory', {'InventoryItem': 'Cheese'}
+        ).then((res) => {
+            console.log(res);
+        })
+    };
+
     return (
         <div>
             <h1>Inventory</h1>
-            <div className='table-container'>
-                <Table className="striped bordered hover">
-                    <thead>
-                        <tr>
-                            {Object.keys(processedData[0]).map((key) => (
-                                <th key={key}>{key}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {processedData.map((item, index) => (
-                            <tr key={index}>
-                                {Object.keys(item).map((key) => (
-                                    <td key={key}>{item[key]}</td>
+            <div className="inventory-frame">
+                <div className='table-container'>
+                    <Table className="striped bordered hover">
+                        <thead>
+                            <tr>
+                                {Object.keys(processedData[0]).map((key) => (
+                                    <th key={key}>{key}</th>
                                 ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {processedData.map((item, index) => (
+                                <tr key={index}>
+                                    {Object.keys(item).map((key) => (
+                                        <td key={key}>{item[key]}</td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
+                <div>
+                    <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
+                    <div>
+                        <DropdownButton title="Select Item">
+                        </DropdownButton>
+                        <Button variant="outline-primary" className="inventory-button" onClick={setQuantity}>Set Quantity</Button>
+                    </div>
+                </div>
             </div>
-            <button className="inventory-button">Restock</button>
         </div>
     )
 }

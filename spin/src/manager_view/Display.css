@@ -16,6 +16,13 @@
     text-align: center;
 }
 
+.inventory-frame {
+    display: flex;
+}
+.inventory-frame>.table-container {
+    margin: auto;
+}
+
 .table-container {
     /* position: absolute; */
     justify-content: center;
