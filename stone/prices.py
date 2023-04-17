@@ -38,7 +38,7 @@ def get_prices():
             storagelist.append(row[0])
         prices_dict["storage"] = storagelist
 
-        print(prices_dict)
+        return prices_dict
     
     finally:
         if connection:
@@ -46,4 +46,57 @@ def get_prices():
             connection.close()
             print("PostgreSQL connection is closed")
 
-get_prices()
+def add_menu_item(json_file):
+    connection = None
+    try:
+        connection = psycopg2.connect(user="csce315331_team_41_master",
+                                      password="goldfishwithnuts",
+                                      host="csce-315-db.engr.tamu.edu",
+                                      database="csce315331_team_41")
+        cursor = connection.cursor()
+
+        add_item = "INSERT INTO menu_t VALUES (%s, %s);"
+        menu_tuple = (json_file["menuitem"], json_file["price"])
+        cursor.execute(add_item, menu_tuple)
+        connection.commit()
+        return True  
+    
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+def add_inv_item(json_file):
+    connection = None
+    try:
+        connection = psycopg2.connect(user="csce315331_team_41_master",
+                                      password="goldfishwithnuts",
+                                      host="csce-315-db.engr.tamu.edu",
+                                      database="csce315331_team_41")
+        cursor = connection.cursor()
+        add_item = "INSERT INTO inventory_t VALUES (%s, %s, %d, %s, %s);"
+        menu_tuple = (json_file["inventoryitem"], json_file["category"], json_file["quantity"], json_file["units"], json_file["storagelocation"] )
+        cursor.execute(add_item, menu_tuple)
+        connection.commit()
+    
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+def change_price(json_file):
+    connection = None
+    try:
+        connection = psycopg2.connect(user="csce315331_team_41_master",
+                                      password="goldfishwithnuts",
+                                      host="csce-315-db.engr.tamu.edu",
+                                      database="csce315331_team_41")
+        cursor = connection.cursor()
+    
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
