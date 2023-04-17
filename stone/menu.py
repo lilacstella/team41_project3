@@ -251,12 +251,21 @@ def process_order(json_data):
         # update orderhistory
         order_history_query = "INSERT INTO order_history VALUES (%s, %s, %s, %s, %s)"
         order_history_tuple = (max_order_num, total_cost, payment_form, order_time, employee_id)
+        print(total_cost)
         cursor.execute(order_history_query, order_history_tuple)
         connection.commit()
 
         for order_item in order_items:
             # individual items in order item history and inventory
             max_line_num += 1
+            item_on_menu = order_item
+            if type(order_item) == dict:
+                if len(order_item['topping']) > 1:
+                    item_on_menu = "2-4 Topping Pizza"
+                elif len(order_item['topping']) == 1:
+                    item_on_menu = "1 Topping Pizza"
+                else:
+                    item_on_menu = "Original Cheese Pizza"
             cursor.execute("INSERT INTO orderitem_t (linenumber, ordernumber, menuitem) VALUES (%s, %s, %s)",
                            (max_line_num, max_order_num, item_on_menu))
             if type(order_item) == dict:
@@ -288,9 +297,10 @@ def process_order(json_data):
                                (order_item,))
 
             connection.commit()
-
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
+
+
