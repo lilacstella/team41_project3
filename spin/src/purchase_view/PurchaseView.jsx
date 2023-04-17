@@ -33,7 +33,17 @@ export default function PurchaseView() {
     }
 
     const checkoutOrder = () => {
-        axios.post('http://localhost:5000/menu', order);
+        // formatting order
+        console.log(order);
+        /* 
+        {
+            "order": ["Gatorade", {"sauce": "Zesty Red", "drizzle": "Ranch"}],
+            "employee_id": 1,
+            "payment_form": "cash",
+        }
+
+        */
+        axios.post('http://localhost:5000/menu', {"payment_form": "cash", "employee_id": 0, "order": order});
         setOrder([]);
     }
 
