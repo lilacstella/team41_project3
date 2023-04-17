@@ -143,7 +143,7 @@ function SalesReportTable(props){
             )
         }
 
-        // console.log(data);
+        // console.log(data.salesreport);
         return (
             <div>
                 <DataTable processedData={data.salesreport}/>
@@ -166,8 +166,8 @@ function SalesReport() {
         setDisplayTable(true);
     }
     
-    console.log(dates.fromDate);
-    console.log(dates.toDate);
+    // console.log(dates.fromDate);
+    // console.log(dates.toDate);
 
     return (
         <div>
@@ -197,9 +197,65 @@ function RestockReport() {
     )
 }
 
+function WhatSellsTable(props){
+    const { data, error, isLoading } = useSWR(`http://localhost:5000/whatsells?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
+        if (error) {
+            console.error(error);
+        }
+
+        if (isLoading || error || data === undefined) {
+            return;
+        }
+
+        const processedData = JSON.parse(data);
+
+        // checks for empty query
+        if (processedData.length == 0){
+            return(
+                <div>
+                    <h2>No data for this time.</h2>
+                </div>
+            )
+        }
+
+        // console.log(JSON.parse(data));
+
+        return (
+            <div>
+                <DataTable processedData={processedData}/>
+            </div>
+        )
+}
+
 function WhatSells() {
+    // use states so that variables get updated thoughout
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+
+    // handles the button click
+    const handleClick = () => {
+        setDates({"fromDate" : document.querySelector('#fromDate').value, 
+                  "toDate" : document.querySelector('#toDate').value});
+
+        setDisplayTable(true);
+    }
+    
+    // console.log(dates.fromDate);
+    // console.log(dates.toDate);
+
     return (
-        <h1>What Sells</h1>
+        <div>
+            <h1>What Sells</h1>
+            <div class="sales-container">
+                from: <Form.Control className="forms" id="fromDate" type="date"></Form.Control>
+                to: <Form.Control className="forms" id ="toDate" type="date"></Form.Control>
+                <Button variant="outline-success" onClick={handleClick}>Submit</Button>
+            </div>
+            {displayTable?<WhatSellsTable fromDate={encodeURIComponent(dates.fromDate)} 
+                                            toDate={encodeURIComponent(dates.toDate)}/> : null}
+        </div>
+        
+
     )
 }
 
