@@ -50,10 +50,9 @@ def weather():
 @cross_origin(origins="http://localhost:3000", methods=["GET"])
 def whatsells():
     if request.method == 'GET':
-        json_data = request.get_json()
-        if json_data is None:
-            return jsonify({"error": "Invalid JSON"})
-        return jsonify(get_what_sells(request.get_json()))
+        date1 = request.args.get('date1')
+        date2 = request.args.get('date2')
+        return jsonify(get_what_sells(date1, date2))
 
 @app.route('/xreport', methods=['GET'])
 @cross_origin(origins="http://localhost:3000", methods=["GET"])
