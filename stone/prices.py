@@ -95,7 +95,7 @@ def change_price(json_file):
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
-        change_proce = "UPDATE menu_t SET price = %d WHERE menuitem = %s"
+        change_price = "UPDATE menu_t SET price = %s WHERE menuitem = %s"
         price_tuple = (json_file["price"], json_file["menuitem"])
         cursor.execute(change_price, price_tuple)
         connection.commit()
