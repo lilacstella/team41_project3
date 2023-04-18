@@ -79,6 +79,7 @@ def add_inv_item(json_file):
         menu_tuple = (json_file["inventoryitem"], json_file["category"], json_file["quantity"], json_file["units"], json_file["storagelocation"] )
         cursor.execute(add_item, menu_tuple)
         connection.commit()
+        return True
     
     finally:
         if connection:
@@ -94,6 +95,11 @@ def change_price(json_file):
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
+        change_proce = "UPDATE menu_t SET price = %d WHERE menuitem = %s"
+        price_tuple = (json_file["price"], json_file["menuitem"])
+        cursor.execute(change_price, price_tuple)
+        connection.commit()
+        return True
     
     finally:
         if connection:

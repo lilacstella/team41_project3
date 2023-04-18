@@ -7,6 +7,7 @@ from stone.whatsellssql import get_what_sells
 from stone.xreportsql import get_xreport
 from stone.zreportsql import get_zreport, post_eodinv
 from stone.salesreportsql import get_sales
+from stone.prices import get_prices, change_price, add_inv_item, add_menu_item
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -80,6 +81,23 @@ def salesreport():
         date2 = request.args.get('date2')
         return jsonify(get_sales(date1, date2))
 
+@app.route('/prices', methods=['GET', 'POST'])
+@cross_origin(origins="http://localhost:3000", methods=["GET", "POST"])
+def prices():
+    if request.method == 'GET':
+        return jsonify(get_prices())
+    elif request.method == 'POST':
+        data = request.get_json()
+        action = data.get("action", "")
+        if action == "add_menu_item":
+            result = add_menu_item(data)
+        elif action == "add_inv_item":
+            result = add_inv_item(data)
+        elif action == "change_price":
+            result = change_price(data)
+        else:
+            result = False
+        return jsonify({"sucess": result})        
 
 if __name__ == '__main__':
     app.run(debug=True)
