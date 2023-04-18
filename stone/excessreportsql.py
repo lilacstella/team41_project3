@@ -13,7 +13,10 @@ def get_excess(datein):
         datestr = datein
         datequery = ("SELECT date FROM inventory_history WHERE date <= %s ORDER BY date DESC LIMIT 1")
         cursor.execute(datequery, (datestr,))
-        date_return = cursor.fetchone()[0]
+        cursor_fetch = cursor.fetchone()
+        if cursor_fetch is None:
+            return "Date out of bounds"
+        date_return = cursor_fetch[0]
         
         print("Date: ", date_return)
 
