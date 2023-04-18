@@ -6,6 +6,7 @@ from stone.menusql import get_menus, process_order
 from stone.zreportsql import get_zreport, post_eodinv
 from stone.salesreportsql import get_sales
 from stone.restockreportsql import get_low_inventory
+from stone.excessreportsql import get_excess
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -70,6 +71,14 @@ def restockreport():
     if request.method == 'GET':
         return jsonify(get_low_inventory())
     
+@app.route('/excessreport', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def excessreport():
+    if request.method == 'GET':
+        date = request.args.get('date')
+        return jsonify(get_excess(date))
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True)
