@@ -11,22 +11,19 @@ def get_excess(datein):
                                        database="csce315331_team_41")
         cursor = connection.cursor()
         datestr = datein
-        # datequery = ("SELECT date FROM inventory_history WHERE date <= %s ORDER BY date DESC LIMIT 1")
-        # cursor.execute(datequery, (datestr,))
-        # date_return = cursor.fetchone()[0]
+        datequery = ("SELECT date FROM inventory_history WHERE date <= %s ORDER BY date DESC LIMIT 1")
+        cursor.execute(datequery, (datestr,))
+        date_return = cursor.fetchone()[0]
         
-        print("FLAGGGGGGG")
-        print("Date: ", datestr)
+        print("Date: ", date_return)
 
         timeInventoryQuery = ("SELECT * FROM inventory_history WHERE date = %s")
-        cursor.execute(timeInventoryQuery, (datestr,))
+        cursor.execute(timeInventoryQuery, (date_return,))
         pastInventory = cursor.fetchall()
 
         past_inventory_list = {}
         for row in pastInventory:
-            past_inventory_list[row[1]] = float(row[2])
-        #print(json.dumps(past_inventory_list))
-    
+            past_inventory_list[row[1]] = float(row[2])  
 
         currInventoryQuery = ("SELECT * FROM inventory_t")
         cursor.execute(currInventoryQuery)
@@ -35,7 +32,6 @@ def get_excess(datein):
         curr_inventory_list = {}
         for row in currInventory:
             curr_inventory_list[row[0]] = float(row[2])
-        # print(json.dumps(curr_inventory_list))
         less_than_10 = []
         
         for item_name in past_inventory_list:
@@ -44,7 +40,6 @@ def get_excess(datein):
                 curr_quantity = curr_inventory_list[item_name]
                 if curr_quantity > .9 * past_quantity:
                     less_than_10.append(item_name)
-                    print(item_name)
         return json.dumps(less_than_10)
 
     finally:
