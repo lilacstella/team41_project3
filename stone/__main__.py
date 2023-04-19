@@ -7,6 +7,8 @@ from stone.whatsellssql import get_what_sells
 from stone.xreportsql import get_xreport
 from stone.zreportsql import get_zreport, post_eodinv
 from stone.salesreportsql import get_sales
+from stone.restockreportsql import get_low_inventory
+from stone.excessreportsql import get_excess
 from stone.prices import get_prices, change_price, add_inv_item, add_menu_item
 
 app = Flask(__name__)
@@ -79,7 +81,20 @@ def salesreport():
         date1 = request.args.get('date1')
         date2 = request.args.get('date2')
         return jsonify(get_sales(date1, date2))
-
+    
+@app.route('/restockreport', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def restockreport():
+    if request.method == 'GET':
+        return jsonify(get_low_inventory())
+    
+@app.route('/excessreport', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def excessreport():
+    if request.method == 'GET':
+        date = request.args.get('date')
+        return jsonify(get_excess(date))
+    
 @app.route('/prices', methods=['GET', 'POST'])
 @cross_origin(origins="http://localhost:3000", methods=["GET", "POST"])
 def prices():
