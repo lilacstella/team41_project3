@@ -2,7 +2,7 @@ import requests
 import json
 import functools
 
-WEATHER_API_KEY = '261b3feb73601f5f3bfbe5d2f3d86ca1'
+WEATHER_API_KEY = 'e4fb6f4376fdb8e87e8284f229cc95a8'
 
 
 functools.cache
