@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import mutate from 'swr';
 import './Display.css';
 import Table from 'react-bootstrap/Table';
@@ -145,7 +145,8 @@ function ZReport() {
             </div>
         )
     }
-    console.log(data);
+    // console.log(data);
+    console.log(data.salesdata[0]);
 
     return (
         <div>
@@ -176,7 +177,7 @@ function SalesReportTable(props) {
         return;
     }
 
-    if (data.salesreport.length == 0) {
+    if (data.salesreport.length === 0) {
         return (
             <div>
                 <h2>No data for this time.</h2>
@@ -225,9 +226,60 @@ function SalesReport() {
     )
 }
 
-function ExcessReport() {
+function ExcessReportTable(props) {
+    const { data, error, isLoading } = useSWR(`http://localhost:5000/excessreport?date=${props.date}`, fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    const processedData = JSON.parse(data);
+    console.log(processedData.excessdata);
+
+    if (processedData.excessdata.length === 0) {
+        return (
+            <div>
+                <h2>No data for this time.</h2>
+            </div>
+        )
+    }
+    
     return (
-        <h1>Excess Report</h1>
+        <div>
+            <DataTable processedData={processedData.excessdata}/>
+        </div>
+
+    )
+}
+
+function ExcessReport() {
+    // use states so that variables get updated thoughout
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+
+    // handles the button click
+    const handleClick = () => {
+        setDates({
+            "date": document.querySelector('#date').value,
+        });
+
+        setDisplayTable(true);
+    }
+
+    return (
+        <div>
+            <h1>Excess Report</h1>
+            <div class="sales-container">
+                from: <Form.Control className="forms" id="date" type="date"></Form.Control>
+                <Button variant="outline-success" onClick={handleClick}>Submit</Button>
+            </div>
+            {displayTable ? <ExcessReportTable date={encodeURIComponent(dates.date)} /> : null}
+        </div>
+
+
     )
 }
 
@@ -250,7 +302,7 @@ function WhatSellsTable(props){
         const processedData = JSON.parse(data);
 
         // checks for empty query
-        if (processedData.length == 0){
+        if (processedData.length === 0){
             return(
                 <div>
                     <h2>No data for this time.</h2>
