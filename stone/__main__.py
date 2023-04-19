@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from stone.inventorysql import get_current_inventory, restock_all, restock_items
 from stone.weather import get_weather
-from stone.menusql import get_menus, process_order
+from stone.menu import get_menus, process_order
 from stone.whatsellssql import get_what_sells
 from stone.xreportsql import get_xreport
 from stone.zreportsql import get_zreport, post_eodinv
