@@ -284,8 +284,35 @@ function ExcessReport() {
 }
 
 function RestockReport() {
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('http://localhost:5000/restockreport', fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    const processedData = JSON.parse(data)
+    console.log(processedData);
+
+    // checks for empty queries and doesn't display table
+    if (processedData.length === 0) {
+        return (
+            <div>
+                <h1>Restock Report</h1>
+                <h2>There are no data for today.</h2>
+            </div>
+        )
+    }
+    
+
     return (
-        <h1>Restock Report</h1>
+        <div>
+            <h1>Restock Report</h1>
+            <DataTable processedData={processedData}/>
+        </div>
     )
 }
 
