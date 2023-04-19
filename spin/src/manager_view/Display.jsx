@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import axios from 'axios';
 import { DropdownButton } from 'react-bootstrap';
+import Form from "react-bootstrap/Form";
 
 const fetcher = (url) => axios.get(url).then(res => res.data);
 
@@ -35,7 +36,6 @@ export default function Display(props) {
 }
 
 function Inventory() {
-    const [selectedItem, setSelectedItem] = useState('');
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('http://localhost:5000/inventory', fetcher);
     if (error) {
@@ -45,6 +45,7 @@ function Inventory() {
     if (isLoading || error || data === undefined) {
         return;
     }
+
     const processedData = JSON.parse(data);
 
     const restockAll = () => {
@@ -65,26 +66,7 @@ function Inventory() {
         <div>
             <h1>Inventory</h1>
             <div className="inventory-frame">
-                <div className='table-container'>
-                    <Table className="striped bordered hover">
-                        <thead>
-                            <tr>
-                                {Object.keys(processedData[0]).map((key) => (
-                                    <th key={key}>{key}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {processedData.map((item, index) => (
-                                <tr key={index}>
-                                    {Object.keys(item).map((key) => (
-                                        <td key={key}>{item[key]}</td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
+                <DataTable processedData={processedData}/>
                 <div>
                     <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
                     <div>
@@ -105,8 +87,33 @@ function XReport() {
 }
 
 function ZReport() {
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('http://localhost:5000/zreport', fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    // checks for empty queries and doesn't display table
+    if (data.salesdata.length === 0){
+        return (
+            <div>
+                <h1>Z Report</h1>
+                <h2>There are no data for today.</h2>
+            </div>
+        )
+    }
+    console.log(data);
+
     return (
-        <h1>Z Report</h1>
+        <div>
+            <h1>Z Report</h1>
+            <DataTable processedData={data.salesdata}/>
+            <h2>Total: ${data.total}</h2>
+        </div>
     )
 }
 
@@ -116,9 +123,65 @@ function Prices() {
     )
 }
 
+// setting up the table for SalesReport
+function SalesReportTable(props){
+    const { data, error, isLoading } = useSWR(`http://localhost:5000/salesreport?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
+        if (error) {
+            console.error(error);
+        }
+
+        if (isLoading || error || data === undefined) {
+            return;
+        }
+
+        // checks for empty query
+        if (data.salesreport.length == 0){
+            return(
+                <div>
+                    <h2>No data for this time.</h2>
+                </div>
+            )
+        }
+
+        // console.log(data.salesreport);
+        return (
+            <div>
+                <DataTable processedData={data.salesreport}/>
+                <h2>total: ${data.totalsales}</h2>
+            </div>
+        
+        )
+}
+
 function SalesReport() {
+    // use states so that variables get updated thoughout
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+
+    // handles the button click
+    const handleClick = () => {
+        setDates({"fromDate" : document.querySelector('#fromDate').value, 
+                  "toDate" : document.querySelector('#toDate').value});
+
+        setDisplayTable(true);
+    }
+    
+    // console.log(dates.fromDate);
+    // console.log(dates.toDate);
+
     return (
-        <h1>Sales Report</h1>
+        <div>
+            <h1>Sales Report</h1>
+            <div class="sales-container">
+                from: <Form.Control className="forms" id="fromDate" type="date"></Form.Control>
+                to: <Form.Control className="forms" id ="toDate" type="date"></Form.Control>
+                <Button variant="outline-success" onClick={handleClick}>Submit</Button>
+            </div>
+            {displayTable?<SalesReportTable fromDate={encodeURIComponent(dates.fromDate)} 
+                                            toDate={encodeURIComponent(dates.toDate)}/> : null}
+        </div>
+        
+
     )
 }
 
@@ -134,8 +197,89 @@ function RestockReport() {
     )
 }
 
+function WhatSellsTable(props){
+    const { data, error, isLoading } = useSWR(`http://localhost:5000/whatsells?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
+        if (error) {
+            console.error(error);
+        }
+
+        if (isLoading || error || data === undefined) {
+            return;
+        }
+
+        const processedData = JSON.parse(data);
+
+        // checks for empty query
+        if (processedData.length == 0){
+            return(
+                <div>
+                    <h2>No data for this time.</h2>
+                </div>
+            )
+        }
+
+        // console.log(JSON.parse(data));
+
+        return (
+            <div>
+                <DataTable processedData={processedData}/>
+            </div>
+        )
+}
+
 function WhatSells() {
+    // use states so that variables get updated thoughout
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+
+    // handles the button click
+    const handleClick = () => {
+        setDates({"fromDate" : document.querySelector('#fromDate').value, 
+                  "toDate" : document.querySelector('#toDate').value});
+
+        setDisplayTable(true);
+    }
+    
+    // console.log(dates.fromDate);
+    // console.log(dates.toDate);
+
     return (
-        <h1>What Sells</h1>
+        <div>
+            <h1>What Sells</h1>
+            <div class="sales-container">
+                from: <Form.Control className="forms" id="fromDate" type="date"></Form.Control>
+                to: <Form.Control className="forms" id ="toDate" type="date"></Form.Control>
+                <Button variant="outline-success" onClick={handleClick}>Submit</Button>
+            </div>
+            {displayTable?<WhatSellsTable fromDate={encodeURIComponent(dates.fromDate)} 
+                                            toDate={encodeURIComponent(dates.toDate)}/> : null}
+        </div>
+        
+
+    )
+}
+
+function DataTable(props) {
+    return (
+        <div className='table-container'>
+            <Table className="striped bordered hover">
+                <thead>
+                    <tr>
+                        {Object.keys(props.processedData[0]).map((key) => (
+                            <th key={key}>{key}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {props.processedData.map((item, index) => (
+                        <tr key={index}>
+                            {Object.keys(item).map((key) => (
+                                <td key={key}>{item[key]}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </div>
     )
 }

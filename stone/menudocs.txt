@@ -32,16 +32,13 @@ basically info to go in order_history, orderitem_t, and inventory
 here is a sample json i used to pass in to test
 {
     "orderhistory": {
-        "ordernumber": 54993,
         "total": 25.99,
         "paymentform": "credit",
-        "orderedat": "2022-12-31 23:59:59",
+        "orderedat": "2023-04-13-18:12:10.647642",
         "employeeid": 1
     },
     "orderitems": [
         {
-            "linenumber": 1000000,
-            "ordernumber": 54993,
             "itemname": "2-4 Topping Pizza",
             "dough": "Regular Dough",
             "sauce": "pesto",
@@ -53,8 +50,6 @@ here is a sample json i used to pass in to test
             "drizzle": "Oregano"
         },
         {
-            "linenumber": 1000001,
-            "ordernumber": 54993,
             "itemname": "Fountain Drink",
             "dough": null,
             "sauce": null,
