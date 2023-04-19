@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import mutate from 'swr';
 import './Display.css';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
@@ -56,7 +57,7 @@ function Inventory() {
     };
 
     const setQuantity = () => {
-        axios.post('http://localhost:5000/inventory', {'InventoryItem': 'Cheese'}
+        axios.post('http://localhost:5000/inventory', { 'InventoryItem': 'Cheese' }
         ).then((res) => {
             console.log(res);
         })
@@ -66,7 +67,7 @@ function Inventory() {
         <div>
             <h1>Inventory</h1>
             <div className="inventory-frame">
-                <DataTable processedData={processedData}/>
+                <DataTable processedData={processedData} />
                 <div>
                     <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
                     <div>
@@ -81,14 +82,8 @@ function Inventory() {
 }
 
 function XReport() {
-    return (
-        <h1>X Report</h1>
-    )
-}
-
-function ZReport() {
     // fetch information from endpoint
-    const { data, error, isLoading } = useSWR('http://localhost:5000/zreport', fetcher);
+    const { data, error, isLoading } = useSWR('http://localhost:5000/xreport', fetcher);
     if (error) {
         console.error(error);
     }
@@ -98,7 +93,51 @@ function ZReport() {
     }
 
     // checks for empty queries and doesn't display table
-    if (data.salesdata.length === 0){
+    if (data.salesdata.length === 0) {
+        return (
+            <div>
+                <h1>X Report</h1>
+                <h2>There are no data for today.</h2>
+            </div>
+        )
+    }
+    console.log(data);
+
+    return (
+        <div>
+            <h1>x Report</h1>
+            <DataTable processedData={data.salesdata} />
+            <h2>Total: ${data.total}</h2>
+        </div>
+    )
+}
+
+
+function ZReport() {
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('http://localhost:5000/zreport', fetcher);
+
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    const handleReset = async () => {
+        // send post request
+        await fetch('http://localhost:5000/zreport', {
+            method: 'POST'
+        });
+
+        mutate('http://localhost:5000/zreport');
+
+        //window.location.reload();
+    };
+
+    // checks for empty queries and doesn't display table
+    if (data.salesdata.length === 0) {
         return (
             <div>
                 <h1>Z Report</h1>
@@ -111,11 +150,14 @@ function ZReport() {
     return (
         <div>
             <h1>Z Report</h1>
-            <DataTable processedData={data.salesdata}/>
+            <DataTable processedData={data.salesdata} />
             <h2>Total: ${data.total}</h2>
+            <button className="reset-button" onClick={handleReset}>Reset Sales</button>
         </div>
     )
 }
+
+
 
 function Prices() {
     return (
@@ -124,33 +166,32 @@ function Prices() {
 }
 
 // setting up the table for SalesReport
-function SalesReportTable(props){
+function SalesReportTable(props) {
     const { data, error, isLoading } = useSWR(`http://localhost:5000/salesreport?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
-        if (error) {
-            console.error(error);
-        }
+    if (error) {
+        console.error(error);
+    }
 
-        if (isLoading || error || data === undefined) {
-            return;
-        }
+    if (isLoading || error || data === undefined) {
+        return;
+    }
 
-        // checks for empty query
-        if (data.salesreport.length == 0){
-            return(
-                <div>
-                    <h2>No data for this time.</h2>
-                </div>
-            )
-        }
-
-        // console.log(data.salesreport);
+    if (data.salesreport.length == 0) {
         return (
             <div>
-                <DataTable processedData={data.salesreport}/>
-                <h2>total: ${data.totalsales}</h2>
+                <h2>No data for this time.</h2>
             </div>
-        
         )
+    }
+
+    // console.log(data);
+    return (
+        <div>
+            <DataTable processedData={data.salesreport} />
+            <h2>total: ${data.totalsales}</h2>
+        </div>
+
+    )
 }
 
 function SalesReport() {
@@ -160,27 +201,26 @@ function SalesReport() {
 
     // handles the button click
     const handleClick = () => {
-        setDates({"fromDate" : document.querySelector('#fromDate').value, 
-                  "toDate" : document.querySelector('#toDate').value});
+        setDates({
+            "fromDate": document.querySelector('#fromDate').value,
+            "toDate": document.querySelector('#toDate').value
+        });
 
         setDisplayTable(true);
     }
-    
-    // console.log(dates.fromDate);
-    // console.log(dates.toDate);
 
     return (
         <div>
             <h1>Sales Report</h1>
             <div class="sales-container">
                 from: <Form.Control className="forms" id="fromDate" type="date"></Form.Control>
-                to: <Form.Control className="forms" id ="toDate" type="date"></Form.Control>
+                to: <Form.Control className="forms" id="toDate" type="date"></Form.Control>
                 <Button variant="outline-success" onClick={handleClick}>Submit</Button>
             </div>
-            {displayTable?<SalesReportTable fromDate={encodeURIComponent(dates.fromDate)} 
-                                            toDate={encodeURIComponent(dates.toDate)}/> : null}
+            {displayTable ? <SalesReportTable fromDate={encodeURIComponent(dates.fromDate)}
+                toDate={encodeURIComponent(dates.toDate)} /> : null}
         </div>
-        
+
 
     )
 }
