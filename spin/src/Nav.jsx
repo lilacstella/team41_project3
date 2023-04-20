@@ -20,24 +20,21 @@ export default function Navbar(props) {
     );
 }
 
-// export function WeatherAPIDisplay() {
-//     return <h2>hi</h2>;
-// }
 
 function WeatherAPIDisplay(){
     const { data, error, isLoading } = useSWR('http://localhost:5000/weather', fetcher);
     if (error) {
-      console.error(error);
+        return <h2></h2>;
     }
 
     if(isLoading)
-        return;
+        return <h2></h2>;
 
     var weather = JSON.parse(data);
     // console.log(weather)
 
-    var text = 'Temperature at ' + weather['location']['name'] + ", " + weather['location']['region'] + 
-               ' is ' + weather['current']['temperature'] + '°F, ' + weather['current']['weather_descriptions'][0]
+    var text = `Temperature at ${weather.location.name} , ${weather.location.region} is 
+        ${weather.current.temperature}°F, ${weather.current.weather_descriptions[0]}`
     return(
         <h2>{text}</h2>
     )
