@@ -23,7 +23,7 @@ const Image = (props) => {
     return (
         <div
             style={{
-                backgroundImage: `url('ivan-torres-MQUqbmszGGM-unsplash.jpg')`,
+                backgroundImage: `url(${props.image})`,
                 backgroundSize: "cover",
             }}
         />
@@ -32,7 +32,7 @@ const Image = (props) => {
 
 const ItemBox = (props) => {
     // highlight item if it is in the order
-    const {itemName, order, addToOrder} = props;
+    const {itemName, image, order, addToOrder} = props;
     const select = () => {
         addToOrder(itemName);
     }
@@ -41,7 +41,7 @@ const ItemBox = (props) => {
     return (
         <figure className="menu-item-box" onClick={select}>
             <AspectRatio>
-                <Image {...props} />
+                <Image image={image} />
             </AspectRatio>
             <figcaption className="menu-item-box-caption">
                 {itemName}
@@ -58,7 +58,7 @@ const ItemBoxes = (props) => {
             {
                 // itemName is Object{"category-name": }
                 itemNames.map((itemName) => (
-                    <ItemBox itemName={itemName[category + "-name"]} order={order} addToOrder={addToOrder}/>
+                    <ItemBox itemName={itemName[category + "-name"]} image={itemName.image} order={order} addToOrder={addToOrder}/>
                 ))
             }
         </div>
@@ -90,6 +90,7 @@ export default function MenuGallery(props) {
     if (error || isLoading)
         return;
 
+    console.log(data);
     return (
         <div className="order-box">
             <MenuItems itemNames={data[view]} category={view} order={order} addToOrder={addToOrder}/>
