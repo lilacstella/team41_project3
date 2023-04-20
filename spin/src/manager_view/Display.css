@@ -24,17 +24,34 @@
 
 .inventory-frame {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.inventory-frame>.table-container {
-    margin: auto;
+.inventory-table-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.inventory-table-row>.table-container {
+    max-height: 50vh;
+}
+
+.inventory-frame>.buttons-frame {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .table-container {
     /* position: absolute; */
     justify-content: center;
     align-items: center;
-    margin-left: 5%;
     /* top: 50%; */
     /* left: 50%; */
     max-height: 60vh;
