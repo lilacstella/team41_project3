@@ -31,13 +31,13 @@
     margin-bottom: 20px;
 }
 
-.inventory-table-row {
+.manager-view-table-row {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.inventory-table-row>.table-container {
+.manager-view-table-row>.table-container {
     max-height: 50vh;
 }
 

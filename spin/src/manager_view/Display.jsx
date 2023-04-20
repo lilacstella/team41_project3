@@ -66,7 +66,7 @@ function Inventory() {
     return (
         <div className='inventory-frame'>
             <h1>Inventory</h1>
-            <div className="inventory-table-row">
+            <div className="manager-view-table-row">
                 <DataTable processedData={processedData} />
             </div>
             <div className="buttons-frame">
@@ -150,7 +150,9 @@ function ZReport() {
     return (
         <div>
             <h1>Z Report</h1>
-            <DataTable processedData={data.salesdata} />
+            <div className="manager-view-table-row">
+                <DataTable processedData={data.salesdata} />
+            </div>
             <h2>Total: ${data.total}</h2>
             <button className="reset-button" onClick={handleReset}>Reset Sales</button>
         </div>
@@ -261,7 +263,7 @@ function WhatSellsTable(props) {
     // console.log(JSON.parse(data));
 
     return (
-        <div>
+        <div className="manager-view-table-row">
             <DataTable processedData={processedData} />
         </div>
     )
