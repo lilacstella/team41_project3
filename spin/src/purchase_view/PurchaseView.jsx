@@ -50,7 +50,7 @@ export default function PurchaseView() {
     return (
         <div className="purchase-frame">
             <Navigation handleClick={setCurrView}/>
-            <MenuGallery view={currView} order={order} addToOrder={addToOrder}/>
+            <MenuGallery view={currView} order={order} addToOrder={addToOrder} pizza={pizza}/>
             <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder}/>
         </div>
     )

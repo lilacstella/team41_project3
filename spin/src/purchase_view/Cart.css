@@ -4,6 +4,7 @@
     background-color: white;
     margin-left: auto;
     border-left: 3px solid black;  
+    overflow: hidden;
 }
 
 .cart-pizza-box-frame {
@@ -14,5 +15,5 @@
 }
 
 .cart-order-list {
-    /* do stuff here */
+    overflow-y: scroll;
 }
