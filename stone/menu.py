@@ -119,8 +119,7 @@ def get_menus():
             image = imgdict[prices_list[0]]
         except KeyError:
             image = None
-        price = {"price": float(prices_list[0]), "image": image}
-        menu_results["fountain-drink"] = price
+        fountain_data = {"drink-name": "Fountain Drink", "price": float(prices_list[0]), "image": image}
 
         # add all drinks
         select_drinks = "SELECT m.menuitem, m.price FROM menu_t m INNER JOIN inventory_t i ON m.menuitem = i.inventoryitem WHERE i.category = 'Drink';"
@@ -134,6 +133,8 @@ def get_menus():
                 image = None
             drinksdata = {"drink-name": row[0], "price": float(row[1]), "image": image}
             menu_results["drink"].append(drinksdata)
+        menu_results["drink"].append(fountain_data)
+        
 
         # add all doughs
         select_doughs = "SELECT m.menuitem, m.price FROM menu_t m INNER JOIN inventory_t i ON m.menuitem = i.inventoryitem WHERE i.category = 'Dough'"
