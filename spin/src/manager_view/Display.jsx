@@ -5,7 +5,8 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import axios from 'axios';
-import { DropdownButton } from 'react-bootstrap';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from "react-bootstrap/Form";
 
 const fetcher = (url) => axios.get(url).then(res => res.data);
@@ -127,9 +128,7 @@ function ZReport() {
 
     const handleReset = async () => {
         // send post request
-        await fetch('http://localhost:5000/zreport', {
-            method: 'POST'
-        });
+        axios.post('http://localhost:5000/zreport', {});
 
         mutate('http://localhost:5000/zreport');
 
@@ -161,51 +160,61 @@ function ZReport() {
 
 
 function Prices() {
+    const [currPrice, setCurrPrice] = useState("null");
+    const [currItem, setCurrItem] = useState("Select Item");
+
     const handleNewPrice = async () => {
         // send post request
-        await fetch('http://localhost:5000/prices', {
-            method: 'POST',
-            action: 'change_price'
-        });
-
-        mutate('http://localhost:5000/prices');
-
-        //window.location.reload();
+        axios.post('http://localhost:5000/prices', 
+        {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
     };
 
     const handleNewMenu = async () => {
         // send post request
-        await fetch('http://localhost:5000/prices', {
-            method: 'POST',
-            action: 'add_menu_item'
-        });
+        axios.post('http://localhost:5000/prices', 
+        {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
 
-        mutate('http://localhost:5000/prices');
-
-        //window.location.reload();
     };
 
     const handleNewInventory = async () => {
         // send post request
-        await fetch('http://localhost:5000/prices', {
-            method: 'POST',
-            action: 'add_inv_item'
-        });
+        axios.post('http://localhost:5000/prices', 
+        {'action': 'add_inv_item'});
 
-        mutate('http://localhost:5000/prices');
-
-        //window.location.reload();
     };
 
-    
+    const { data, error, isLoading } = useSWR('http://localhost:5000/prices', fetcher);
 
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    console.log(data.menuitems)
+
+    var menuItems = {};
+    data.menuitems.map(item => (
+        menuItems[item.menu_item_name] = item.current_price
+    ));
+
+    console.log(menuItems);
+    
     return (
         <div>
             <h1>Prices</h1>
             <div className="prices-container">
                 <label>Item to Change: </label>
-                <DropdownButton className="selectBox" title="Select Item">
+                <DropdownButton className="selectBox" title={currItem} id="changePriceName" onSelect={name => {setCurrItem(name); setCurrPrice(menuItems[name])}}>
+                    {Object.keys(menuItems).map(name => (
+                        <Dropdown.Item key={name} eventKey={name}>
+                            {name}
+                        </Dropdown.Item>
+                    ))}
                 </DropdownButton>
+                <label>Curr Price: {currPrice}</label>
                 <Form.Control className="numforms" id="newPrice" type="number" placeholder="New Price"></Form.Control>
                 <Button variant="outline-success" onClick={handleNewPrice}>Submit</Button>
             </div>
