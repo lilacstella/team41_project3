@@ -161,8 +161,75 @@ function ZReport() {
 
 
 function Prices() {
+    const handleNewPrice = async () => {
+        // send post request
+        await fetch('http://localhost:5000/prices', {
+            method: 'POST',
+            action: 'change_price'
+        });
+
+        mutate('http://localhost:5000/prices');
+
+        //window.location.reload();
+    };
+
+    const handleNewMenu = async () => {
+        // send post request
+        await fetch('http://localhost:5000/prices', {
+            method: 'POST',
+            action: 'add_menu_item'
+        });
+
+        mutate('http://localhost:5000/prices');
+
+        //window.location.reload();
+    };
+
+    const handleNewInventory = async () => {
+        // send post request
+        await fetch('http://localhost:5000/prices', {
+            method: 'POST',
+            action: 'add_inv_item'
+        });
+
+        mutate('http://localhost:5000/prices');
+
+        //window.location.reload();
+    };
+
+    
+
     return (
-        <h1>Prices</h1>
+        <div>
+            <h1>Prices</h1>
+            <div className="prices-container">
+                <label>Item to Change: </label>
+                <DropdownButton className="selectBox" title="Select Item">
+                </DropdownButton>
+                <Form.Control className="numforms" id="newPrice" type="number" placeholder="New Price"></Form.Control>
+                <Button variant="outline-success" onClick={handleNewPrice}>Submit</Button>
+            </div>
+
+            <div className="prices-container">
+                <label>New Menu Item: </label>
+                <Form.Control className="forms" id="newMenuItemName" placeholder="Item Name"></Form.Control>
+                <Form.Control className="numforms" id="newMenuItemPrice" type="number" placeholder="Price"></Form.Control>
+                <Button variant="outline-success" onClick={handleNewMenu}>Submit</Button>
+            </div>
+
+            <div className="prices-container">
+                <label>New Inventory Item: </label>
+                <Form.Control className="forms" id="newInventoryItemName" placeholder="Item Name"></Form.Control>
+                <DropdownButton className="selectBox" title="Item Type">
+                </DropdownButton>
+                <DropdownButton className="selectBox" title="Item Storage">
+                </DropdownButton>
+                <Form.Control className="numforms" id="newInventoryItemAmount" type="number" placeholder="Amount"></Form.Control>
+                <Form.Control className="forms" id="newInventoryItemUnits" placeholder="Units"></Form.Control>
+                <Button variant="outline-success" onClick={handleNewInventory}>Submit</Button>
+            </div>
+
+        </div>
     )
 }
 

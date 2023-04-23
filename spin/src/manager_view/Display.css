@@ -103,15 +103,35 @@ button.inventory-button {
     flex-direction: row;
 }
 
+.prices-container {
+    margin-top: 90px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    flex-direction: row;
+    overflow-x: scroll;
+}
+
 .forms {
     margin-left: 20px;
     margin-right: 20px;
     width: 170px !important;
 }
 
+.numforms {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 120px !important;
+}
+
+.selectBox{
+    margin-left: 20px;
+}
+
 .reset-button {
     background-color: #FFA500;
-    border: 1px solid #ccc;
+    border: 1px solid #635252;
     color: #333;
     padding: 10px 20px;
     font-size: 16px;
