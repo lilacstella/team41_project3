@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from stone.inventorysql import get_current_inventory, restock_all, restock_items
 from stone.weather import get_weather
+from stone.translate import do_translate
 from stone.menu import get_menus, process_order
 from stone.whatsellssql import get_what_sells
 from stone.xreportsql import get_xreport
@@ -112,6 +113,14 @@ def prices():
         else:
             result = False
         return jsonify({"sucess": result})        
+
+@app.route('/translate', methods=['GET'])
+@cross_origin(origins="http://localhost:3000", methods=["GET"])
+def translate():
+    if request.method == 'GET':
+        text = request.args.get('text')
+        target_lang = request.args.get('target_lang')
+        return jsonify(do_translate(text, target_lang))
 
 if __name__ == '__main__':
     app.run(debug=True)

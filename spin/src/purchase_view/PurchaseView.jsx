@@ -4,9 +4,10 @@ import axios from 'axios';
 import Cart from './Cart';
 import './PurchaseView.css';
 
+
 export default function PurchaseView() {
     const [currView, setCurrView] = useState('sauce');
-    const [pizza, setPizza] = useState({'topping': []});
+    const [pizza, setPizza] = useState({ 'topping': [] });
     const [order, setOrder] = useState([]);
 
     const addToOrder = (item) => {
@@ -16,7 +17,7 @@ export default function PurchaseView() {
                 if (pizza['topping'].length >= 4)
                     return;
                 else
-                    setPizza({...pizza, 'topping' : [...pizza['topping'], item]});
+                    setPizza({ ...pizza, 'topping': [...pizza['topping'], item] });
             }
             else
                 setPizza({ ...pizza, [currView]: item });
@@ -29,7 +30,7 @@ export default function PurchaseView() {
 
     const addPizzaToOrder = () => {
         setOrder([...order, pizza]);
-        setPizza({'topping': []});
+        setPizza({ 'topping': [] });
     }
 
     const checkoutOrder = () => {
@@ -43,18 +44,20 @@ export default function PurchaseView() {
         }
 
         */
-        axios.post('http://localhost:5000/menu', {"payment_form": "cash", "employee_id": 0, "order": order});
+        axios.post('http://localhost:5000/menu', { "payment_form": "cash", "employee_id": 0, "order": order });
         setOrder([]);
     }
 
     return (
         <div className="purchase-frame">
-            <Navigation handleClick={setCurrView}/>
-            <MenuGallery view={currView} order={order} addToOrder={addToOrder}/>
-            <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder}/>
+            <Navigation handleClick={setCurrView} />
+            <MenuGallery view={currView} order={order} addToOrder={addToOrder} />
+            <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder} />
         </div>
     )
 }
+
+
 
 // can be hidden in server view
 function Navigation(props) {
