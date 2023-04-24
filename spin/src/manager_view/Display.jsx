@@ -65,18 +65,18 @@ function Inventory() {
     };
 
     return (
-        <div>
+        <div className='inventory-frame'>
             <h1>Inventory</h1>
-            <div className="inventory-frame">
+            <div className="manager-view-table-row">
                 <DataTable processedData={processedData} />
-                <div>
-                    <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
-                    <div>
-                        <DropdownButton title="Select Item">
-                        </DropdownButton>
-                        <Button variant="outline-primary" className="inventory-button" onClick={setQuantity}>Set Quantity</Button>
-                    </div>
-                </div>
+            </div>
+            <div className="buttons-frame">
+                <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
+                <DropdownButton style={{"margin-left": "20px"}} title="Select Item">
+
+                </DropdownButton>
+                <Form.Control type="number" placeholder="Quantity" />
+                <Button variant="outline-primary" className="inventory-button" onClick={setQuantity}>Set Quantity</Button>
             </div>
         </div>
     )
@@ -150,7 +150,9 @@ function ZReport() {
     return (
         <div>
             <h1>Z Report</h1>
-            <DataTable processedData={data.salesdata} />
+            <div className="manager-view-table-row">
+                <DataTable processedData={data.salesdata} />
+            </div>
             <h2>Total: ${data.total}</h2>
             <button className="reset-button" onClick={handleReset}>Reset Sales</button>
         </div>
@@ -411,34 +413,34 @@ function RestockReport() {
     )
 }
 
-function WhatSellsTable(props){
+function WhatSellsTable(props) {
     const { data, error, isLoading } = useSWR(`http://localhost:5000/whatsells?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
-        if (error) {
-            console.error(error);
-        }
+    if (error) {
+        console.error(error);
+    }
+    
+    if (isLoading || error || data === undefined) {
+        return;
+    }
 
-        if (isLoading || error || data === undefined) {
-            return;
-        }
+    const processedData = JSON.parse(data);
 
-        const processedData = JSON.parse(data);
-
-        // checks for empty query
-        if (processedData.length === 0){
-            return(
-                <div>
-                    <h2>No data for this time.</h2>
-                </div>
-            )
-        }
-
-        // console.log(JSON.parse(data));
-
+    // checks for empty query
+    if (processedData.length == 0) {
         return (
             <div>
-                <DataTable processedData={processedData}/>
+                <h2>No data for this time.</h2>
             </div>
         )
+    }
+
+    // console.log(JSON.parse(data));
+
+    return (
+        <div className="manager-view-table-row">
+            <DataTable processedData={processedData} />
+        </div>
+    )
 }
 
 function WhatSells() {
@@ -448,12 +450,14 @@ function WhatSells() {
 
     // handles the button click
     const handleClick = () => {
-        setDates({"fromDate" : document.querySelector('#fromDate').value, 
-                  "toDate" : document.querySelector('#toDate').value});
+        setDates({
+            "fromDate": document.querySelector('#fromDate').value,
+            "toDate": document.querySelector('#toDate').value
+        });
 
         setDisplayTable(true);
     }
-    
+
     // console.log(dates.fromDate);
     // console.log(dates.toDate);
 
@@ -462,13 +466,13 @@ function WhatSells() {
             <h1>What Sells</h1>
             <div class="sales-container">
                 from: <Form.Control className="forms" id="fromDate" type="date"></Form.Control>
-                to: <Form.Control className="forms" id ="toDate" type="date"></Form.Control>
+                to: <Form.Control className="forms" id="toDate" type="date"></Form.Control>
                 <Button variant="outline-success" onClick={handleClick}>Submit</Button>
             </div>
-            {displayTable?<WhatSellsTable fromDate={encodeURIComponent(dates.fromDate)} 
-                                            toDate={encodeURIComponent(dates.toDate)}/> : null}
+            {displayTable ? <WhatSellsTable fromDate={encodeURIComponent(dates.fromDate)}
+                toDate={encodeURIComponent(dates.toDate)} /> : null}
         </div>
-        
+
 
     )
 }

@@ -4,15 +4,27 @@
     background-color: white;
     margin-left: auto;
     border-left: 3px solid black;  
+    overflow: hidden;
 }
 
-.cart-pizza-box-frame {
+.cart-box-frame {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-box-frame.builder {
+    height: 39.5%;
+    border-bottom: 3px solid black;
+}
+
+.cart-box-frame p:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.cart-box-frame .cart-item-list {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    height: 40%;
-}
-
-.cart-order-list {
-    /* do stuff here */
+    height: 80%;
 }
