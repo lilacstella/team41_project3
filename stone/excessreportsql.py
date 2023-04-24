@@ -15,7 +15,7 @@ def get_excess(datein):
         cursor.execute(datequery, (datestr,))
         cursor_fetch = cursor.fetchone()
         if cursor_fetch is None:
-            return "Date out of bounds"
+            return '[]'
         date_return = cursor_fetch[0]
         
         print("Date: ", date_return)
@@ -43,7 +43,8 @@ def get_excess(datein):
                 curr_quantity = curr_inventory_list[item_name]
                 if curr_quantity > .9 * past_quantity:
                     less_than_10.append(item_name)
-        return json.dumps(less_than_10)
+        return_dict = {'excessdata': [{"ItemName": x} for x in less_than_10]}
+        return json.dumps(return_dict)
 
     finally:
         if connection:

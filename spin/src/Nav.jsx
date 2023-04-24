@@ -30,6 +30,7 @@ function WeatherAPIDisplay(){
     if(isLoading)
         return <h2></h2>;
 
+    // console.log(data)
     var weather = JSON.parse(data);
     // console.log(weather)
 
