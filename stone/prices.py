@@ -123,32 +123,24 @@ def add_img(json_file):
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
-        add_img = "INSERT INTO item_images VALUES (%s, %s)"
-        img_tuple = (json_file["item-name"], json_file["img-link"])
-        cursor.execute(add_img, img_tuple)
-        connection.commit()
+        checkforimage = "SELECT * FROM item_images where item_name = %s"
+        checktuple = (json_file["item_name"],)
+        print(json_file["img_url"])
+        cursor.execute(checkforimage, checktuple)
+        results = cursor.fetchall()
+        if(results == []):
+            add_img = "INSERT INTO item_images VALUES (%s, %s)"
+            img_tuple = (json_file["item_name"], json_file["img_url"])
+            cursor.execute(add_img, img_tuple)
+            connection.commit()
+        else:
+            update_img = "UPDATE item_images SET img_url = %s WHERE item_name = %s"
+            update_tuple = (json_file["img_url"], json_file["item_name"])
+            cursor.execute(update_img, update_tuple)
+            connection.commit()
+
         return True
     
-    finally:
-        if connection:
-            cursor.close()
-            connection.close()
-            print("PostgreSQL connection is closed")
-
-def change_img(json_file):
-    connection = None
-    try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
-        cursor = connection.cursor()
-        update_img = "UPDATE item_images SET img_url = %s WHERE item_name = %s"
-        update_tuple = (json_file["img_url"], json_file["item_name"])
-        cursor.execute(update_img, update_tuple)
-        connection.commit()
-        return True
-
     finally:
         if connection:
             cursor.close()
