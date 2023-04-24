@@ -123,7 +123,7 @@ def add_img(json_file):
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
-        add_img = "INSERT INTO item_images (%s, %s)"
+        add_img = "INSERT INTO item_images VALUES (%s, %s)"
         img_tuple = (json_file["item-name"], json_file["img-link"])
         cursor.execute(add_img, img_tuple)
         connection.commit()
