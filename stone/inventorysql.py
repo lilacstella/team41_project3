@@ -58,13 +58,9 @@ def restock_items(restock_json):
         restock_json_dict = restock_json
         # Update the inventory with the specified item and restock amount using a parameterized query
         restock_query = "UPDATE Inventory_t SET Quantity = %s WHERE InventoryItem = %s"
-        for item_data in restock_json_dict.values():
-            inventory_item = item_data['InventoryItem']
-            restock_amount = item_data['Quantity']
-            print(inventory_item)
-            print(restock_amount)
-            cursor.execute(restock_query, (restock_amount, inventory_item))
-            connection.commit()
+        inventory_tuple = (str(abs(int(restock_json_dict["Quantity"]))), restock_json_dict["InventoryItem"])
+        cursor.execute(restock_query, inventory_tuple)
+        connection.commit()
     finally:
         if connection:
             cursor.close()

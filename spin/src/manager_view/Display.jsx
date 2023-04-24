@@ -38,6 +38,8 @@ export default function Display(props) {
 }
 
 function Inventory() {
+    const [currItem, setCurrItem] = useState("Select Item");
+
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('http://localhost:5000/inventory', fetcher);
     if (error) {
@@ -49,19 +51,17 @@ function Inventory() {
     }
 
     const processedData = JSON.parse(data);
+    // console.log(processedData);
+
+    let inventoryItems = [];
+    processedData.map(item => inventoryItems.push(item.InventoryItem));
 
     const restockAll = () => {
-        axios.post('http://localhost:5000/inventory', {}
-        ).then((res) => {
-            console.log(res);
-        })
+        axios.post('http://localhost:5000/inventory', {})
     };
 
     const setQuantity = () => {
-        axios.post('http://localhost:5000/inventory', { 'InventoryItem': 'Cheese' }
-        ).then((res) => {
-            console.log(res);
-        })
+        axios.post('http://localhost:5000/inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
     };
 
     return (
@@ -72,10 +72,16 @@ function Inventory() {
             </div>
             <div className="buttons-frame">
                 <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
-                <DropdownButton style={{"margin-left": "20px"}} title="Select Item">
-
+                <DropdownButton style={{"margin-left": "20px"}} title={currItem} onSelect={name => setCurrItem(name)}>
+                    <div className="dropdownmenu">
+                        {inventoryItems.map(name => (
+                            <Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            </Dropdown.Item>
+                        ))}
+                    </div>
                 </DropdownButton>
-                <Form.Control type="number" placeholder="Quantity" />
+                <Form.Control className="numforms" id="restockAmount" type="number" placeholder="Quantity" />
                 <Button variant="outline-primary" className="inventory-button" onClick={setQuantity}>Set Quantity</Button>
             </div>
         </div>
@@ -102,7 +108,7 @@ function XReport() {
             </div>
         )
     }
-    console.log(data);
+    // console.log(data);
 
     return (
         <div>
@@ -159,13 +165,32 @@ function ZReport() {
     )
 }
 
-
-
 function Prices() {
     const [currPrice, setCurrPrice] = useState("null");
     const [currItem, setCurrItem] = useState("Select Item");
     const [category, setCategory] = useState("Item Type");
     const [storage, setStorage] = useState("Item Storage");
+    const [currInvItem, setInvItem] = useState("Select Item");
+
+    const { data:menuData, error:error1, isLoading:isLoading1 } = useSWR('http://localhost:5000/prices', fetcher);
+
+    const { data:inventoryData, error:error2, isLoading:isLoading2 } = useSWR('http://localhost:5000/inventory', fetcher);
+
+    if (error1) {
+        console.error(error1);
+    }
+
+    if (isLoading1 || error1 || menuData === undefined) {
+        return;
+    }
+
+    if (error2) {
+        console.error(error2);
+    }
+
+    if (isLoading2 || error2 || inventoryData === undefined) {
+        return;
+    }
 
     const handleNewPrice = async () => {
         // send post request
@@ -189,22 +214,24 @@ function Prices() {
 
     };
 
-    const { data, error, isLoading } = useSWR('http://localhost:5000/prices', fetcher);
+    const handleNewImage = async () => {
+        // send post request
+        axios.post('http://localhost:5000/prices', 
+        {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
+         'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
+         'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
 
-    if (error) {
-        console.error(error);
-    }
+    };
 
-    if (isLoading || error || data === undefined) {
-        return;
-    }
-
-    // console.log(data)
+    // console.log(menuData);
 
     var menuItems = {};
-    data.menuitems.map(item => (
+    menuData.menuitems.map(item => (
         menuItems[item.menu_item_name] = item.current_price
     ));
+
+    let inventoryItems = [];
+    JSON.parse(inventoryData).map(item => inventoryItems.push(item.InventoryItem));
 
     // console.log(menuItems);
     
@@ -214,11 +241,13 @@ function Prices() {
             <div className="prices-container">
                 <label>Item to Change: </label>
                 <DropdownButton className="selectBox" title={currItem} id="changePriceName" onSelect={name => {setCurrItem(name); setCurrPrice(menuItems[name])}}>
-                    {Object.keys(menuItems).map(name => (
-                        <Dropdown.Item key={name} eventKey={name}>
-                            {name}
-                        </Dropdown.Item>
-                    ))}
+                    <div className="dropdownmenu">
+                        {Object.keys(menuItems).map(name => (
+                            <Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            </Dropdown.Item>
+                        ))}
+                    </div>
                 </DropdownButton>
                 <label>Curr Price: {currPrice}</label>
                 <Form.Control className="numforms" id="newPrice" type="number" placeholder="New Price"></Form.Control>
@@ -236,27 +265,41 @@ function Prices() {
                 <label>New Inventory Item: </label>
                 <Form.Control className="forms" id="newInventoryItemName" placeholder="Item Name"></Form.Control>
                 <DropdownButton className="selectBox" title={category} onSelect={name => setCategory(name)}>
-                    {data.categories.map(name => (
-                        <Dropdown.Item key={name} eventKey={name}>
-                            {name}
-                        </Dropdown.Item>
-                    ))}
+                    <div className="dropdownmenu">
+                        {menuData.categories.map(name => (
+                            <Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            </Dropdown.Item>
+                        ))}
+                    </div>
                 </DropdownButton>
                 <DropdownButton className="selectBox" title={storage} onSelect={name => setStorage(name)}>
-                    {data.storage.map(name => (
-                        <Dropdown.Item key={name} eventKey={name}>
-                            {name}
-                        </Dropdown.Item>
-                    ))}
+                    <div className="dropdownmenu">
+                        {menuData.storage.map(name => (
+                            <Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            </Dropdown.Item>
+                        ))}
+                    </div>
                 </DropdownButton>
                 <Form.Control className="numforms" id="newInventoryItemAmount" type="number" placeholder="Amount"></Form.Control>
                 <Form.Control className="forms" id="newInventoryItemUnits" placeholder="Units"></Form.Control>
+                <Button variant="outline-success" onClick={handleNewInventory}>Submit</Button>
             </div>
             
             <div className="prices-container">
-                <label>Link for Item Image: </label>
+                <label>Upload Image: </label>
+                <DropdownButton className="selectBox" title={currInvItem} id="changeImage" onSelect={name => setInvItem(name)}>
+                    <div className="dropdownmenu">
+                        {inventoryItems.map(name => (
+                            <Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            </Dropdown.Item>
+                        ))}
+                    </div>
+                </DropdownButton>
                 <Form.Control className="linkforms" id="newInventoryItemLink" placeholder="Link"></Form.Control>
-                <Button variant="outline-success" onClick={handleNewInventory}>Submit</Button>
+                <Button variant="outline-success" onClick={handleNewImage}>Submit</Button>
             </div>
 
         </div>
@@ -334,7 +377,7 @@ function ExcessReportTable(props) {
     }
 
     const processedData = JSON.parse(data);
-    console.log(processedData.excessdata);
+    // console.log(processedData.excessdata);
 
     if (processedData.excessdata.length === 0) {
         return (
@@ -392,7 +435,7 @@ function RestockReport() {
     }
 
     const processedData = JSON.parse(data)
-    console.log(processedData);
+    // console.log(processedData);
 
     // checks for empty queries and doesn't display table
     if (processedData.length === 0) {
@@ -426,7 +469,7 @@ function WhatSellsTable(props) {
     const processedData = JSON.parse(data);
 
     // checks for empty query
-    if (processedData.length == 0) {
+    if (processedData.length === 0) {
         return (
             <div>
                 <h2>No data for this time.</h2>
