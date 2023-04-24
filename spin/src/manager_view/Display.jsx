@@ -145,7 +145,7 @@ function ZReport() {
         )
     }
     // console.log(data);
-    console.log(data.salesdata[0]);
+    // console.log(data.salesdata[0]);
 
     return (
         <div>
@@ -197,7 +197,7 @@ function Prices() {
         return;
     }
 
-    console.log(data)
+    // console.log(data)
 
     var menuItems = {};
     data.menuitems.map(item => (
