@@ -93,7 +93,7 @@ export default function MenuGallery(props) {
     if (error || isLoading)
         return;
 
-    console.log(data);
+    // console.log(data);
     return (
         <div className="order-box">
             <MenuItems itemNames={data[view]} category={view} order={order} addToOrder={addToOrder} pizza={pizza}/>
