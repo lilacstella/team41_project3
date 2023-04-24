@@ -9,7 +9,7 @@ from stone.zreportsql import get_zreport, post_eodinv
 from stone.salesreportsql import get_sales
 from stone.restockreportsql import get_low_inventory
 from stone.excessreportsql import get_excess
-from stone.prices import get_prices, change_price, add_inv_item, add_menu_item
+from stone.prices import get_prices, change_price, add_inv_item, add_menu_item, add_img, change_img
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -109,6 +109,10 @@ def prices():
             result = add_inv_item(data)
         elif action == "change_price":
             result = change_price(data)
+        elif action == "add_image":
+            result = add_img(data)
+        elif action == "change_image":
+            result = change_img(data)
         else:
             result = False
         return jsonify({"sucess": result})        
