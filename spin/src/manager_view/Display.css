@@ -126,6 +126,13 @@ button.inventory-button {
     width: 120px !important;
 }
 
+.linkforms {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 250px !important;
+}
+
+
 .selectBox{
     margin-left: 20px;
 }

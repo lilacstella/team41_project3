@@ -162,6 +162,8 @@ function ZReport() {
 function Prices() {
     const [currPrice, setCurrPrice] = useState("null");
     const [currItem, setCurrItem] = useState("Select Item");
+    const [category, setCategory] = useState("Item Type");
+    const [storage, setStorage] = useState("Item Storage");
 
     const handleNewPrice = async () => {
         // send post request
@@ -179,7 +181,9 @@ function Prices() {
     const handleNewInventory = async () => {
         // send post request
         axios.post('http://localhost:5000/prices', 
-        {'action': 'add_inv_item'});
+        {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
+         'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
+         'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
 
     };
 
@@ -193,14 +197,14 @@ function Prices() {
         return;
     }
 
-    console.log(data.menuitems)
+    console.log(data)
 
     var menuItems = {};
     data.menuitems.map(item => (
         menuItems[item.menu_item_name] = item.current_price
     ));
 
-    console.log(menuItems);
+    // console.log(menuItems);
     
     return (
         <div>
@@ -229,12 +233,27 @@ function Prices() {
             <div className="prices-container">
                 <label>New Inventory Item: </label>
                 <Form.Control className="forms" id="newInventoryItemName" placeholder="Item Name"></Form.Control>
-                <DropdownButton className="selectBox" title="Item Type">
+                <DropdownButton className="selectBox" title={category} onSelect={name => setCategory(name)}>
+                    {data.categories.map(name => (
+                        <Dropdown.Item key={name} eventKey={name}>
+                            {name}
+                        </Dropdown.Item>
+                    ))}
                 </DropdownButton>
-                <DropdownButton className="selectBox" title="Item Storage">
+                <DropdownButton className="selectBox" title={storage} onSelect={name => setStorage(name)}>
+                    {data.storage.map(name => (
+                        <Dropdown.Item key={name} eventKey={name}>
+                            {name}
+                        </Dropdown.Item>
+                    ))}
                 </DropdownButton>
                 <Form.Control className="numforms" id="newInventoryItemAmount" type="number" placeholder="Amount"></Form.Control>
                 <Form.Control className="forms" id="newInventoryItemUnits" placeholder="Units"></Form.Control>
+            </div>
+            
+            <div className="prices-container">
+                <label>Link for Item Image: </label>
+                <Form.Control className="linkforms" id="newInventoryItemLink" placeholder="Link"></Form.Control>
                 <Button variant="outline-success" onClick={handleNewInventory}>Submit</Button>
             </div>
 
