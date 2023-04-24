@@ -207,7 +207,7 @@ function Prices() {
     // console.log(menuItems);
     
     return (
-        <div>
+        <div className="prices-page">
             <h1>Prices</h1>
             <div className="prices-container">
                 <label>Item to Change: </label>
