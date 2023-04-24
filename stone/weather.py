@@ -2,10 +2,10 @@ import requests
 import json
 import functools
 
-WEATHER_API_KEY = '261b3feb73601f5f3bfbe5d2f3d86ca1'
+WEATHER_API_KEY = 'f29cc72823de3dff0e87b235e8650f8b'
 
 
-functools.cache
+@functools.cache
 def get_weather():
     location = 'College Station'
     response = requests.get(

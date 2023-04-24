@@ -75,7 +75,7 @@ def add_inv_item(json_file):
                                       host="csce-315-db.engr.tamu.edu",
                                       database="csce315331_team_41")
         cursor = connection.cursor()
-        add_item = "INSERT INTO inventory_t VALUES (%s, %s, %d, %s, %s);"
+        add_item = "INSERT INTO inventory_t VALUES (%s, %s, %s, %s, %s);"
         menu_tuple = (json_file["inventoryitem"], json_file["category"], json_file["quantity"], json_file["units"], json_file["storagelocation"] )
         cursor.execute(add_item, menu_tuple)
         connection.commit()

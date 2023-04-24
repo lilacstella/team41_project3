@@ -13,10 +13,10 @@ export default function ManagerView() {
                 <Button className="manager-button" buttonText="Inventory" view={setCurrView}/>
                 <Button className="manager-button" buttonText="X Report" view={setCurrView}/>
                 <Button className="manager-button" buttonText="Z Report" view={setCurrView}/>
-                <Button className="manager-button disabled" buttonText="Prices" view={setCurrView}/>
+                <Button className="manager-button" buttonText="Prices" view={setCurrView}/>
                 <Button className="manager-button" buttonText="Sales Report" view={setCurrView}/>
-                <Button className="manager-button disabled" buttonText="Excess Report" view={setCurrView}/>
-                <Button className="manager-button disabled" buttonText="Restock Report" view={setCurrView}/>
+                <Button className="manager-button" buttonText="Excess Report" view={setCurrView}/>
+                <Button className="manager-button" buttonText="Restock Report" view={setCurrView}/>
                 <Button className="manager-button" buttonText="What Sells" view={setCurrView}/>
             </div>
             <Display view={currView} />
