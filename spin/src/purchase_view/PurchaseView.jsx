@@ -10,7 +10,7 @@ export default function PurchaseView() {
     const [order, setOrder] = useState([]);
 
     const addToOrder = (item) => {
-        console.log(item + " " + currView);
+        // console.log(item + " " + currView);
         if (['sauce', 'cheese', 'dough', 'topping', 'drizzle'].includes(currView)) {
             if (currView === 'topping') {
                 if (pizza['topping'].length >= 4)
@@ -23,8 +23,8 @@ export default function PurchaseView() {
         } else {
             setOrder([...order, item]);
         }
-        console.log(order);
-        console.log(pizza);
+        // console.log(order);
+        // console.log(pizza);
     }
 
     const addPizzaToOrder = () => {
@@ -34,7 +34,7 @@ export default function PurchaseView() {
 
     const checkoutOrder = () => {
         // formatting order
-        console.log(order);
+        // console.log(order);
         /* 
         {
             "order": ["Gatorade", {"sauce": "Zesty Red", "drizzle": "Ranch"}],
@@ -47,11 +47,16 @@ export default function PurchaseView() {
         setOrder([]);
     }
 
+    const clearOrder = () => {
+        setOrder([]);
+        setPizza({'topping': []});
+    }
+
     return (
         <div className="purchase-frame">
             <Navigation handleClick={setCurrView}/>
             <MenuGallery view={currView} order={order} addToOrder={addToOrder} pizza={pizza}/>
-            <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder}/>
+            <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder} clear={clearOrder} setOrder={setOrder} setPizza={setPizza}/>
         </div>
     )
 }
