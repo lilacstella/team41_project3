@@ -51,7 +51,7 @@ function Inventory() {
     }
 
     const processedData = JSON.parse(data);
-    console.log(processedData);
+    // console.log(processedData);
 
     let inventoryItems = [];
     processedData.map(item => inventoryItems.push(item.InventoryItem));
@@ -108,7 +108,7 @@ function XReport() {
             </div>
         )
     }
-    console.log(data);
+    // console.log(data);
 
     return (
         <div>
@@ -377,7 +377,7 @@ function ExcessReportTable(props) {
     }
 
     const processedData = JSON.parse(data);
-    console.log(processedData.excessdata);
+    // console.log(processedData.excessdata);
 
     if (processedData.excessdata.length === 0) {
         return (
@@ -435,7 +435,7 @@ function RestockReport() {
     }
 
     const processedData = JSON.parse(data)
-    console.log(processedData);
+    // console.log(processedData);
 
     // checks for empty queries and doesn't display table
     if (processedData.length === 0) {
