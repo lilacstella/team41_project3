@@ -8,8 +8,9 @@ import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from "react-bootstrap/Form";
+import { HOST } from '..';
 
-const fetcher = (url) => axios.get(url).then(res => res.data);
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 export default function Display(props) {
     return (
@@ -41,7 +42,7 @@ function Inventory() {
     const [currItem, setCurrItem] = useState("Select Item");
 
     // fetch information from endpoint
-    const { data, error, isLoading } = useSWR('http://localhost:5000/inventory', fetcher);
+    const { data, error, isLoading } = useSWR('inventory', fetcher);
     if (error) {
         console.error(error);
     }
@@ -58,12 +59,12 @@ function Inventory() {
     inventoryItems.sort();
 
     const restockAll = () => {
-        axios.post('http://localhost:5000/inventory', {})
+        axios.post(HOST + 'inventory', {})
         alert('Restocked All Items!');
     };
 
     const setQuantity = () => {
-        axios.post('http://localhost:5000/inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
+        axios.post(HOST + 'inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
         alert('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
     };
 
@@ -93,7 +94,7 @@ function Inventory() {
 
 function XReport() {
     // fetch information from endpoint
-    const { data, error, isLoading } = useSWR('http://localhost:5000/xreport', fetcher);
+    const { data, error, isLoading } = useSWR('xreport', fetcher);
     if (error) {
         console.error(error);
     }
@@ -127,7 +128,7 @@ function XReport() {
 
 function ZReport() {
     // fetch information from endpoint
-    const { data, error, isLoading } = useSWR('http://localhost:5000/zreport', fetcher);
+    const { data, error, isLoading } = useSWR('zreport', fetcher);
 
     if (error) {
         console.error(error);
@@ -139,11 +140,12 @@ function ZReport() {
 
     const handleReset = async () => {
         // send post request
-        axios.post('http://localhost:5000/zreport', {});
+        axios.post(HOST + 'zreport', {});
 
-        mutate('http://localhost:5000/zreport');
+        mutate(HOST + 'zreport');
         
         alert('Reseted Z Report!');
+        
         //window.location.reload();
     };
 
@@ -178,9 +180,9 @@ function Prices() {
     const [storage, setStorage] = useState("Item Storage");
     const [currInvItem, setInvItem] = useState("Select Item");
 
-    const { data:menuData, error:error1, isLoading:isLoading1 } = useSWR('http://localhost:5000/prices', fetcher);
+    const { data:menuData, error:error1, isLoading:isLoading1 } = useSWR('prices', fetcher);
 
-    const { data:inventoryData, error:error2, isLoading:isLoading2 } = useSWR('http://localhost:5000/inventory', fetcher);
+    const { data:inventoryData, error:error2, isLoading:isLoading2 } = useSWR('inventory', fetcher);
 
     if (error1) {
         console.error(error1);
@@ -200,7 +202,7 @@ function Prices() {
 
     const handleNewPrice = async () => {
         // send post request
-        axios.post('http://localhost:5000/prices', 
+        axios.post(HOST + 'prices', 
         {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
         
         alert(currItem + "'s Price has been changed to $" + document.getElementById('newPrice').value);
@@ -208,7 +210,7 @@ function Prices() {
 
     const handleNewMenu = async () => {
         // send post request
-        axios.post('http://localhost:5000/prices', 
+        axios.post(HOST + 'prices', 
         {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
         
         alert('New Menu Item: ' + document.getElementById('newMenuItemName').value + ' added with price: $' + document.getElementById('newMenuItemPrice').value);
@@ -216,7 +218,7 @@ function Prices() {
 
     const handleNewInventory = async () => {
         // send post request
-        axios.post('http://localhost:5000/prices', 
+        axios.post(HOST + 'prices', 
         {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
          'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
          'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
@@ -226,7 +228,7 @@ function Prices() {
 
     const handleNewImage = async () => {
         // send post request
-        axios.post('http://localhost:5000/prices', 
+        axios.post(HOST + 'prices', 
         {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
 
         alert('Image changed for: ' + currInvItem);
@@ -320,7 +322,7 @@ function Prices() {
 
 // setting up the table for SalesReport
 function SalesReportTable(props) {
-    const { data, error, isLoading } = useSWR(`http://localhost:5000/salesreport?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
+    const { data, error, isLoading } = useSWR(`salesreport?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
     if (error) {
         console.error(error);
     }
@@ -381,7 +383,7 @@ function SalesReport() {
 }
 
 function ExcessReportTable(props) {
-    const { data, error, isLoading } = useSWR(`http://localhost:5000/excessreport?date=${props.date}`, fetcher);
+    const { data, error, isLoading } = useSWR(`excessreport?date=${props.date}`, fetcher);
     if (error) {
         console.error(error);
     }
@@ -439,7 +441,7 @@ function ExcessReport() {
 
 function RestockReport() {
     // fetch information from endpoint
-    const { data, error, isLoading } = useSWR('http://localhost:5000/restockreport', fetcher);
+    const { data, error, isLoading } = useSWR('restockreport', fetcher);
     if (error) {
         console.error(error);
     }
@@ -473,7 +475,7 @@ function RestockReport() {
 }
 
 function WhatSellsTable(props) {
-    const { data, error, isLoading } = useSWR(`http://localhost:5000/whatsells?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
+    const { data, error, isLoading } = useSWR(`whatsells?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
     if (error) {
         console.error(error);
     }
