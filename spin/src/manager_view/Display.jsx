@@ -56,13 +56,16 @@ function Inventory() {
 
     let inventoryItems = [];
     processedData.map(item => inventoryItems.push(item.InventoryItem));
+    inventoryItems.sort();
 
     const restockAll = () => {
         axios.post(HOST + 'inventory', {})
+        alert('Restocked All Items!');
     };
 
     const setQuantity = () => {
         axios.post(HOST + 'inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
+        alert('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
     };
 
     return (
@@ -113,8 +116,10 @@ function XReport() {
 
     return (
         <div>
-            <h1>x Report</h1>
-            <DataTable processedData={data.salesdata} />
+            <h1>X Report</h1>
+                <div className="manager-view-table-row">
+                    <DataTable processedData={data.salesdata} />
+                </div>
             <h2>Total: ${data.total}</h2>
         </div>
     )
@@ -138,7 +143,9 @@ function ZReport() {
         axios.post(HOST + 'zreport', {});
 
         mutate(HOST + 'zreport');
-
+        
+        alert('Reseted Z Report!');
+        
         //window.location.reload();
     };
 
@@ -167,7 +174,7 @@ function ZReport() {
 }
 
 function Prices() {
-    const [currPrice, setCurrPrice] = useState("null");
+    const [currPrice, setCurrPrice] = useState("0.00");
     const [currItem, setCurrItem] = useState("Select Item");
     const [category, setCategory] = useState("Item Type");
     const [storage, setStorage] = useState("Item Storage");
@@ -197,13 +204,16 @@ function Prices() {
         // send post request
         axios.post(HOST + 'prices', 
         {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
+        
+        alert(currItem + "'s Price has been changed to $" + document.getElementById('newPrice').value);
     };
 
     const handleNewMenu = async () => {
         // send post request
         axios.post(HOST + 'prices', 
         {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
-
+        
+        alert('New Menu Item: ' + document.getElementById('newMenuItemName').value + ' added with price: $' + document.getElementById('newMenuItemPrice').value);
     };
 
     const handleNewInventory = async () => {
@@ -212,13 +222,16 @@ function Prices() {
         {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
          'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
          'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
-
+        
+        alert('New Inventory Item: ' + document.getElementById('newInventoryItemName').value + ' added.');
     };
 
     const handleNewImage = async () => {
         // send post request
         axios.post(HOST + 'prices', 
         {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
+
+        alert('Image changed for: ' + currInvItem);
     };
 
     // console.log(menuData);
@@ -227,10 +240,13 @@ function Prices() {
     menuData.menuitems.map(item => (
         menuItems[item.menu_item_name] = item.current_price
     ));
+    const sortedMenu = Object.entries(menuItems)
+    .sort(([key1], [key2]) => key1.localeCompare(key2))
+    .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
 
     let inventoryItems = [];
     JSON.parse(inventoryData).map(item => inventoryItems.push(item.InventoryItem));
-
+    inventoryItems.sort();
     // console.log(menuItems);
     
     return (
@@ -240,14 +256,14 @@ function Prices() {
                 <label>Item to Change: </label>
                 <DropdownButton className="selectBox" title={currItem} id="changePriceName" onSelect={name => {setCurrItem(name); setCurrPrice(menuItems[name])}}>
                     <div className="dropdownmenu">
-                        {Object.keys(menuItems).map(name => (
+                        {Object.keys(sortedMenu).map(name => (
                             <Dropdown.Item key={name} eventKey={name}>
                                 {name}
                             </Dropdown.Item>
                         ))}
                     </div>
                 </DropdownButton>
-                <label>Curr Price: {currPrice}</label>
+                <label>Curr Price: ${currPrice}</label>
                 <Form.Control className="numforms" id="newPrice" type="number" placeholder="New Price"></Form.Control>
                 <Button variant="outline-success" onClick={handleNewPrice}>Submit</Button>
             </div>
@@ -264,7 +280,7 @@ function Prices() {
                 <Form.Control className="forms" id="newInventoryItemName" placeholder="Item Name"></Form.Control>
                 <DropdownButton className="selectBox" title={category} onSelect={name => setCategory(name)}>
                     <div className="dropdownmenu">
-                        {menuData.categories.map(name => (
+                        {menuData.categories.sort().map(name => (
                             <Dropdown.Item key={name} eventKey={name}>
                                 {name}
                             </Dropdown.Item>
@@ -273,7 +289,7 @@ function Prices() {
                 </DropdownButton>
                 <DropdownButton className="selectBox" title={storage} onSelect={name => setStorage(name)}>
                     <div className="dropdownmenu">
-                        {menuData.storage.map(name => (
+                        {menuData.storage.sort().map(name => (
                             <Dropdown.Item key={name} eventKey={name}>
                                 {name}
                             </Dropdown.Item>
@@ -326,7 +342,9 @@ function SalesReportTable(props) {
     // console.log(data);
     return (
         <div>
-            <DataTable processedData={data.salesreport} />
+            <div className="manager-view-table-row">
+                <DataTable processedData={data.salesreport} />
+            </div>
             <h2>total: ${data.totalsales}</h2>
         </div>
 
@@ -377,7 +395,7 @@ function ExcessReportTable(props) {
     const processedData = JSON.parse(data);
     // console.log(processedData.excessdata);
 
-    if (processedData.excessdata.length === 0) {
+    if (processedData.excessdata === undefined || processedData.excessdata.length === 0) {
         return (
             <div>
                 <h2>No data for this time.</h2>
@@ -386,7 +404,7 @@ function ExcessReportTable(props) {
     }
     
     return (
-        <div>
+        <div className='manager-view-table-row'>
             <DataTable processedData={processedData.excessdata}/>
         </div>
 
@@ -449,7 +467,9 @@ function RestockReport() {
     return (
         <div>
             <h1>Restock Report</h1>
-            <DataTable processedData={processedData}/>
+            <div className="manager-view-table-row">
+                <DataTable processedData={processedData}/>  
+            </div>
         </div>
     )
 }
@@ -479,7 +499,9 @@ function WhatSellsTable(props) {
 
     return (
         <div className="manager-view-table-row">
-            <DataTable processedData={processedData} />
+            <div className="manager-view-table-row">
+                <DataTable processedData={processedData} />
+            </div>
         </div>
     )
 }
@@ -521,7 +543,7 @@ function WhatSells() {
 function DataTable(props) {
     return (
         <div className='table-container'>
-            <Table className="striped bordered hover">
+            <table-md className="striped bordered hover">
                 <thead>
                     <tr>
                         {Object.keys(props.processedData[0]).map((key) => (
@@ -530,7 +552,7 @@ function DataTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.processedData.map((item, index) => (
+                    {props.processedData.sort().map((item, index) => (
                         <tr key={index}>
                             {Object.keys(item).map((key) => (
                                 <td key={key}>{item[key]}</td>
@@ -538,7 +560,7 @@ function DataTable(props) {
                         </tr>
                     ))}
                 </tbody>
-            </Table>
+            </table-md>
         </div>
     )
 }

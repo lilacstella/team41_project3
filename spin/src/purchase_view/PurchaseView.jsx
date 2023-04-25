@@ -46,11 +46,14 @@ export default function PurchaseView() {
         */
         axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
         setOrder([]);
+        alert('Order placed!');
     }
 
     const clearOrder = () => {
         setOrder([]);
         setPizza({'topping': []});
+
+        alert('Order cleared!');
     }
 
     return (
