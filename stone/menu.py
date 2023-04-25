@@ -48,6 +48,7 @@ def get_menus():
         imgdict = {}
         for row in img:
             imgdict[row[0]] = row[1]
+        print(imgdict)
 
         menu_results = {}
         # add sauces
@@ -111,7 +112,7 @@ def get_menus():
         cursor.execute(select_fountaindrink)
         prices_list = cursor.fetchone()
         try:
-            image = imgdict[prices_list[0]]
+            image = imgdict["Fountain Drink"]
         except KeyError:
             image = None
         fountain_data = {"drink-name": "Fountain Drink", "price": float(prices_list[0]), "image": image}
