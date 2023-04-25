@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
+.menu-view-title {
+    /* preferred if other divs can be shifted around */
+    /* display: flex;
+    justify-content: center;
+    width: 100%; */
+    font-family: 'Alfa Slab One', sans;
+}
+
+.menu-view-frame {
+    height: 86vh;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.menu-view-frame>.menu-view-boxed {
+    border: 3px solid #e4a826;
+    height: 45%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.menu-view-frame>.menu-view-boxed h2 {
+    width: 100%;
+}
+
+
+.menu-view-frame>.menu-view-boxed>div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.menu-view-frame>.menu-view-boxed .menu-view-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.menu-view-frame>.menu-view-boxed .menu-view-row>p {
+    margin-left: 5px;
+}   

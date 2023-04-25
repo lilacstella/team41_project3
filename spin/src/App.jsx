@@ -1,28 +1,25 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import Nav from './Nav';
 import ManagerView from './manager_view/ManagerView';
 import PurchaseView from './purchase_view/PurchaseView';
+import MenuView from './menu_view/MenuView';
 
 function App() {
-  const [showPurchaseView, setShowPurchaseView] = useState(true);
-  
-  const toggleView = () => {
-    setShowPurchaseView(!showPurchaseView);
+  const [showView, setView] = useState('menu');
+
+  const views = {
+      'customer': [<PurchaseView />, "Spin N' Stone", 'Login'],
+      'manager': [<ManagerView />, 'Manager View', 'Back'],
+      'menu': [<MenuView />, "Spin N' Stone Menu", "Order"]
   };
 
-  let displayText = "Spin N' Stone";
-  let buttonText = "Login";
-
-  if (!showPurchaseView) {
-    displayText = "Manager View";
-    buttonText = "Back";
-  }
+  var [currView, displayText, buttonText] = views[showView];
 
   return (
     <div>
-      <Nav login={toggleView} displayText={displayText} buttonText={buttonText} />
+      <Nav login={() => setView('customer')} displayText={displayText} buttonText={buttonText} />
       <div>
-        {showPurchaseView ? <PurchaseView /> : <ManagerView />}
+        {currView}
       </div>
     </div>
   );
