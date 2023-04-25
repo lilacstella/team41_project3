@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
-from stone import ORIGIN
+from stone import ORIGIN, HOST_IP, HOST_PORT
 from stone.excess_report import get_excess
 from stone.inventory import get_current_inventory, restock_all, restock_items
 from stone.menu import get_menus, process_order
@@ -13,12 +13,13 @@ from stone.what_sells import get_what_sells
 from stone.x_report import get_xreport
 from stone.z_report import get_zreport, post_eodinv
 
+
 app = Flask(__name__)
 cors = CORS(app)
 
 
 @app.route('/menu', methods=['GET', 'POST'])
-@cross_origin(origins=ORIGIN, methods=["GET", "POST"])
+# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def menu():
     if request.method == 'GET':
         return jsonify(get_menus())
@@ -31,7 +32,7 @@ def menu():
 
 
 @app.route('/inventory', methods=['GET', 'POST'])
-@cross_origin(origins=ORIGIN, methods=["GET", "POST"])
+# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def inventory():
     if request.method == 'GET':
         return jsonify(get_current_inventory())
@@ -46,14 +47,14 @@ def inventory():
 
 
 @app.route('/weather', methods=['GET'])
-@cross_origin(origins=ORIGIN, methods=["GET"])
+# @cross_origin(origins=ORIGIN, methods=["GET"])
 def weather():
     if request.method == 'GET':
         return jsonify(get_weather())
 
 
 @app.route('/whatsells', methods=['GET'])
-@cross_origin(origins=ORIGIN, methods=["GET"])
+# @cross_origin(origins=ORIGIN, methods=["GET"])
 def whatsells():
     if request.method == 'GET':
         date1 = request.args.get('date1')
@@ -62,14 +63,14 @@ def whatsells():
 
 
 @app.route('/xreport', methods=['GET'])
-@cross_origin(origins=ORIGIN, methods=["GET"])
+# @cross_origin(origins=ORIGIN, methods=["GET"])
 def xreport():
     if request.method == 'GET':
         return jsonify(get_xreport())
 
 
 @app.route('/zreport', methods=['GET', 'POST'])
-@cross_origin(origins=ORIGIN, methods=["GET", "POST"])
+# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def zreport():
     if request.method == 'GET':
         return jsonify(get_zreport())
@@ -81,7 +82,7 @@ def zreport():
 
 
 @app.route('/salesreport', methods=['GET'])
-@cross_origin(origins=ORIGIN, methods=["GET"])
+# @cross_origin(origins=ORIGIN, methods=["GET"])
 def salesreport():
     if request.method == 'GET':
         date1 = request.args.get('date1')
@@ -90,14 +91,14 @@ def salesreport():
 
 
 @app.route('/restockreport', methods=['GET'])
-@cross_origin(origins=ORIGIN, methods=["GET"])
+# @cross_origin(origins=ORIGIN, methods=["GET"])
 def restockreport():
     if request.method == 'GET':
         return jsonify(get_low_inventory())
 
 
 @app.route('/excessreport', methods=['GET'])
-@cross_origin(origins=ORIGIN, methods=["GET"])
+# @cross_origin(origins=ORIGIN, methods=["GET"])
 def excessreport():
     if request.method == 'GET':
         date = request.args.get('date')
@@ -105,7 +106,7 @@ def excessreport():
 
 
 @app.route('/prices', methods=['GET', 'POST'])
-@cross_origin(origins=ORIGIN, methods=["GET", "POST"])
+# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def prices():
     if request.method == 'GET':
         return jsonify(get_prices())
@@ -126,4 +127,4 @@ def prices():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host=HOST_IP, port=HOST_PORT)

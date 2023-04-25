@@ -1,6 +1,8 @@
 print(f"Spin N' Stone Pizza POS Back End")
 
 ORIGIN = "http://localhost:3000"
+HOST_IP = "localhost"
+HOST_PORT = 5000
 
 SQL_CREDS = {
     'user': 'csce315331_team_41_master',
