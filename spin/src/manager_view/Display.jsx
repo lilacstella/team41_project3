@@ -59,10 +59,12 @@ function Inventory() {
 
     const restockAll = () => {
         axios.post('http://localhost:5000/inventory', {})
+        alert('Restocked All Items!');
     };
 
     const setQuantity = () => {
         axios.post('http://localhost:5000/inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
+        alert('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
     };
 
     return (
@@ -140,7 +142,8 @@ function ZReport() {
         axios.post('http://localhost:5000/zreport', {});
 
         mutate('http://localhost:5000/zreport');
-
+        
+        alert('Reseted Z Report!');
         //window.location.reload();
     };
 
@@ -199,13 +202,16 @@ function Prices() {
         // send post request
         axios.post('http://localhost:5000/prices', 
         {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
+        
+        alert(currItem + "'s Price has been changed to $" + document.getElementById('newPrice').value);
     };
 
     const handleNewMenu = async () => {
         // send post request
         axios.post('http://localhost:5000/prices', 
         {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
-
+        
+        alert('New Menu Item: ' + document.getElementById('newMenuItemName').value + ' added with price: $' + document.getElementById('newMenuItemPrice').value);
     };
 
     const handleNewInventory = async () => {
@@ -214,13 +220,16 @@ function Prices() {
         {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
          'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
          'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
-
+        
+        alert('New Inventory Item: ' + document.getElementById('newInventoryItemName').value + ' added.');
     };
 
     const handleNewImage = async () => {
         // send post request
         axios.post('http://localhost:5000/prices', 
         {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
+
+        alert('Image changed for: ' + currInvItem);
     };
 
     // console.log(menuData);
@@ -384,7 +393,7 @@ function ExcessReportTable(props) {
     const processedData = JSON.parse(data);
     // console.log(processedData.excessdata);
 
-    if (processedData.excessdata == undefined || processedData.excessdata.length === 0) {
+    if (processedData.excessdata === undefined || processedData.excessdata.length === 0) {
         return (
             <div>
                 <h2>No data for this time.</h2>
@@ -541,7 +550,7 @@ function DataTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.processedData.map((item, index) => (
+                    {props.processedData.sort().map((item, index) => (
                         <tr key={index}>
                             {Object.keys(item).map((key) => (
                                 <td key={key}>{item[key]}</td>
