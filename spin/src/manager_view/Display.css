@@ -66,6 +66,7 @@
     /* -webkit-transform: translate(-50%, -50%); */
     /* transform: translate(-50%, -50%); */
     flex-direction: row;
+    margin-bottom: 2em;
 }
 
 .table-container table {
@@ -79,6 +80,7 @@
 .table-container th,
 .table-container td {
     padding: 20px;
+    padding-right: 4em;
     background-color: rgba(255, 255, 255, 0.2);
     color: black;
 }
