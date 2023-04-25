@@ -2,8 +2,9 @@ import React from 'react';
 import useSWR from 'swr';
 import axios from 'axios';
 import './Nav.css';
+import { HOST } from '.';
 
-const fetcher = (url) => axios.get(url).then(res => res.data);
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 /* navbar includes login */
 export default function Navbar(props) {
@@ -22,7 +23,7 @@ export default function Navbar(props) {
 
 
 function WeatherAPIDisplay(){
-    const { data, error, isLoading } = useSWR('http://localhost:5000/weather', fetcher);
+    const { data, error, isLoading } = useSWR('weather', fetcher);
     if (error) {
         return <h2></h2>;
     }

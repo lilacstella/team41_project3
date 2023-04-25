@@ -2,8 +2,9 @@ import React from 'react';
 import useSWR from 'swr';
 import axios from 'axios';
 import './Gallery.css';
+import { HOST } from '..';
 
-const fetcher = (url) => axios.get(url).then(res => res.data);
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 // maintaining aspect ratio of the image
 const AspectRatio = (props) => {
@@ -89,7 +90,7 @@ function MenuItems(props) {
 export default function MenuGallery(props) {
     // sauce, topping, cheese, drizzle, drink, dough, seasonal
     const { view, order, addToOrder, pizza } = props;
-    const { data, error, isLoading } = useSWR('http://localhost:5000/menu', fetcher);
+    const { data, error, isLoading } = useSWR('menu', fetcher);
     if (error || isLoading)
         return;
 

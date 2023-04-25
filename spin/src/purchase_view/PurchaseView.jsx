@@ -3,6 +3,7 @@ import MenuGallery from './Gallery';
 import axios from 'axios';
 import Cart from './Cart';
 import './PurchaseView.css';
+import { HOST } from '..';
 
 export default function PurchaseView() {
     const [currView, setCurrView] = useState('sauce');
@@ -43,7 +44,7 @@ export default function PurchaseView() {
         }
 
         */
-        axios.post('http://localhost:5000/menu', {"payment_form": "cash", "employee_id": 0, "order": order});
+        axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
         setOrder([]);
     }
 
