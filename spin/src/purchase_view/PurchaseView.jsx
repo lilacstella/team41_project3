@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cart from './Cart';
 import './PurchaseView.css';
 
-export default function PurchaseView() {
+export default function PurchaseView(props) {
     const [currView, setCurrView] = useState('sauce');
     const [pizza, setPizza] = useState({'topping': []});
     const [order, setOrder] = useState([]);
@@ -54,7 +54,7 @@ export default function PurchaseView() {
 
     return (
         <div className="purchase-frame">
-            <Navigation handleClick={setCurrView}/>
+            <Navigation handleClick={setCurrView} setMenuView={props.setMenuView}/>
             <MenuGallery view={currView} order={order} addToOrder={addToOrder} pizza={pizza}/>
             <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder} clear={clearOrder} setOrder={setOrder} setPizza={setPizza}/>
         </div>
@@ -73,6 +73,7 @@ function Navigation(props) {
             <Tab name="Drink" switchTab={props.handleClick} />
             <Tab name="Dough" switchTab={props.handleClick} />
             <Tab name="Seasonal" switchTab={props.handleClick} />
+            <Tab name="Menu View" switchTab={props.setMenuView} />
         </div>
     );
 }

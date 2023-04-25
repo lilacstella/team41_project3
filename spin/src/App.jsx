@@ -8,16 +8,18 @@ function App() {
   const [showView, setView] = useState('menu');
 
   const views = {
-      'customer': [<PurchaseView />, "Spin N' Stone", 'Login'],
-      'manager': [<ManagerView />, 'Manager View', 'Back'],
-      'menu': [<MenuView />, "Spin N' Stone Menu", "Order"]
+    // should be login in customer direct 
+    // react component, direct to, display text, button text
+    'customer': [<PurchaseView setMenuView={() => setView('menu')} />, 'manager', "Spin N' Stone", 'Login'],
+    'manager': [<ManagerView setMenuView={() => setView('menu')} />, 'customer', 'Manager View', 'Back'],
+    'menu': [<MenuView />, 'customer', "Spin N' Stone Menu", "Order"]
   };
 
-  var [currView, displayText, buttonText] = views[showView];
+  var [currView, direct, displayText, buttonText] = views[showView];
 
   return (
     <div>
-      <Nav login={() => setView('customer')} displayText={displayText} buttonText={buttonText} />
+      <Nav setView={setView} direct={direct} displayText={displayText} buttonText={buttonText} />
       <div>
         {currView}
       </div>
