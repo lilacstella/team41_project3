@@ -2,7 +2,7 @@ import requests
 import json
 import functools
 
-WEATHER_API_KEY = 'f29cc72823de3dff0e87b235e8650f8b'
+from stone import WEATHER_API_KEY
 
 
 @functools.cache

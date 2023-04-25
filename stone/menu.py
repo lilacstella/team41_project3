@@ -4,15 +4,13 @@ from datetime import datetime
 import psycopg2
 from psycopg2 import sql
 
+from stone import SQL_CREDS
 
-# for later login stuff????
+
 def get_employees():
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         select_employees = "select * from employee_t"
         cursor.execute(select_employees)
@@ -40,10 +38,7 @@ def get_employees():
 def get_menus():
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
 
         # get images
@@ -134,7 +129,6 @@ def get_menus():
             drinksdata = {"drink-name": row[0], "price": float(row[1]), "image": image}
             menu_results["drink"].append(drinksdata)
         menu_results["drink"].append(fountain_data)
-        
 
         # add all doughs
         select_doughs = "SELECT m.menuitem, m.price FROM menu_t m INNER JOIN inventory_t i ON m.menuitem = i.inventoryitem WHERE i.category = 'Dough'"
@@ -209,10 +203,7 @@ def get_menus():
 def process_order(json_data):
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         # array of strings and dictionaries, dictionary if it's a pizza
         order_items = json_data["order"]
@@ -303,5 +294,3 @@ def process_order(json_data):
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-
-

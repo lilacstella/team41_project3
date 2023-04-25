@@ -1,13 +1,13 @@
 import psycopg2
 import json
 
+from stone import SQL_CREDS
+
+
 def get_what_sells(date1, date2):
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                       password="goldfishwithnuts",
-                                       host="csce-315-db.engr.tamu.edu",
-                                       database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         # Update the inventory with the specified item and restock amount using a parameterized query
         what_sells_query = ("SELECT li1.MenuItem AS item1, li2.MenuItem AS item2, COUNT(DISTINCT o.OrderNumber) AS order_count\n" +

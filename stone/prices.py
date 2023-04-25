@@ -1,13 +1,12 @@
-import json
 import psycopg2
+
+from stone import SQL_CREDS
+
 
 def get_prices():
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
 
         prices_dict = {}
@@ -27,7 +26,7 @@ def get_prices():
         for row in categories:
             categorieslist.append(row[0])
         prices_dict["categories"] = categorieslist
-        if("Seasonal" not in categorieslist):
+        if ("Seasonal" not in categorieslist):
             categorieslist.append("Seasonal")
 
         select_storageloc = "select distinct storagelocation from inventory_t"
@@ -47,88 +46,81 @@ def get_prices():
         prices_dict["no-img"] = no_img_items
 
         return prices_dict
-    
+
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
 
+
 def add_menu_item(json_file):
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
 
         add_item = "INSERT INTO menu_t VALUES (%s, %s);"
         menu_tuple = (json_file["menuitem"], json_file["price"])
         cursor.execute(add_item, menu_tuple)
         connection.commit()
-        return True  
-    
+        return True
+
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
+
 
 def add_inv_item(json_file):
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         add_item = "INSERT INTO inventory_t VALUES (%s, %s, %s, %s, %s);"
-        menu_tuple = (json_file["inventoryitem"], json_file["category"], json_file["quantity"], json_file["units"], json_file["storagelocation"] )
+        menu_tuple = (json_file["inventoryitem"], json_file["category"], json_file["quantity"], json_file["units"],
+                      json_file["storagelocation"])
         cursor.execute(add_item, menu_tuple)
         connection.commit()
         return True
-    
+
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
 
+
 def change_price(json_file):
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         change_price = "UPDATE menu_t SET price = %s WHERE menuitem = %s"
         price_tuple = (json_file["price"], json_file["menuitem"])
         cursor.execute(change_price, price_tuple)
         connection.commit()
         return True
-    
+
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
 
+
 def add_img(json_file):
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         checkforimage = "SELECT * FROM item_images where item_name = %s"
         checktuple = (json_file["item_name"],)
         print(json_file["img_url"])
         cursor.execute(checkforimage, checktuple)
         results = cursor.fetchall()
-        if(results == []):
+        if (results == []):
             add_img = "INSERT INTO item_images VALUES (%s, %s)"
             img_tuple = (json_file["item_name"], json_file["img_url"])
             cursor.execute(add_img, img_tuple)
@@ -140,10 +132,9 @@ def add_img(json_file):
             connection.commit()
 
         return True
-    
+
     finally:
         if connection:
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-
