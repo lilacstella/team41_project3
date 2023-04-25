@@ -2,7 +2,7 @@ nav {
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 19.5vh;
+    height: 14.5vh;
     background-color: #e7b449;
     justify-content: space-between;
     border-bottom: .5vh solid black;

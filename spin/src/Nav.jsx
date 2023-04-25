@@ -9,7 +9,7 @@ const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 /* navbar includes login */
 export default function Navbar(props) {
     const handleClick = () => {
-        props.login();
+        props.setView(props.direct);
     };
 
     return (
