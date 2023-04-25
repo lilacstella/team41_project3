@@ -1,14 +1,14 @@
-import json
+from datetime import datetime
+
 import psycopg2
-from datetime import date, datetime
+
+from stone import SQL_CREDS
+
 
 def get_zreport():
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         maxdatequery = "select max(date) from inventory_history;"
         cursor.execute(maxdatequery)
@@ -20,18 +20,18 @@ def get_zreport():
         zreportdict = {}
         saleslist = []
         for row in zreporttable:
-            salesdata = {"itemname" : row[0], "numbersold" : row[1], "sales": str(row[2])}
+            salesdata = {"itemname": row[0], "numbersold": row[1], "sales": str(row[2])}
             saleslist.append(salesdata)
         zreportdict["salesdata"] = saleslist
 
-        zreportpaymenttype = "select paymentform, sum(total) as totalsales from order_history where orderedat > '" + maxdate +  "' group by paymentform;"
+        zreportpaymenttype = "select paymentform, sum(total) as totalsales from order_history where orderedat > '" + maxdate + "' group by paymentform;"
         cursor.execute(zreportpaymenttype)
         zreportpayment = cursor.fetchall()
         paymentlist = []
         total = 0
         for row in zreportpayment:
             total += row[1]
-            paymentdata = {"paymenttype" : row[0], "sales": str(row[1])}
+            paymentdata = {"paymenttype": row[0], "sales": str(row[1])}
             paymentlist.append(paymentdata)
         zreportdict["paymentdata"] = paymentlist
         zreportdict["total"] = str(total)
@@ -43,13 +43,11 @@ def get_zreport():
             connection.close()
             print("PostgreSQL connection is closed")
 
+
 def post_eodinv():
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                      password="goldfishwithnuts",
-                                      host="csce-315-db.engr.tamu.edu",
-                                      database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         select_inv = "select inventoryitem, quantity,units from inventory_t"
         cursor.execute(select_inv)
@@ -61,7 +59,7 @@ def post_eodinv():
             cursor.execute(insert_inv_history, (current_date, item[0], item[1], item[2]))
 
         connection.commit()
-        
+
         return True
     except psycopg2.Error as e:
         return False

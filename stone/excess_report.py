@@ -1,14 +1,15 @@
-import psycopg2
 import json
 
-#returns inventory in JSON
+import psycopg2
+
+from stone import SQL_CREDS
+
+
+# returns inventory in JSON
 def get_excess(datein):
     connection = None
     try:
-        connection = psycopg2.connect(user="csce315331_team_41_master",
-                                       password="goldfishwithnuts",
-                                       host="csce-315-db.engr.tamu.edu",
-                                       database="csce315331_team_41")
+        connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         datestr = datein
         datequery = ("SELECT date FROM inventory_history WHERE date <= %s ORDER BY date DESC LIMIT 1")
@@ -17,7 +18,7 @@ def get_excess(datein):
         if cursor_fetch is None:
             return '[]'
         date_return = cursor_fetch[0]
-        
+
         print("Date: ", date_return)
 
         timeInventoryQuery = ("SELECT * FROM inventory_history WHERE date = %s")
@@ -26,7 +27,7 @@ def get_excess(datein):
 
         past_inventory_list = {}
         for row in pastInventory:
-            past_inventory_list[row[1]] = float(row[2])  
+            past_inventory_list[row[1]] = float(row[2])
 
         currInventoryQuery = ("SELECT * FROM inventory_t")
         cursor.execute(currInventoryQuery)
@@ -36,7 +37,7 @@ def get_excess(datein):
         for row in currInventory:
             curr_inventory_list[row[0]] = float(row[2])
         less_than_10 = []
-        
+
         for item_name in past_inventory_list:
             past_quantity = past_inventory_list[item_name]
             if item_name in curr_inventory_list.keys():
