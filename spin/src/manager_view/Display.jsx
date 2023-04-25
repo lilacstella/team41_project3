@@ -217,10 +217,7 @@ function Prices() {
     const handleNewImage = async () => {
         // send post request
         axios.post('http://localhost:5000/prices', 
-        {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
-         'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
-         'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
-
+        {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
     };
 
     // console.log(menuData);
