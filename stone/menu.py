@@ -48,7 +48,6 @@ def get_menus():
         imgdict = {}
         for row in img:
             imgdict[row[0]] = row[1]
-        print(imgdict)
 
         menu_results = {}
         # add sauces
