@@ -2,7 +2,7 @@
 .manager-frame {
   overflow: hidden;
   display: flex;
-  height: 80vh;
+  height: 85vh;
   justify-content: space-between;
 }
 

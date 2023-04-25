@@ -1,12 +1,4 @@
 .manager-view-display-frame {
-    /* background-color: white;
-    height: 80vh;
-    width: 80vw;
-    justify-content: center;
-    align-items: center;
-    overflow-y: scroll;
-    position: absolute;
-    right: 0; */
     height: 100%;
     width: 80vw;
     border-left: 5px solid black;
