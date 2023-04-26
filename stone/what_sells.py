@@ -15,11 +15,9 @@ def get_what_sells(date1, date2):
                 "INNER JOIN OrderItem_T li2 ON li1.OrderNumber = li2.OrderNumber AND li1.MenuItem < li2.MenuItem\n" +
                 "INNER JOIN Order_History o ON li1.OrderNumber = o.OrderNumber AND date(o.orderedat) >= %s AND date(o.orderedat) <= %s\n" +
                 "GROUP BY li1.MenuItem, li2.MenuItem HAVING COUNT(DISTINCT o.OrderNumber) >= 1\n" +
-                "ORDER BY 3 DESC");
+                "ORDER BY 3 DESC")
         start_date = date1
         end_date = date2
-        print(start_date)
-        print(end_date)
         cursor.execute(what_sells_query, (start_date, end_date))
         pairs = cursor.fetchall()
         pairs_list = []
