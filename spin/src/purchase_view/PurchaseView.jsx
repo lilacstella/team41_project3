@@ -29,6 +29,12 @@ export default function PurchaseView(props) {
     }
 
     const addPizzaToOrder = () => {
+        // if a pizza have no sauce and no cheese, not allowed
+        if ((!('cheese' in pizza) || pizza['cheese'] === undefined) && (!('sauce' in pizza) && pizza['sauce'] === undefined)){
+            alert('Please add either cheese or sauce to your cheese pizza!');
+            return;
+        }
+
         setOrder([...order, pizza]);
         setPizza({'topping': []});
     }

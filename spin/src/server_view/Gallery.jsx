@@ -7,31 +7,6 @@ import { HOST } from '..';
 
 const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
-// maintaining aspect ratio of the image
-const AspectRatio = (props) => {
-    const { ratio = 1 / 1, ...otherProps } = props;
-
-    return (
-        <div
-            className="aspect-ratio"
-            style={{ paddingTop: `${100 / ratio}%` }}
-            {...otherProps}
-        />
-    );
-};
-
-const Image = (props) => {
-    // using props for url in the future
-    return (
-        <div
-            style={{
-                backgroundImage: `url(${props.image})`,
-                backgroundSize: "cover",
-            }}
-        />
-    );
-};
-
 const ItemBox = (props) => {
     // highlight item if it is in the order
     const {itemName, image, order, addToOrder, pizza} = props;
@@ -45,9 +20,6 @@ const ItemBox = (props) => {
     
     return (
         <figure className={classes} onClick={select}>
-            <AspectRatio>
-                <Image image={image} />
-            </AspectRatio>
             <figcaption className="menu-item-box-caption">
                 {itemName}
             </figcaption>

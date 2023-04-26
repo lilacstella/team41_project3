@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MenuGallery, {OrderHistory} from './Gallery';
 import axios from 'axios';
-import Cart from '../purchase_view/Cart';
+import Cart from './Cart';
 import './ServerView.css';
 import { HOST } from '..';
 
@@ -29,7 +29,18 @@ export default function ServerView(props) {
     }
 
     const addPizzaToOrder = () => {
-        setOrder([...order, pizza]);
+        // if a pizza have no sauce and no cheese, not allowed
+        if ((!('cheese' in pizza) || pizza['cheese'] === undefined) && (!('sauce' in pizza) && pizza['sauce'] === undefined)){
+            alert('Please add either cheese or sauce to your cheese pizza!');
+            return;
+        }
+
+        var pizzaArr = []
+        for (var i = 0; i < document.getElementById('pizzaBuilderNum').value; i++){
+            pizzaArr.push(pizza);
+        }
+        // prevent adding pizza here
+        setOrder([...order, ...pizzaArr]);
         setPizza({'topping': []});
     }
 
