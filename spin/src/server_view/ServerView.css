@@ -34,20 +34,3 @@
     cursor: pointer;
     background-color: #f8db9c;
 }
-
-.modal-content {
-    font-size: 1.2rem;
-}
-  
-.modal-header {
-    background-color: #f8f9fa;
-}
-
-.close {
-    color: red;
-    font-size: 2rem;
-    font-weight: bold;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-}

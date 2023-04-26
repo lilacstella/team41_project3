@@ -77,15 +77,13 @@ export default function PurchaseView(props) {
         setShowModal(true);
     }
 
-    const handleClose = () => setShowModal(false);
-
     return (
         <div className="purchase-frame">
             <Navigation handleClick={setCurrView} setMenuView={props.setMenuView}/>
             <MenuGallery view={currView} order={order} addToOrder={addToOrder} pizza={pizza}/>
             <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder} clear={clearOrder} setOrder={setOrder} setPizza={setPizza}/>
             
-            <Modal show={showModal} onHide={handleClose}>
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{modalText}</Modal.Title>
                 </Modal.Header>
