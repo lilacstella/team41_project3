@@ -50,6 +50,13 @@ export default function PurchaseView(props) {
         }
 
         */
+
+        // order validation
+        if (order === undefined || (Array.isArray(order) && order.length === 0)){
+            alert('Invalid order, please add items');
+            return;
+        }
+
         axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
         setOrder([]);
         alert('Order placed!');
