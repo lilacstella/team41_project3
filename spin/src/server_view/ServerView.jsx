@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MenuGallery, {OrderHistory} from './Gallery';
 import axios from 'axios';
-import Cart from '../purchase_view/Cart';
+import Cart from './Cart';
 import './ServerView.css';
 import { HOST } from '..';
 
@@ -9,6 +9,9 @@ export default function ServerView(props) {
     const [currView, setCurrView] = useState('sauce');
     const [pizza, setPizza] = useState({'topping': []});
     const [order, setOrder] = useState([]);
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
 
     const addToOrder = (item) => {
         // console.log(item + " " + currView);
@@ -29,7 +32,17 @@ export default function ServerView(props) {
     }
 
     const addPizzaToOrder = () => {
-        setOrder([...order, pizza]);
+        // if a pizza have no sauce and no cheese, not allowed
+        if ((!('cheese' in pizza) || pizza['cheese'] === undefined) && (!('sauce' in pizza) && pizza['sauce'] === undefined)){
+            return;
+        }
+
+        var pizzaArr = []
+        for (var i = 0; i < document.getElementById('pizzaBuilderNum').value; i++){
+            pizzaArr.push(pizza);
+        }
+        // prevent adding pizza here
+        setOrder([...order, ...pizzaArr]);
         setPizza({'topping': []});
     }
 
@@ -44,17 +57,22 @@ export default function ServerView(props) {
         }
 
         */
+
+        // order validation
+        if (order === undefined || (Array.isArray(order) && order.length === 0)){
+            return;
+        }
+
         axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
         setOrder([]);
-        alert('Order placed!');
     }
 
     const clearOrder = () => {
         setOrder([]);
         setPizza({'topping': []});
-
-        alert('Order cleared!');
     }
+
+    const handleClose = () => setShowModal(false);
 
     return (
         <div className="server-frame">

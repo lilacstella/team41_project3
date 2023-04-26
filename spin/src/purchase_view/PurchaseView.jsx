@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Modal } from 'react-bootstrap';
 import MenuGallery from './Gallery';
 import axios from 'axios';
 import Cart from './Cart';
@@ -9,6 +10,9 @@ export default function PurchaseView(props) {
     const [currView, setCurrView] = useState('sauce');
     const [pizza, setPizza] = useState({'topping': []});
     const [order, setOrder] = useState([]);
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
 
     const addToOrder = (item) => {
         // console.log(item + " " + currView);
@@ -29,6 +33,13 @@ export default function PurchaseView(props) {
     }
 
     const addPizzaToOrder = () => {
+        // if a pizza have no sauce and no cheese, not allowed
+        if ((!('cheese' in pizza) || pizza['cheese'] === undefined) && (!('sauce' in pizza) && pizza['sauce'] === undefined)){
+            setModalText('Please add either cheese or sauce to your cheese pizza!');
+            setShowModal(true);
+            return;
+        }
+
         setOrder([...order, pizza]);
         setPizza({'topping': []});
     }
@@ -44,16 +55,26 @@ export default function PurchaseView(props) {
         }
 
         */
+
+        // order validation
+        if (order === undefined || (Array.isArray(order) && order.length === 0)){
+            setModalText('Invalid order, please add items');
+            setShowModal(true);
+            return;
+        }
+
         axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
         setOrder([]);
-        alert('Order placed!');
+        setModalText('Order placed!');
+        setShowModal(true);
     }
 
     const clearOrder = () => {
         setOrder([]);
         setPizza({'topping': []});
 
-        alert('Order cleared!');
+        setModalText('Order cleared!');
+        setShowModal(true);
     }
 
     return (
@@ -61,6 +82,12 @@ export default function PurchaseView(props) {
             <Navigation handleClick={setCurrView} setMenuView={props.setMenuView}/>
             <MenuGallery view={currView} order={order} addToOrder={addToOrder} pizza={pizza}/>
             <Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder} clear={clearOrder} setOrder={setOrder} setPizza={setPizza}/>
+            
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{modalText}</Modal.Title>
+                </Modal.Header>
+            </Modal>
         </div>
     )
 }
