@@ -10,6 +10,9 @@ export default function ServerView(props) {
     const [pizza, setPizza] = useState({'topping': []});
     const [order, setOrder] = useState([]);
 
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
+
     const addToOrder = (item) => {
         // console.log(item + " " + currView);
         if (['sauce', 'cheese', 'dough', 'topping', 'drizzle'].includes(currView)) {
@@ -31,7 +34,6 @@ export default function ServerView(props) {
     const addPizzaToOrder = () => {
         // if a pizza have no sauce and no cheese, not allowed
         if ((!('cheese' in pizza) || pizza['cheese'] === undefined) && (!('sauce' in pizza) && pizza['sauce'] === undefined)){
-            alert('Please add either cheese or sauce to your cheese pizza!');
             return;
         }
 
@@ -58,21 +60,19 @@ export default function ServerView(props) {
 
         // order validation
         if (order === undefined || (Array.isArray(order) && order.length === 0)){
-            alert('Invalid order, please add items');
             return;
         }
 
         axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
         setOrder([]);
-        alert('Order placed!');
     }
 
     const clearOrder = () => {
         setOrder([]);
         setPizza({'topping': []});
-
-        alert('Order cleared!');
     }
+
+    const handleClose = () => setShowModal(false);
 
     return (
         <div className="server-frame">
