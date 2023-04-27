@@ -97,9 +97,8 @@ def change_price(json_file):
     try:
         connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
-        change_price = "UPDATE menu_t SET price = %s WHERE menuitem = %s"
         price_tuple = (json_file["price"], json_file["menuitem"])
-        cursor.execute(change_price, price_tuple)
+        cursor.execute("UPDATE menu_t SET price = %s WHERE menuitem = %s", price_tuple)
         connection.commit()
         return True
 
@@ -121,9 +120,8 @@ def add_img(json_file):
         cursor.execute(checkforimage, checktuple)
         results = cursor.fetchall()
         if (results == []):
-            add_img = "INSERT INTO item_images VALUES (%s, %s)"
             img_tuple = (json_file["item_name"], json_file["img_url"])
-            cursor.execute(add_img, img_tuple)
+            cursor.execute("INSERT INTO item_images VALUES (%s, %s)", img_tuple)
             connection.commit()
         else:
             update_img = "UPDATE item_images SET img_url = %s WHERE item_name = %s"

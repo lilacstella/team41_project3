@@ -12,7 +12,7 @@ def get_excess(datein):
         connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         datestr = datein
-        datequery = ("SELECT date FROM inventory_history WHERE date <= %s ORDER BY date DESC LIMIT 1")
+        datequery = "SELECT date FROM inventory_history WHERE date <= %s ORDER BY date DESC LIMIT 1"
         cursor.execute(datequery, (datestr,))
         cursor_fetch = cursor.fetchone()
         if cursor_fetch is None:
@@ -21,7 +21,7 @@ def get_excess(datein):
 
         print("Date: ", date_return)
 
-        timeInventoryQuery = ("SELECT * FROM inventory_history WHERE date = %s")
+        timeInventoryQuery = "SELECT * FROM inventory_history WHERE date = %s"
         cursor.execute(timeInventoryQuery, (date_return,))
         pastInventory = cursor.fetchall()
 
@@ -29,7 +29,7 @@ def get_excess(datein):
         for row in pastInventory:
             past_inventory_list[row[1]] = float(row[2])
 
-        currInventoryQuery = ("SELECT * FROM inventory_t")
+        currInventoryQuery = "SELECT * FROM inventory_t"
         cursor.execute(currInventoryQuery)
         currInventory = cursor.fetchall()
 

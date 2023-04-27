@@ -1,10 +1,7 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import Flow
-from googleapiclient.discovery import build
 
-from stone import HOST_IP, HOST_PORT, G_CLIENT_ID, G_CLIENT_SECRET
+from stone import HOST_IP, HOST_PORT
 from stone.employees import user_login
 from stone.excess_report import get_excess
 from stone.inventory import get_current_inventory, restock_all, restock_items
@@ -85,7 +82,7 @@ def zreport():
     if request.method == 'GET':
         return jsonify(get_zreport())
     elif request.method == 'POST':
-        if (post_eodinv()):
+        if post_eodinv():
             return jsonify({'success': True})
         else:
             return jsonify({'success': False})

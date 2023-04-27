@@ -19,5 +19,3 @@ def user_login(data):
         return {'id': res[0], 'permission': 'manager' if res[1] else 'server'}
     else:
         return {'id': 0, 'permission': 'customer'}
-def employees_create_if_not_exist():
-    return 0
