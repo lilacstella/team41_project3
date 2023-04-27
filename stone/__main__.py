@@ -1,7 +1,11 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+from flask import Flask, request, jsonify, session
+from flask_cors import CORS
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import Flow
+from googleapiclient.discovery import build
 
-from stone import ORIGIN, HOST_IP, HOST_PORT
+from stone import HOST_IP, HOST_PORT, G_CLIENT_ID, G_CLIENT_SECRET
+from stone.employees import user_login
 from stone.excess_report import get_excess
 from stone.inventory import get_current_inventory, restock_all, restock_items
 from stone.menu import get_menus, process_order
@@ -13,9 +17,15 @@ from stone.what_sells import get_what_sells
 from stone.x_report import get_xreport
 from stone.z_report import get_zreport, post_eodinv
 
-
 app = Flask(__name__)
 cors = CORS(app)
+
+TOKEN_URI = 'https://oauth2.googleapis.com/token'
+
+
+@app.route('/auth', methods=['POST'])
+def auth():
+    return jsonify(user_login(request.get_json()))
 
 
 @app.route('/menu', methods=['GET', 'POST'])
