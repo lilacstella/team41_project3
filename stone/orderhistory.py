@@ -15,7 +15,8 @@ def get_orders(date):
         orders = cursor.fetchall()
         order_list = []
         for row in orders:
-            orderdata = {"Order Number": row[0], "Total": row[1], "Payment Form": row[2], "Ordered At": row[3]}
+            orderdata = {"Order #": row[0], "Total": row[1],
+                         "Time": row[3], "Employee": row[4]}
             order_list.append(orderdata)
         
         # Return as a JSON string
@@ -26,16 +27,16 @@ def get_orders(date):
             connection.close()
             print("PostgreSQL connection is closed")
 
-def remove_order(ordernumber):
+def remove_order(json_file):
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
         cursor = connection.cursor()
         delete_inv_query = "delete from orderitem_t where ordernumber = %s"
         delete_order_history_query = "delete from order_history where ordernumber = %s"
-        cursor.execute(delete_inv_query, (ordernumber,))
+        cursor.execute(delete_inv_query, (json_file["ordernumber"],))
         connection.commit()
-        cursor.execute(delete_order_history_query, (ordernumber,))
+        cursor.execute(delete_order_history_query, (json_file["ordernumber"],))
         connection.commit()
         return True
 

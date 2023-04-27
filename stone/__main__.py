@@ -134,11 +134,9 @@ def orderhistory():
         print(date)
         return jsonify(get_orders(date))
     elif request.method == 'POST':
-        ordernumber = request.args.get('ordernumber')
-        if (remove_order(ordernumber)):
+        if (remove_order(request.get_json())):
             return jsonify({'success': True})
-        else:
-            return jsonify({'success': False})
+        return jsonify({'success': False})
 
 if __name__ == '__main__':
     app.run(debug=True, host=HOST_IP, port=HOST_PORT)

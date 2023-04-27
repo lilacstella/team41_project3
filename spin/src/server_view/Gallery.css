@@ -6,6 +6,11 @@
     border-right: 3px solid black;
 }
 
+.order-box h1{
+    text-align: center;
+    margin-top: 0.5em;
+}
+
 .gallery {
     padding: 5vmin;
 }
@@ -54,4 +59,13 @@
 
 .menu-item-box.selected {
     border: 2px solid #000;
+}
+
+.orderhistory-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    flex-direction: row;
 }

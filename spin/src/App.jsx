@@ -6,7 +6,7 @@ import MenuView from './menu_view/MenuView';
 import ServerView from './server_view/ServerView';
 
 function App() {
-  const [showView, setView] = useState('customer');
+  const [showView, setView] = useState('server');
 
   const views = {
     // should be login in customer direct 

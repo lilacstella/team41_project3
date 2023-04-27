@@ -420,7 +420,7 @@ function ExcessReportTable(props) {
         console.error(error);
     }
 
-    if (isLoading || error || data === undefined) {
+    if (isLoading || error || data === undefined || data.length === 0) {
         return;
     }
 

@@ -10,9 +10,6 @@ export default function ServerView(props) {
     const [pizza, setPizza] = useState({'topping': []});
     const [order, setOrder] = useState([]);
 
-    const [showModal, setShowModal] = useState(false);
-    const [modalText, setModalText] = useState('test');
-
     const addToOrder = (item) => {
         // console.log(item + " " + currView);
         if (['sauce', 'cheese', 'dough', 'topping', 'drizzle'].includes(currView)) {
@@ -71,8 +68,6 @@ export default function ServerView(props) {
         setOrder([]);
         setPizza({'topping': []});
     }
-
-    const handleClose = () => setShowModal(false);
 
     return (
         <div className="server-frame">
