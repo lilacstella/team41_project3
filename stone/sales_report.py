@@ -31,7 +31,7 @@ def get_sales(date1, date2):
         salesreportlist = []
         total = 0
         for row in results:
-            salesreportlist.append({"itemname": row[0], "itemsales": str(row[1])})
+            salesreportlist.append({"ItemName": row[0], "ItemSales": str(row[1])})
             total += row[1]
         salesreportdict["salesreport"] = salesreportlist
         salesreportdict["totalsales"] = str(total)

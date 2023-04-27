@@ -20,7 +20,7 @@ def get_zreport():
         zreportdict = {}
         saleslist = []
         for row in zreporttable:
-            salesdata = {"itemname": row[0], "numbersold": row[1], "sales": str(row[2])}
+            salesdata = {"Item Name": row[0], "Number Sold": row[1], "Sales": str(row[2])}
             saleslist.append(salesdata)
         zreportdict["salesdata"] = saleslist
 

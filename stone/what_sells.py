@@ -22,9 +22,9 @@ def get_what_sells(date1, date2):
         pairs = cursor.fetchall()
         pairs_list = []
         for row in pairs:
-            pairsdata = {"item1": row[0], 
-                                "item2": row[1], 
-                                "count": row[2], 
+            pairsdata = {"Item 1": row[0],
+                                "Item 2": row[1],
+                                "Count": row[2],
                                 }
             pairs_list.append(pairsdata)
         # Return as a JSON string

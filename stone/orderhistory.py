@@ -15,7 +15,7 @@ def get_orders(date):
         orders = cursor.fetchall()
         order_list = []
         for row in orders:
-            orderdata = {"ordernumber": row[0], "total": row[1], "paymentform": row[2], "orderedat": row[3]}
+            orderdata = {"Order Number": row[0], "Total": row[1], "Payment Form": row[2], "Ordered At": row[3]}
             order_list.append(orderdata)
         
         # Return as a JSON string
