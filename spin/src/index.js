@@ -5,6 +5,7 @@ import App from './App';
 // import reportWebVitals from './reportWebVitals';
 
 export const HOST = 'http://localhost:5000/';
+export const G_CLIENT_ID = '257525904215-rj4iugd6avdihsnv7p0iuadsv8c91lgj.apps.googleusercontent.com';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

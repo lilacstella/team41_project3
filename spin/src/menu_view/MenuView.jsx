@@ -16,7 +16,7 @@ export default function MenuView() {
                 <div className="menu-view-boxed" />
             </div>
         )
-    console.log(data);
+    // console.log(data);
     var menuList = [];
     Object.keys(data).map(key => {
         if (data[key] !== undefined && Array.isArray(data[key])) {

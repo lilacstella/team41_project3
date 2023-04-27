@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import mutate from 'swr';
 import './Display.css';
-import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import axios from 'axios';

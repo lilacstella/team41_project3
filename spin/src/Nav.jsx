@@ -9,7 +9,7 @@ const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 /* navbar includes login */
 export default function Navbar(props) {
     const handleClick = () => {
-        props.setView(props.direct);
+        props.direct();
     };
 
     return (
@@ -25,11 +25,11 @@ export default function Navbar(props) {
 function WeatherAPIDisplay(){
     const { data, error, isLoading } = useSWR('weather', fetcher);
     if (error) {
-        return <h2></h2>;
+        return null;
     }
 
     if(isLoading)
-        return <h2></h2>;
+        return null;
 
     // console.log(data)
     var weather = JSON.parse(data);
