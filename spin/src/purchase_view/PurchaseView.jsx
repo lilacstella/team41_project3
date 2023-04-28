@@ -104,7 +104,6 @@ function Navigation(props) {
             <Tab name="Drink" switchTab={props.handleClick} />
             <Tab name="Dough" switchTab={props.handleClick} />
             <Tab name="Seasonal" switchTab={props.handleClick} />
-            <Tab name="Menu View" switchTab={props.setMenuView} />
         </div>
     );
 }

@@ -13,6 +13,7 @@ function App() {
 
     const [showLogin, setShowLogin] = useState(false);
     const [view, setView] = useState(perms);
+    const [menuView, setMenuView] = useState(false);
 
     const backToCustomer = () => {
         localStorage.setItem('employee_permission', 'customer');
@@ -24,8 +25,8 @@ function App() {
         // should be login in customer direct 
         // react component, display text, button directs to, button text
         'customer': [<PurchaseView />, "Spin N' Stone", () => {perms === 'customer' ? setShowLogin(true) : setView(perms) }, 'Login'],
-        'server': [<PurchaseView />, "Server View", backToCustomer, 'Sign Out'],
-        'manager': [<ManagerView setMenuView={() => (<MenuView />)} />, 'Manager View', backToCustomer, 'Sign Out']
+        'server': [<ServerView setMenuView={() => setMenuView(!menuView)}/>, "Server View", backToCustomer, 'Sign Out'],
+        'manager': [<ManagerView setMenuView={() => setMenuView(!menuView)} />, 'Manager View', backToCustomer, 'Sign Out']
     };
     
     useEffect(() => {
@@ -36,9 +37,9 @@ function App() {
     return (
         <div>
             <LoginModal showLogin={showLogin} setShowLogin={setShowLogin} />
-            <Nav direct={directTo} displayText={displayText} buttonText={buttonText} />
-            <div>
-                {currView}
+            <Nav direct={directTo} displayText={displayText} buttonText={menuView ? '' : buttonText} />
+            <div onClick={() => {if (menuView) setMenuView(false)}}>
+                {menuView ? <MenuView /> : currView}
             </div>
         </div>
     );
