@@ -8,11 +8,13 @@ import LoginModal from './login_view/Login';
 
 function App() {
     const perms = localStorage.getItem('employee_permission');
-    if (!perms)
+    if (!perms) {
         localStorage.setItem('employee_permission', 'customer');
+        localStorage.setItem('employee_id', 0);
+    }
 
     const [showLogin, setShowLogin] = useState(false);
-    const [view, setView] = useState(perms);
+    const [view, setView] = useState('customer');
     const [menuView, setMenuView] = useState(false);
 
     const backToCustomer = () => {
