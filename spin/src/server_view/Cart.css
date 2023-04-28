@@ -1,0 +1,41 @@
+.cart-frame {
+    height: 100%;
+    width: 30vw;
+    background-color: white;
+    margin-left: auto;
+    border-left: 3px solid black;  
+    overflow: hidden;
+}
+
+.cart-box-frame {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-box-frame.builder {
+    height: 39.5%;
+    border-bottom: 3px solid black;
+}
+
+.cart-box-frame p:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.cart-box-frame .cart-item-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 80%;
+}
+
+.pizza-builder-buttons {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+}
+
+.numform{
+    width: 120px !important;
+}

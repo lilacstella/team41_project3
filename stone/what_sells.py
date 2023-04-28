@@ -18,15 +18,13 @@ def get_what_sells(date1, date2):
                 "ORDER BY 3 DESC")
         start_date = date1
         end_date = date2
-        print(start_date)
-        print(end_date)
         cursor.execute(what_sells_query, (start_date, end_date))
         pairs = cursor.fetchall()
         pairs_list = []
         for row in pairs:
-            pairsdata = {"item1": row[0], 
-                                "item2": row[1], 
-                                "count": row[2], 
+            pairsdata = {"Item 1": row[0],
+                                "Item 2": row[1],
+                                "Count": row[2],
                                 }
             pairs_list.append(pairsdata)
         # Return as a JSON string

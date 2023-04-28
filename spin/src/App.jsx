@@ -3,6 +3,7 @@ import Nav from './Nav';
 import ManagerView from './manager_view/ManagerView';
 import PurchaseView from './purchase_view/PurchaseView';
 import MenuView from './menu_view/MenuView';
+import ServerView from './server_view/ServerView';
 import LoginModal from './login_view/Login';
 
 function App() {

@@ -1,11 +1,11 @@
-.purchase-frame {
+.server-frame {
     overflow: hidden;
     display: flex;
     height: 85vh;
     background-color: #e7b449;
 }   
 
-.purchase-view-tab-frame {
+.server-view-tab-frame {
     display: flex;
     height: 100%;
     overflow-y: scroll;
@@ -13,7 +13,7 @@
     color: rgba(240, 248, 255, 0.653);
 }
 
-.purchase-view-tab {
+.server-view-tab {
     width: 150px;
     height: 90px;
     display: flex;
@@ -25,29 +25,12 @@
     border-bottom: 3px solid #d3a43e;
 }
 
-.purchase-view-tab>h2 {
+.server-view-tab>h2 {
     font-size: 1.5em;
     font-weight: bold;
 }
 
-.purchase-view-tab:hover {
+.server-view-tab:hover {
     cursor: pointer;
     background-color: #f8db9c;
-}
-
-.modal-content {
-    font-size: 1.2rem;
-}
-  
-.modal-header {
-    background-color: #f8f9fa;
-}
-
-.close {
-    color: red;
-    font-size: 2rem;
-    font-weight: bold;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
 }

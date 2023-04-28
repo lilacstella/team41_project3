@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import mutate from 'swr';
 import './Display.css';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from "react-bootstrap/Form";
+
 import { HOST } from '..';
 
 const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
@@ -39,6 +41,8 @@ export default function Display(props) {
 
 function Inventory() {
     const [currItem, setCurrItem] = useState("Select Item");
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
 
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('inventory', fetcher);
@@ -59,12 +63,14 @@ function Inventory() {
 
     const restockAll = () => {
         axios.post(HOST + 'inventory', {})
-        alert('Restocked All Items!');
+        setModalText('Restocked All Items!');
+        setShowModal(true);
     };
 
     const setQuantity = () => {
         axios.post(HOST + 'inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
-        alert('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
+        setModalText('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
+        setShowModal(true);
     };
 
     return (
@@ -87,6 +93,12 @@ function Inventory() {
                 <Form.Control className="numforms" id="restockAmount" type="number" placeholder="Quantity" />
                 <Button variant="outline-primary" className="inventory-button" onClick={setQuantity}>Set Quantity</Button>
             </div>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{modalText}</Modal.Title>
+                </Modal.Header>
+            </Modal>
         </div>
     )
 }
@@ -128,6 +140,8 @@ function XReport() {
 function ZReport() {
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('zreport', fetcher);
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
 
     if (error) {
         console.error(error);
@@ -143,7 +157,8 @@ function ZReport() {
 
         mutate(HOST + 'zreport');
         
-        alert('Reseted Z Report!');
+        setModalText('Reseted Z Report!');
+        setShowModal(true);
         
         //window.location.reload();
     };
@@ -168,6 +183,12 @@ function ZReport() {
             </div>
             <h2>Total: ${data.total}</h2>
             <button className="reset-button" onClick={handleReset}>Reset Sales</button>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{modalText}</Modal.Title>
+                </Modal.Header>
+            </Modal>
         </div>
     )
 }
@@ -178,6 +199,9 @@ function Prices() {
     const [category, setCategory] = useState("Item Type");
     const [storage, setStorage] = useState("Item Storage");
     const [currInvItem, setInvItem] = useState("Select Item");
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
 
     const { data:menuData, error:error1, isLoading:isLoading1 } = useSWR('prices', fetcher);
 
@@ -204,7 +228,8 @@ function Prices() {
         axios.post(HOST + 'prices', 
         {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
         
-        alert(currItem + "'s Price has been changed to $" + document.getElementById('newPrice').value);
+        setModalText(currItem + "'s Price has been changed to $" + document.getElementById('newPrice').value);
+        setShowModal(true);
     };
 
     const handleNewMenu = async () => {
@@ -212,7 +237,8 @@ function Prices() {
         axios.post(HOST + 'prices', 
         {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
         
-        alert('New Menu Item: ' + document.getElementById('newMenuItemName').value + ' added with price: $' + document.getElementById('newMenuItemPrice').value);
+        setModalText('New Menu Item: ' + document.getElementById('newMenuItemName').value + ' added with price: $' + document.getElementById('newMenuItemPrice').value);
+        setShowModal(true);
     };
 
     const handleNewInventory = async () => {
@@ -222,7 +248,8 @@ function Prices() {
          'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
          'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
         
-        alert('New Inventory Item: ' + document.getElementById('newInventoryItemName').value + ' added.');
+        setModalText('New Inventory Item: ' + document.getElementById('newInventoryItemName').value + ' added.');
+        setShowModal(true);
     };
 
     const handleNewImage = async () => {
@@ -230,7 +257,8 @@ function Prices() {
         axios.post(HOST + 'prices', 
         {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
 
-        alert('Image changed for: ' + currInvItem);
+        setModalText('Image changed for: ' + currInvItem);
+        setShowModal(true);
     };
 
     // console.log(menuData);
@@ -314,7 +342,12 @@ function Prices() {
                 <Form.Control className="linkforms" id="newInventoryItemLink" placeholder="Link"></Form.Control>
                 <Button variant="outline-success" onClick={handleNewImage}>Submit</Button>
             </div>
-
+            
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{modalText}</Modal.Title>
+                </Modal.Header>
+            </Modal>
         </div>
     )
 }
@@ -387,7 +420,7 @@ function ExcessReportTable(props) {
         console.error(error);
     }
 
-    if (isLoading || error || data === undefined) {
+    if (isLoading || error || data === undefined || data.length === 0) {
         return;
     }
 

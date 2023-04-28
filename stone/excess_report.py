@@ -36,15 +36,15 @@ def get_excess(datein):
         curr_inventory_list = {}
         for row in currInventory:
             curr_inventory_list[row[0]] = float(row[2])
-        less_than_10 = []
+        less_than_10 = {}
 
         for item_name in past_inventory_list:
             past_quantity = past_inventory_list[item_name]
             if item_name in curr_inventory_list.keys():
                 curr_quantity = curr_inventory_list[item_name]
                 if curr_quantity > .9 * past_quantity:
-                    less_than_10.append(item_name)
-        return_dict = {'excessdata': [{"ItemName": x} for x in less_than_10]}
+                    less_than_10[item_name] = curr_quantity
+        return_dict = {'excessdata': [{"ItemName": x, "Quantity": less_than_10[x]} for x in less_than_10]}
         return json.dumps(return_dict)
 
     finally:
