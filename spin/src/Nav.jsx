@@ -8,15 +8,12 @@ const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 /* navbar includes login */
 export default function Navbar(props) {
-    const handleClick = () => {
-        props.direct();
-    };
 
     return (
         <nav>
             <h1>{props.displayText}</h1>
             <WeatherAPIDisplay/>
-            <button className="login-btn" onClick={handleClick}>{props.buttonText}</button>
+            <button className="login-btn" onClick={props.direct}> {props.buttonText}</button>
         </nav>
     );
 }

@@ -27,7 +27,7 @@ export default function LoginModal(props) {
                 }}>
                     Sign in with Pin
                 </Button>
-                <LoginButton />
+                <LoginButton setShowLogin={setShowLogin}/>
             </Modal.Footer>
         </Modal>
     )
@@ -35,12 +35,13 @@ export default function LoginModal(props) {
 
 
 
-function LoginButton() {
+function LoginButton(props) {
     function handleCallback(response) {
         axios.post(HOST + 'auth', { 'email': jwt_decode(response.credential).email })
             .then(res => {
                 localStorage.setItem('employee_id', res.data.id);
                 localStorage.setItem('employee_permission', res.data.permission);
+                props.setShowLogin(false);
             })
     }
 
