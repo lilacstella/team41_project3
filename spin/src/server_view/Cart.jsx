@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
+import Form from "react-bootstrap/Form";
 import './Cart.css';
 
 
@@ -61,7 +62,10 @@ function PizzaBuilder(props) {
             <div className="cart-item-list">
                 <PizzaContent pizza={pizza} removeItem={removeItem} />
             </div>
-            <Button variant="outline-success" onClick={add}>Add</Button>
+            <div className='pizza-builder-buttons'>
+                <Form.Control className='numform' id='pizzaBuilderNum' defaultValue={1} type='number'/>
+                <Button variant="outline-success" onClick={add}>Add</Button>
+            </div>
         </div>
     );
 }
@@ -71,12 +75,14 @@ function OrderList(props) {
     const { order } = props;
 
     const removeItem = (item) => {
+        console.log('removing' + item);
         const index = order.indexOf(item);
         if (index !== -1)
             props.setOrder([...order.slice(0, index), ...order.slice(index + 1)]);
     }
 
     const renderItems = () => {
+
         return order.map((item) => {
             if (typeof item === 'object') {
                 return (<PizzaContent pizza={item} removeItem={() => removeItem(item)}/>);

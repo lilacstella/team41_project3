@@ -12,6 +12,7 @@ from stone.weather import get_weather
 from stone.what_sells import get_what_sells
 from stone.x_report import get_xreport
 from stone.z_report import get_zreport, post_eodinv
+from stone.orderhistory import get_orders, remove_order
 
 
 app = Flask(__name__)
@@ -125,6 +126,17 @@ def prices():
             result = False
         return jsonify({"success": result})
 
+@app.route('/orderhistory', methods=['GET', 'POST'])
+# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
+def orderhistory():
+    if request.method == 'GET':
+        date = request.args.get('date')
+        print(date)
+        return jsonify(get_orders(date))
+    elif request.method == 'POST':
+        if (remove_order(request.get_json())):
+            return jsonify({'success': True})
+        return jsonify({'success': False})
 
 if __name__ == '__main__':
     app.run(debug=True, host=HOST_IP, port=HOST_PORT)

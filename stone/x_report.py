@@ -20,7 +20,7 @@ def get_xreport():
         xreportdict = {}
         saleslist = []
         for row in xreporttable:
-            salesdata = {"itemname": row[0], "numbersold": row[1], "sales": str(row[2])}
+            salesdata = {"Item Name": row[0], "Number Sold": row[1], "Sales": str(row[2])}
             saleslist.append(salesdata)
         xreportdict["salesdata"] = saleslist
 
