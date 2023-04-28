@@ -1,11 +1,12 @@
 import './MenuView.css'
 import useSWR from 'swr';
 import axios from 'axios';
+import { HOST } from '..';
 
-const fetcher = (url) => axios.get(url).then(res => res.data);
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 export default function MenuView() {
-    const { data, error, isLoading } = useSWR('http://localhost:5000/menu', fetcher);
+    const { data, error, isLoading } = useSWR('menu', fetcher);
     if (error || isLoading)
         return (
             <div className="menu-view-frame">
