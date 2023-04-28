@@ -58,7 +58,7 @@ function Inventory() {
     // console.log(processedData);
 
     let inventoryItems = [];
-    processedData.map(item => inventoryItems.push(item.InventoryItem));
+    processedData.map(item => inventoryItems.push(item["Inventory Item"]));
     inventoryItems.sort();
 
     const restockAll = () => {
@@ -272,7 +272,7 @@ function Prices() {
     .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
 
     let inventoryItems = [];
-    JSON.parse(inventoryData).map(item => inventoryItems.push(item.InventoryItem));
+    JSON.parse(inventoryData).map(item => inventoryItems.push(item['Inventory Item']));
     inventoryItems.sort();
     // console.log(menuItems);
     
