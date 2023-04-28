@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
-from stone import ORIGIN, HOST_IP, HOST_PORT
+from stone import HOST_IP, HOST_PORT
+from stone.employees import user_login
 from stone.excess_report import get_excess
 from stone.inventory import get_current_inventory, restock_all, restock_items
 from stone.menu import get_menus, process_order
@@ -14,9 +15,15 @@ from stone.x_report import get_xreport
 from stone.z_report import get_zreport, post_eodinv
 from stone.orderhistory import get_orders, remove_order
 
-
 app = Flask(__name__)
 cors = CORS(app)
+
+TOKEN_URI = 'https://oauth2.googleapis.com/token'
+
+
+@app.route('/auth', methods=['POST'])
+def auth():
+    return jsonify(user_login(request.get_json()))
 
 
 @app.route('/menu', methods=['GET', 'POST'])
@@ -76,7 +83,7 @@ def zreport():
     if request.method == 'GET':
         return jsonify(get_zreport())
     elif request.method == 'POST':
-        if (post_eodinv()):
+        if post_eodinv():
             return jsonify({'success': True})
         else:
             return jsonify({'success': False})

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import mutate from 'swr';
 import './Display.css';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import axios from 'axios';

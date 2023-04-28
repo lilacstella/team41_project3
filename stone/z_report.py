@@ -62,6 +62,7 @@ def post_eodinv():
 
         return True
     except psycopg2.Error as e:
+        print(e)
         return False
     finally:
         if connection:

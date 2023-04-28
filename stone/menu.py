@@ -221,7 +221,12 @@ def process_order(json_data):
 
         # Cookie
         # Baja Blast
-        # {'topping': ['Tomatoes', 'Mushrooms', 'Salami', 'Jalapeño'], 'sauce': 'Alfredo', 'cheese': 'Mozzarella', 'drizzle': 'Olive Oil'}
+        # {
+        # 'topping': ['Tomatoes', 'Mushrooms', 'Salami', 'Jalapeño'],
+        # 'sauce': 'Alfredo',
+        # 'cheese': 'Mozzarella',
+        # 'drizzle': 'Olive Oil'
+        # }
         order_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         employee_id = json_data["employee_id"]
         payment_form = json_data["payment_form"]

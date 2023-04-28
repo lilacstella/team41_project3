@@ -7,16 +7,13 @@ import { HOST } from '.';
 const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 /* navbar includes login */
-export default function Navbar(props) {
-    const handleClick = () => {
-        props.setView(props.direct);
-    };
+export default function Nav(props) {
 
     return (
         <nav>
             <h1>{props.displayText}</h1>
             <WeatherAPIDisplay/>
-            <button className="login-btn" onClick={handleClick}>{props.buttonText}</button>
+            {props.buttonText === "" ? null : <button className="login-btn" onClick={props.direct}> {props.buttonText}</button> }
         </nav>
     );
 }
@@ -25,11 +22,11 @@ export default function Navbar(props) {
 function WeatherAPIDisplay(){
     const { data, error, isLoading } = useSWR('weather', fetcher);
     if (error) {
-        return <h2></h2>;
+        return null;
     }
 
     if(isLoading)
-        return <h2></h2>;
+        return null;
 
     // console.log(data)
     var weather = JSON.parse(data);
