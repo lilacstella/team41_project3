@@ -19,8 +19,7 @@ nav>h1 {
 nav>button {
     width: 150px;
     height: 65px;
-    /* margin-left: 3%;
-    margin-right: 5%; */
+    margin-right: 5%;
     background-color: white;
     color: black;
     font-size: 1.5em;
