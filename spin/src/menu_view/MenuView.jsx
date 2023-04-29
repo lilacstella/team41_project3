@@ -33,21 +33,23 @@ export default function MenuView() {
         <div className="menu-view-frame">
             <div className="menu-view-boxed">
                 <h1 className="menu-view-title">Build Your Own Pizza</h1>
-                {
-                    ['Sauce', 'Cheese', 'Topping', 'Drizzle'].map(category => {
-                        return (
-                            <div>
-                                <h2>{category}</h2>
-                                <div className='menu-view-row'>
-                                    {data[category.toLowerCase()].map(item => <p>{item[category.toLowerCase() + '-name']}</p>)}
+                <div className="menu-view-boxed-row">
+                    {
+                        ['Sauce', 'Topping', 'Cheese', 'Drizzle'].map(category => {
+                            return (
+                                <div className="menu-view-boxed-row-item">
+                                    <h2>{category}</h2>
+                                    <div>
+                                        {data[category.toLowerCase()].map(item => <p>{item[category.toLowerCase() + '-name']}</p>)}
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })
-                }
+                            )
+                        })
+                    }
+                </div>
             </div>
 
-            <div className="menu-view-boxed">
+            <div className="menu-view-boxed additionals">
                 <p>Original Cheese Pizza - {data['cheese-pizza-price'].price}</p>
                 <p>1 Topping Pizza - {data['one-topping-pizza-price'].price}</p>
                 <p>2-4 Topping Pizza - {data['multi-topping-pizza-price'].price}</p>
