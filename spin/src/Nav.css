@@ -4,7 +4,7 @@ nav {
     align-items: center;
     height: 14.5vh;
     background-color: #e7b449;
-    justify-content: space-between;
+    justify-content: space-around;
     border-bottom: .5vh solid black;
 }
 
@@ -12,14 +12,14 @@ nav>h1 {
     font-size: 3.5em;
     color: black;
     font-weight: bold;
-    margin-left: 5%;
+    /* margin-left: 5%; */
 }
 
 nav>button {
     width: 150px;
     height: 65px;
-    margin-left: 3%;
-    margin-right: 5%;
+    /* margin-left: 3%;
+    margin-right: 5%; */
     background-color: white;
     color: black;
     font-size: 1.5em;

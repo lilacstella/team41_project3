@@ -12,6 +12,7 @@ export default function Nav(props) {
     return (
         <nav>
             <h1>{props.displayText}</h1>
+            {props.buttonText === "" ? null : <div id="google_translate_element"></div>}
             <WeatherAPIDisplay/>
             {props.buttonText === "" ? null : <button className="login-btn" onClick={props.direct}> {props.buttonText}</button> }
         </nav>
