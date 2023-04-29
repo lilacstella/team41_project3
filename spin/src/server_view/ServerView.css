@@ -3,6 +3,7 @@
     display: flex;
     height: 85vh;
     background-color: #e7b449;
+    overflow-y: scroll;
 }   
 
 .server-view-tab-frame {
