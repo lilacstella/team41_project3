@@ -17,7 +17,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <div>
-      <div id="google_translate_element"></div>
       <App />
     </div>
   </React.StrictMode>
