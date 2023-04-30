@@ -8,6 +8,12 @@ from stone import SQL_CREDS
 
 
 def get_employees():
+    """
+    Retrieves a list of all employees from the 'employee_t' table in the PostgreSQL database.
+
+    Returns:
+    str: A JSON formatted string containing employee data. The data is formatted as a list of dictionaries with keys 'employeeid', 'employee name', and 'manager'.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -36,6 +42,12 @@ def get_employees():
 # returns as a dictionary, each entry has a list of the items for the query, run json.dumps(menu["itemname"]) to get
 # in json form
 def get_menus():
+    """
+    Retrieves a list of all menu items from the PostgreSQL database and returns them as a dictionary.
+    
+    Returns:
+    dict: A dictionary containing the menu items grouped by category. The dictionary has keys 'sauce', 'cheese', 'topping', 'drizzle', 'drink', 'dough', and 'seasonal'. Each key's value is a list of dictionaries containing information about each item.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -201,6 +213,15 @@ def get_menus():
 
 # order json passed as list of orderitem dicts
 def process_order(json_data):
+    """
+    Processes a JSON object containing an order, updates the order history and inventory, and computes the total cost of the order.
+
+    Parameters:
+    json_data (dict): A dictionary containing the order information, including employee_id, payment_form, and an order list with strings and dictionaries representing the order items.
+
+    Returns:
+    None
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
