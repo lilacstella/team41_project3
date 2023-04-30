@@ -63,10 +63,12 @@ export default function PurchaseView(props) {
             return;
         }
 
-        axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
-        setOrder([]);
+
         setModalText('Order placed!');
         setShowModal(true);
+
+        axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": localStorage.getItem('employee_id'), "order": order});
+        setOrder([]);
     }
 
     const clearOrder = () => {
