@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import mutate from 'swr';
 import './Display.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -151,16 +150,13 @@ function ZReport() {
         return;
     }
 
+
     const handleReset = async () => {
         // send post request
         axios.post(HOST + 'zreport', {});
 
-        mutate(HOST + 'zreport');
-        
         setModalText('Reseted Z Report!');
         setShowModal(true);
-        
-        //window.location.reload();
     };
 
     // checks for empty queries and doesn't display table
@@ -179,7 +175,7 @@ function ZReport() {
         <div>
             <h1>Z Report</h1>
             <div className="manager-view-table-row">
-                <DataTable processedData={data.salesdata} />
+                <DataTable processedData={data.salesdata}/>
             </div>
             <h2>Total: ${data.total}</h2>
             <button className="reset-button" onClick={handleReset}>Reset Sales</button>
