@@ -6,7 +6,48 @@ from psycopg2 import sql
 
 from stone import SQL_CREDS
 
+"""
+This module contains functions related to retrieving employee and menu data from a PostgreSQL database.
 
+Dependencies:
+- json
+- psycopg2
+- stone
+
+Functions:
+- get_employees(): Retrieves a list of all employees from the 'employee_t' table in the PostgreSQL database and returns them as a JSON formatted string.
+- get_menus(): Retrieves a list of all menu items from the PostgreSQL database and returns them as a dictionary. The dictionary has keys 'sauce', 'cheese', 'topping', 'drizzle', 'drink', 'dough', and 'seasonal'. Each key's value is a list of dictionaries containing information about each item.
+- process_order(order_json): Processes an order and updates the inventory accordingly.
+
+Example Usage:
+
+get a list of all employees
+employees_data = inventory.get_employees()
+
+get the current menu
+menu_data = inventory.get_menus()
+
+process an order
+order_data = {
+    "OrderID": "1",
+    "OrderDate": "2020-04-01 12:00:00",
+    "OrderItems": [
+        {
+            "ItemName": "Pepperoni Pizza",
+            "Quantity": "1"
+        },
+        {
+            "ItemName": "Cheese Pizza",
+            "Quantity": "1"
+        }
+    ]
+}
+inventory.process_order(order_data)
+
+Note:
+
+The SQL credentials are obtained from the stone module.
+"""
 def get_employees():
     """
     Retrieves a list of all employees from the 'employee_t' table in the PostgreSQL database.
