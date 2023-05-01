@@ -23,7 +23,7 @@ export default function MenuView() {
         if (data[key] !== undefined && Array.isArray(data[key])) {
             data[key].map(item => {
                 if (item.price !== undefined)
-                    menuList.push(item[key + '-name'] + " - " + item.price);
+                    menuList.push(item[key + '-name'] + " - $" + item.price);
                 return null;
             });
         }
@@ -46,9 +46,9 @@ export default function MenuView() {
             </div>
 
             <div className="menu-view-box additionals">
-                <p>Original Cheese Pizza - {data['cheese-pizza-price'].price}</p>
-                <p>1 Topping Pizza - {data['one-topping-pizza-price'].price}</p>
-                <p>2-4 Topping Pizza - {data['multi-topping-pizza-price'].price}</p>
+                <p>Original Cheese Pizza - ${data['cheese-pizza-price'].price}</p>
+                <p>1 Topping Pizza - ${data['one-topping-pizza-price'].price}</p>
+                <p>2-4 Topping Pizza - ${data['multi-topping-pizza-price'].price}</p>
                 {menuList.map(item => <p>{item}</p>)}
             </div>
         </div>
