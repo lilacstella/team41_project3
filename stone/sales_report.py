@@ -2,8 +2,35 @@ import psycopg2
 
 from stone import SQL_CREDS
 
+"""
+This module provides functions to retrieve sales and inventory data from a PostgreSQL database.
 
+Dependencies:
+- psycopg2
+- stone (SQL_CREDS constant)
+
+Functions:
+- get_sales(date1, date2)
+
+Example Usage:
+
+mydatabase.get_sales("2020-01-01", "2020-01-31")
+{'salesreport': [{'itemname': 'item1', 'itemsales': '100.00'}, {'itemname': 'item2', 'itemsales': '200.00'}], 'totalsales': '300.00'}
+
+"""
 def get_sales(date1, date2):
+    """
+    Retrieves sales report data from the database for a specified date range.
+
+    Args:
+    - date1 (str): A string representing the start date for the sales report (formatted as "YYYY-MM-DD").
+    - date2 (str): A string representing the end date for the sales report (formatted as "YYYY-MM-DD").
+    
+    Returns:
+    A dictionary with two keys:
+    - "salesreport": A list of dictionaries, where each dictionary contains an item name and its total sales within the date range.
+    - "totalsales": A string representing the total sales for all items within the date range.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)

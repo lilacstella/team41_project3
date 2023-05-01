@@ -6,8 +6,55 @@ from psycopg2 import sql
 
 from stone import SQL_CREDS
 
+"""
+This module contains functions related to retrieving employee and menu data from a PostgreSQL database.
 
+Dependencies:
+- json
+- psycopg2
+- stone
+
+Functions:
+- get_employees(): Retrieves a list of all employees from the 'employee_t' table in the PostgreSQL database and returns them as a JSON formatted string.
+- get_menus(): Retrieves a list of all menu items from the PostgreSQL database and returns them as a dictionary. The dictionary has keys 'sauce', 'cheese', 'topping', 'drizzle', 'drink', 'dough', and 'seasonal'. Each key's value is a list of dictionaries containing information about each item.
+- process_order(order_json): Processes an order and updates the inventory accordingly.
+
+Example Usage:
+
+get a list of all employees
+employees_data = inventory.get_employees()
+
+get the current menu
+menu_data = inventory.get_menus()
+
+process an order
+order_data = {
+    "OrderID": "1",
+    "OrderDate": "2020-04-01 12:00:00",
+    "OrderItems": [
+        {
+            "ItemName": "Pepperoni Pizza",
+            "Quantity": "1"
+        },
+        {
+            "ItemName": "Cheese Pizza",
+            "Quantity": "1"
+        }
+    ]
+}
+inventory.process_order(order_data)
+
+Note:
+
+The SQL credentials are obtained from the stone module.
+"""
 def get_employees():
+    """
+    Retrieves a list of all employees from the 'employee_t' table in the PostgreSQL database.
+
+    Returns:
+    str: A JSON formatted string containing employee data. The data is formatted as a list of dictionaries with keys 'employeeid', 'employee name', and 'manager'.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -36,6 +83,12 @@ def get_employees():
 # returns as a dictionary, each entry has a list of the items for the query, run json.dumps(menu["itemname"]) to get
 # in json form
 def get_menus():
+    """
+    Retrieves a list of all menu items from the PostgreSQL database and returns them as a dictionary.
+    
+    Returns:
+    dict: A dictionary containing the menu items grouped by category. The dictionary has keys 'sauce', 'cheese', 'topping', 'drizzle', 'drink', 'dough', and 'seasonal'. Each key's value is a list of dictionaries containing information about each item.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -201,6 +254,15 @@ def get_menus():
 
 # order json passed as list of orderitem dicts
 def process_order(json_data):
+    """
+    Processes a JSON object containing an order, updates the order history and inventory, and computes the total cost of the order.
+
+    Parameters:
+    json_data (dict): A dictionary containing the order information, including employee_id, payment_form, and an order list with strings and dictionaries representing the order items.
+
+    Returns:
+    None
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)

@@ -3,8 +3,30 @@ import json
 
 from stone import SQL_CREDS
 
+"""
+This module provides functions to retrieve data from a PostgreSQL database and return it as a JSON string. The module depends on the psycopg2 and json modules, as well as the SQL_CREDS credentials and WEATHER_API_KEY key provided in the stone module.
+
+Functions:
+- get_what_sells(date1, date2)
+- get_weather()
+
+Example usage:
+
+mydatabase.get_what_sells("2020-01-01", "2020-01-31")
+[{"item1": "item1", "item2": "item2", "order_count": 1}, {"item1": "item1", "item2": "item3", "order_count": 1}, {"item1": "item2", "item2": "item3", "order_count": 1}]
+"""
 
 def get_what_sells(date1, date2):
+    """
+    Returns pairs of menu items that have been ordered together within the specified date range.
+
+    Args:
+    - date1 (str): Start date of the date range in "YYYY-MM-DD" format.
+    - date2 (str): End date of the date range in "YYYY-MM-DD" format.
+    
+    Returns:
+    (str): JSON-encoded list of dictionaries containing item pairs and the count of orders in which they were ordered together.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)

@@ -4,9 +4,35 @@ import psycopg2
 
 from stone import SQL_CREDS
 
+"""
+This module provides functions to interact with a PostgreSQL database using psycopg2 library. It requires the SQL_CREDS module to store the credentials to access the database.
+
+Dependencies:
+- psycopg2
+- json
+- stone.SQL_CREDS
+
+Functions:
+- get_low_inventory(): Returns inventory items with quantity less than or equal to 10 in JSON format.
+
+Example Usage:
+
+mydatabase.get_low_inventory()
+'[{"InventoryItem": "item1", "Category": "category1", "Quantity": 5.0, "Units": "unit1", "StorageLocation": "location1"}]'
+
+"""
 
 # returns inventory in JSON
 def get_low_inventory():
+    """
+    Returns inventory items with quantity less than or equal to 10 in JSON format.
+
+    Args:
+    None
+
+    Returns:
+    - str: A JSON string representing the inventory items with quantity less than or equal to 10.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)

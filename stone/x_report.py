@@ -4,8 +4,26 @@ import psycopg2
 
 from stone import SQL_CREDS
 
+"""
+This module provides a function for generating an X report from a PostgreSQL database.
+
+Dependencies:
+    - psycopg2
+    - stone.SQL_CREDS
+
+Example usage:
+    get_xreport()
+    {'salesdata': [{'itemname': 'item1', 'numbersold': 1, 'sales': '100.00'}, {'itemname': 'item2', 'numbersold': 2, 'sales': '200.00'}], 'paymentdata': [{'paymenttype': 'cash', 'totalsales': '300.00'}], 'total': '300.00'}
+
+"""
 
 def get_xreport():
+    """
+    Retrieve data from a PostgreSQL database and format it into a dictionary with sales data, payment data, and a total.
+
+    Returns:
+        A dictionary containing sales data, payment data, and a total.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
