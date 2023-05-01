@@ -101,7 +101,11 @@ function OrderList(props) {
                 }
             </div>
             <div style={{ 'display': 'flex', 'flexDirection': 'column' }}>
-                <Button variant="outline-primary" onClick={props.checkout}>Checkout</Button>
+                <div style={{'display': 'flex', 'flexDirection': 'column'}}>
+                    <Button variant="outline-primary" onClick={() => props.checkout('Cash')}>Cash</Button>
+                    <Button variant="outline-primary" onClick={() => props.checkout('Credit')}>Credit</Button>
+                    <Button variant="outline-primary" onClick={() => props.checkout('Debit')}>Debit</Button>
+                </div>
                 <Button variant="outline-danger" onClick={props.clear}>Clear</Button>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import MenuGallery from './Gallery';
 import axios from 'axios';
 import Cart from './Cart';
@@ -12,6 +12,7 @@ export default function PurchaseView(props) {
     const [order, setOrder] = useState([]);
 
     const [showModal, setShowModal] = useState(false);
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [modalText, setModalText] = useState('test');
 
     const addToOrder = (item) => {
@@ -63,10 +64,27 @@ export default function PurchaseView(props) {
             return;
         }
 
-        axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
+
+        setModalText('Select payment method');
+        setShowCheckoutModal(true);
+    }
+
+    const submitCashOrder = () => {
+        axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": localStorage.getItem('employee_id'), "order": order});
         setOrder([]);
-        setModalText('Order placed!');
-        setShowModal(true);
+        setShowCheckoutModal(false);
+    }
+
+    const submitCreditOrder = () => {
+        axios.post(HOST + 'menu', {"payment_form": "credit", "employee_id": localStorage.getItem('employee_id'), "order": order});
+        setOrder([]);
+        setShowCheckoutModal(false);
+    }
+
+    const submitDebitOrder = () => {
+        axios.post(HOST + 'menu', {"payment_form": "debit", "employee_id": localStorage.getItem('employee_id'), "order": order});
+        setOrder([]);
+        setShowCheckoutModal(false);
     }
 
     const clearOrder = () => {
@@ -87,6 +105,17 @@ export default function PurchaseView(props) {
                 <Modal.Header closeButton>
                     <Modal.Title>{modalText}</Modal.Title>
                 </Modal.Header>
+            </Modal>
+
+            <Modal show={showCheckoutModal} onHide={() => setShowCheckoutModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{modalText}</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={submitCashOrder}>Cash</Button>
+                    <Button variant="secondary" onClick={submitCreditOrder}>Credit</Button>
+                    <Button variant="secondary" onClick={submitDebitOrder}>Debit</Button>
+                </Modal.Footer>
             </Modal>
         </div>
     )

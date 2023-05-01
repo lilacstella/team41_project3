@@ -43,7 +43,7 @@ export default function ServerView(props) {
         setPizza({'topping': []});
     }
 
-    const checkoutOrder = () => {
+    const checkoutOrder = (payment_form) => {
         // formatting order
         // console.log(order);
         /* 
@@ -60,7 +60,7 @@ export default function ServerView(props) {
             return;
         }
 
-        axios.post(HOST + 'menu', {"payment_form": "cash", "employee_id": 0, "order": order});
+        axios.post(HOST + 'menu', {"payment_form": payment_form, "employee_id": localStorage.getItem('employee_id'), "order": order});
         setOrder([]);
     }
 
