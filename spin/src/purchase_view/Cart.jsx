@@ -2,7 +2,6 @@ import useSWR from 'swr';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import Form from "react-bootstrap/Form";
 import axios from 'axios';
 import { HOST } from '..';
 import './Cart.css';
@@ -127,13 +126,13 @@ function OrderList(props) {
 
         return order.map((item) => {
             if (typeof item === 'object') {
-                return (<PizzaContent pizza={item} removeItem={() => removeItem(item)}/>);
+                return (<PizzaContent pizza={item} removeItem={() => removeItem(item)} />);
             }
             else
                 return (
-                <div onClick={() => removeItem(item)} className="price-tag-div">
-                    <p>{item}</p>
-                    <p>${menuItems[item]}</p>
+                    <div onClick={() => removeItem(item)} className="price-tag-div">
+                        <p>{item}</p>
+                        <p>${menuItems[item]}</p>
                     </div>
                 );
         });
