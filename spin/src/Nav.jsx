@@ -11,7 +11,14 @@ export default function Nav(props) {
 
     return (
         <nav>
-            <h1>{props.displayText}</h1>
+            {props.buttonText === "" ? 
+                <div className="logo-div">
+                    <img className="menuLogo" alt="Team 41 Spin N' Stone Logo" src="logo.png"></img> 
+                    <h1>Spin N' Stone</h1>
+                </div> 
+                : 
+                <h1>{props.displayText}</h1> 
+            } 
             {props.buttonText === "" ? null : <div id="google_translate_element"></div>}
             <WeatherAPIDisplay/>
             {props.buttonText === "" ? null : <button className="login-btn" onClick={props.direct}> {props.buttonText}</button> }
