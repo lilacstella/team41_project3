@@ -1,11 +1,30 @@
+/**
+ * @module MenuView
+ * @description This module exports a functional component that renders the menu view of the pizza ordering application.
+ * @requires './MenuView.css'
+ * @requires 'swr'
+ * @requires 'axios'
+ * @requires '..' {HOST}
+*/
 import './MenuView.css'
 import useSWR from 'swr';
 import axios from 'axios';
 import { HOST } from '..';
 
+/**
+ * @function fetcher
+ * @description A function that fetches data using Axios and returns the data.
+ * @param {string} url - The URL to fetch data from.
+ * @returns {Promise} - A Promise that resolves to the data fetched from the URL.
+*/
 const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 export default function MenuView() {
+    /**
+     * @function MenuView
+     * @description A functional component that renders the menu view of the pizza ordering application.
+     * @returns {JSX.Element} - A JSX Element that renders the menu view.
+    */
     const { data, error, isLoading } = useSWR('menu', fetcher);
     if (error || isLoading)
         return (
