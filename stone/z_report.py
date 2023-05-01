@@ -4,8 +4,36 @@ import psycopg2
 
 from stone import SQL_CREDS
 
+"""
+This module provides a function for generating a Z report from a PostgreSQL database.
+
+Dependencies:
+- datetime module
+- psycopg2 module
+- SQL_CREDS variable imported from the stone module
+
+Example usage:
+
+mydatabase.get_zreport()
+{'salesdata': [{'itemname': 'item1', 'numbersold': 1, 'sales': '100.00'}, {'itemname': 'item2', 'numbersold': 2, 'sales': '200.00'}], 'paymentdata': [{'paymenttype': 'cash', 'sales': '300.00'}], 'total': '300.00'}
+
+mydatabase.post_eodinv()
+True
+
+
+"""
 
 def get_zreport():
+    """
+    Retrieves the daily sales and payment information from the database for generating a Z report.
+
+    Returns:
+        A dictionary containing the sales data and payment data for the day and the total sales for the day.
+
+    Raises:
+        None
+
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -45,6 +73,16 @@ def get_zreport():
 
 
 def post_eodinv():
+    """
+    Retrieves the current inventory and adds it to the inventory history table for end-of-day record keeping.
+
+    Returns:
+        True if inventory history added successfully, False otherwise.
+
+    Raises:
+        psycopg2.Error: If an error occurs while adding the inventory history.
+
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
