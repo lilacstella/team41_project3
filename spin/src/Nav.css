@@ -8,6 +8,19 @@ nav {
     border-bottom: .5vh solid black;
 }
 
+img.menuLogo {
+    height: 10vh;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.logo-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 nav>h1 {
     font-size: 3.5em;
     color: black;
