@@ -2,8 +2,57 @@ import psycopg2
 
 from stone import SQL_CREDS
 
+"""
+This module provides functions to interact with a PostgreSQL database containing menu and inventory information for a restaurant.
+
+Dependencies:
+- psycopg2: PostgreSQL adapter for Python
+
+Functions:
+- get_prices(): Retrieve prices of menu items, categories, storage locations, and items without images.
+- add_menu_item(json_file): Add a menu item and its price to the database.
+- add_inv_item(json_file): Add an inventory item and its details to the database.
+- change_price(json_file): Change the price of a menu item in the database.
+- add_img(json_file): Add or update the image URL for a menu item in the database.
+
+Example usage:
+
+Retrieve prices
+prices = restaurant_db.get_prices()
+print(prices)
+
+Add a menu item
+menu_item = {"menuitem": "Pepperoni Pizza", "price": 12.99}
+added = restaurant_db.add_menu_item(json.dumps(menu_item))
+print(added)
+
+Add an inventory item
+inv_item = {"inventoryitem": "Pepperoni", "category": "Topping-Meat", "quantity": 10, "units": "oz", "storagelocation": "Fridge"}
+added = restaurant_db.add_inv_item(json.dumps(inv_item))
+print(added)
+
+Change the price of a menu item
+new_price = {"menuitem": "Pepperoni Pizza", "price": 13.99}
+changed = restaurant_db.change_price(json.dumps(new_price))
+print(changed)
+
+Add or update the image URL for a menu item
+img_info = {"item_name": "Pepperoni Pizza", "img_url": "https://example.com/pepperoni.jpg"}
+added_or_updated = restaurant_db.add_img(json.dumps(img_info))
+print(added_or_updated)
+"""
 
 def get_prices():
+    """
+    Retrieve prices of menu items, categories, storage locations, and items without images.
+
+    Returns:
+    A dictionary containing the following keys:
+        - menuitems: a list of dictionaries, each representing a menu item and its current price.
+        - categories: a list of strings, each representing a category of inventory items.
+        - storage: a list of strings, each representing a storage location for inventory items.
+        - no-img: a list of strings, each representing an inventory item that does not have an image in the database.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -55,6 +104,15 @@ def get_prices():
 
 
 def add_menu_item(json_file):
+    """
+    Adds a new menu item to the database.
+
+    Args:
+    - json_file: a dictionary containing the menu item and its price.
+
+    Returns:
+    - True if the insertion is successful.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -74,6 +132,15 @@ def add_menu_item(json_file):
 
 
 def add_inv_item(json_file):
+    """
+    Adds a new inventory item to the database.
+
+    Args:
+    - json_file: a dictionary containing the inventory item, its category, quantity, units and storage location.
+
+    Returns:
+    - True if the insertion is successful.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -93,6 +160,15 @@ def add_inv_item(json_file):
 
 
 def change_price(json_file):
+    """
+    Changes the price of a menu item.
+
+    Args:
+    - json_file: a dictionary containing the menu item and its new price.
+
+    Returns:
+    - True if the update is successful.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
@@ -111,6 +187,15 @@ def change_price(json_file):
 
 
 def add_img(json_file):
+    """
+    Adds or updates an image URL for an item in the database.
+
+    Args:
+    - json_file: a dictionary containing the item name and its image URL.
+
+    Returns:
+    - True if the insertion/update is successful.
+    """
     connection = None
     try:
         connection = psycopg2.connect(**SQL_CREDS)
