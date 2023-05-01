@@ -1,8 +1,7 @@
 /**
-
-This module exports a button component for use in a React application.
-@module Button
-@requires "./Button.css"
+ * This module exports a button component for use in a React application.
+ * @module Button
+ * @requires "./Button.css"
 */
 
 import "./Button.css";

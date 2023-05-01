@@ -1,3 +1,17 @@
+/**
+ * Module representing the Display component for the Manager view in a web app.
+ * @module Display
+ * @requires React
+ * @requires react-bootstrap/Modal
+ * @requires react-bootstrap/Button
+ * @requires swr
+ * @requires axios
+ * @requires react-bootstrap/Dropdown
+ * @requires react-bootstrap/DropdownButton
+ * @requires react-bootstrap/Form
+ * @requires ../HOST
+*/
+
 import React, { useState } from 'react';
 import './Display.css';
 import Modal from 'react-bootstrap/Modal';
@@ -10,9 +24,21 @@ import Form from "react-bootstrap/Form";
 
 import { HOST } from '..';
 
+/**
+ * Fetches data from a specified URL using axios.
+ * @function fetcher
+ * @param {string} url - The URL to fetch data from.
+ * @returns {Promise} A promise that resolves to the data fetched from the URL.
+*/
 const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 export default function Display(props) {
+    /**
+     * A functional component that renders the Manager view display.
+     * @function Display
+     * @param {object} props - The props object that contains the current view to render.
+     * @returns {JSX.Element} A React component that renders the specified view.
+    */
     return (
         <div className="manager-view-display-frame">
             {props.view === 'inventory' ? (
@@ -39,6 +65,11 @@ export default function Display(props) {
 }
 
 function Inventory() {
+    /**
+     * A functional component that renders the Inventory view.
+     * @function Inventory
+     * @returns {JSX.Element} A React component that renders the Inventory view.
+    */
     const [currItem, setCurrItem] = useState("Select Item");
     const [showModal, setShowModal] = useState(false);
     const [modalText, setModalText] = useState('test');
@@ -103,6 +134,11 @@ function Inventory() {
 }
 
 function XReport() {
+    /**
+    * Returns the X Report component, which displays the daily sales data
+    * @function XReport
+    * @returns {JSX.Element} - The X Report component
+    */
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('xreport', fetcher);
     if (error) {
@@ -137,6 +173,11 @@ function XReport() {
 
 
 function ZReport() {
+    /**
+     * Returns the Z Report component, which displays the sales data for the day and allows the user to reset the sales data
+     * @function ZReport
+     * @returns {JSX.Element} - The Z Report component
+     */
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('zreport', fetcher);
     const [showModal, setShowModal] = useState(false);
@@ -190,6 +231,11 @@ function ZReport() {
 }
 
 function Prices() {
+    /**
+     * Returns the Prices component, which displays the menu items, inventory items, and allows the user to change prices, add menu items and inventory items, and change inventory item images
+     * @function Prices
+     * @returns {JSX.Element} - The Prices component
+     */
     const [currPrice, setCurrPrice] = useState("0.00");
     const [currItem, setCurrItem] = useState("Select Item");
     const [category, setCategory] = useState("Item Type");
@@ -350,6 +396,13 @@ function Prices() {
 
 // setting up the table for SalesReport
 function SalesReportTable(props) {
+    /**
+     * Displays a table of sales report data.
+     * @param {Object} props - The props passed down to the component.
+     * @param {string} props.fromDate - The start date of the sales report.
+     * @param {string} props.toDate - The end date of the sales report.
+     * @returns {JSX.Element} - The SalesReportTable component JSX.Element.
+    */
     const { data, error, isLoading } = useSWR(`salesreport?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
     if (error) {
         console.error(error);
@@ -380,6 +433,10 @@ function SalesReportTable(props) {
 }
 
 function SalesReport() {
+    /**
+     * Displays a sales report table with the selected date range.
+     * @returns {JSX.Element} - The SalesReport component JSX.Element.
+    */
     // use states so that variables get updated thoughout
     const [displayTable, setDisplayTable] = useState(false);
     const [dates, setDates] = useState({});
@@ -411,6 +468,12 @@ function SalesReport() {
 }
 
 function ExcessReportTable(props) {
+    /**
+     * Displays a table of excess report data.
+     * @param {Object} props - The props passed down to the component.
+     * @param {string} props.date - The date of the excess report.
+     * @returns {JSX.Element} - The ExcessReportTable component JSX.Element.
+    */
     const { data, error, isLoading } = useSWR(`excessreport?date=${props.date}`, fetcher);
     if (error) {
         console.error(error);
@@ -440,6 +503,11 @@ function ExcessReportTable(props) {
 }
 
 function ExcessReport() {
+    /**
+     * Function that renders the Excess Report component.
+     * @function ExcessReport
+     * @returns {JSX.Element} JSX.Element representing the Excess Report component.
+    */
     // use states so that variables get updated thoughout
     const [displayTable, setDisplayTable] = useState(false);
     const [dates, setDates] = useState({});
@@ -468,6 +536,10 @@ function ExcessReport() {
 }
 
 function RestockReport() {
+    /**
+     * Function that renders the Restock Report component.
+     * @returns {JSX.Element} JSX.Element representing the Restock Report component.
+    */
     // fetch information from endpoint
     const { data, error, isLoading } = useSWR('restockreport', fetcher);
     if (error) {
@@ -503,6 +575,13 @@ function RestockReport() {
 }
 
 function WhatSellsTable(props) {
+    /**
+     * Function that renders the What Sells Table component.
+     * @param {Object} props - The props passed to the component.
+     * @param {string} props.fromDate - The start date of the report.
+     * @param {string} props.toDate - The end date of the report.
+     * @returns {JSX.Element} JSX.Element representing the What Sells Table component.
+    */
     const { data, error, isLoading } = useSWR(`whatsells?date1=${props.fromDate}&date2=${props.toDate}`, fetcher);
     if (error) {
         console.error(error);
@@ -535,6 +614,10 @@ function WhatSellsTable(props) {
 }
 
 function WhatSells() {
+    /**
+     * Function that renders the What Sells component.
+     * @returns {JSX.Element} JSX.Element representing the What Sells component.
+    */
     // use states so that variables get updated thoughout
     const [displayTable, setDisplayTable] = useState(false);
     const [dates, setDates] = useState({});
@@ -569,6 +652,12 @@ function WhatSells() {
 }
 
 function DataTable(props) {
+    /**
+     * DataTable component that renders a table with the provided data.
+     * @param {Object} props - The props object for DataTable component.
+     * @param {Array<Object>} props.processedData - The processed data to be displayed in the table.
+     * @returns {JSX.Element} The DataTable component.
+    */
     return (
         <div className='table-container'>
             <table-md className="striped bordered hover">
