@@ -23,7 +23,7 @@ export default function MenuView() {
         if (data[key] !== undefined && Array.isArray(data[key])) {
             data[key].map(item => {
                 if (item.price !== undefined)
-                    menuList.push(item[key + '-name'] + " " + item.price);
+                    menuList.push(item[key + '-name'] + " - " + item.price);
                 return null;
             });
         }
