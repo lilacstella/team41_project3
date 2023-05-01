@@ -1,12 +1,17 @@
 """
-This is a file that contains a module to retrieve inventory data and generate a report of excess items.
+This module connects to a PostgreSQL database using the credentials stored in the 'SQL_CREDS' variable from the 'stone' module. 
 
-The module connects to a PostgreSQL database using the credentials stored in the 'SQL_CREDS' variable from the 'stone' module. 
+Dependencies:
+- psycopg2
+- stone
+- json
 
-The 'get_excess' function takes a date input and returns a JSON object of excess inventory items based on a comparison of past and current inventory levels.
+Functions:
+- get_excess(datein)
 
 Example usage:
     excess_report.get_excess('2022-04-25')
+    '[{"ItemName": "Milk"}, {"ItemName": "Eggs"}]'
 """
 import json
 
