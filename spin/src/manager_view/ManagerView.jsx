@@ -1,9 +1,25 @@
+/**
+
+ManagerView is a React component that serves as the main view for the manager interface.
+It allows the user to select various tabs to view different reports and menus.
+@module ManagerView
+@requires React
+@requires Button
+@requires Display
+@requires ./ManagerView.css
+*/
 import React, { useState } from 'react';
 import Button from './Button';
 import Display from './Display';
 import './ManagerView.css';
 
 export default function ManagerView(props) {
+    /**
+     * The main function that returns the ManagerView component.
+     * @function ManagerView
+     * @param {Object} props - The props object that contains the setMenuView function to change the view of the menu component.
+     * @returns {JSX.Element} - The JSX code that renders the ManagerView component.
+    */
     const [currView, setCurrView] = useState('display');
 
     return (
