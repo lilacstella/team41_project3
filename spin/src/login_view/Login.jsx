@@ -1,3 +1,15 @@
+/**
+ * Login Modal React component.
+ * @module LoginModal
+ * @requires react-bootstrap/Modal
+ * @requires react-bootstrap/Button
+ * @requires react-bootstrap/Form
+ * @requires jwt-decode
+ * @requires axios
+ * @requires ..
+ * @requires react
+ */
+
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -5,6 +17,15 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import { HOST, G_CLIENT_ID } from '..';
 import { useEffect } from 'react';
+
+/**
+ * LoginModal function component.
+ * @function
+ * @param {object} props - Component properties.
+ * @param {boolean} props.showLogin - Flag to show/hide modal.
+ * @param {function} props.setShowLogin - Function to set showLogin flag.
+ * @returns {JSX.Element} - Login modal component.
+ */
 
 export default function LoginModal(props) {
     const { showLogin, setShowLogin } = props;
@@ -33,7 +54,13 @@ export default function LoginModal(props) {
     )
 }
 
-
+/**
+ * LoginButton function component.
+ * @function
+ * @param {object} props - Component properties.
+ * @param {function} props.setShowLogin - Function to set showLogin flag.
+ * @returns {JSX.Element} - Login button component.
+ */
 
 function LoginButton(props) {
     function handleCallback(response) {
