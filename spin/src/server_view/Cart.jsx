@@ -1,9 +1,13 @@
+import useSWR from 'swr';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Form from "react-bootstrap/Form";
+import axios from 'axios';
+import { HOST } from '..';
 import './Cart.css';
 
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 export default function Cart(props) {
     return (
@@ -15,18 +19,35 @@ export default function Cart(props) {
 }
 
 function PizzaContent(props) {
+    const { data, loading, error } = useSWR('menu', fetcher);
     const { pizza, removeItem } = props;
+
+
+    if (loading || error || data === undefined)
+        return null;
+
     var pizzaType;
-    if (pizza.topping === undefined || pizza.topping.length === 0)
+    var pizzaCost;
+    if (pizza.topping === undefined || pizza.topping.length === 0) {
         pizzaType = 'Original Cheese Pizza';
-    else if (pizza.topping.length === 1)
+        pizzaCost = data['cheese-pizza-price']['price'];
+    }
+    else if (pizza.topping.length === 1) {
         pizzaType = '1 Topping Pizza';
-    else
+        pizzaCost = data['one-topping-pizza-price']['price'];
+    }
+    else {
         pizzaType = '2-4 Topping Pizza';
+        pizzaCost = data['multi-topping-pizza-price']['price'];
+    }
+
 
     return (
         <div>
-            <h4>{pizzaType}</h4>
+            <div className="price-tag-div">
+                <h4>{pizzaType}</h4>
+                <p>${pizzaCost}</p>
+            </div>
             {
                 Object.keys(pizza).map(key => {
                     const value = pizza[key];
@@ -73,6 +94,7 @@ function PizzaBuilder(props) {
 
 function OrderList(props) {
     const { order } = props;
+    const { data, loading, error } = useSWR('prices', fetcher);
 
     const removeItem = (item) => {
         console.log('removing' + item);
@@ -81,6 +103,29 @@ function OrderList(props) {
             props.setOrder([...order.slice(0, index), ...order.slice(index + 1)]);
     }
 
+    if (loading || error || data === undefined)
+        return null;
+
+    const menuItems = {};
+    data.menuitems.map(item => (
+        menuItems[item.menu_item_name] = item.current_price
+    ));
+    const totalPrice = () => {
+        var total = 0;
+        order.forEach((item) => {
+            if (typeof item === 'object') {
+                if (item.topping === undefined || item.topping.length === 0)
+                    total += Number(menuItems['Original Cheese Pizza']);
+                else if (item.topping.length === 1)
+                    total += Number(menuItems['1 Topping Pizza']);
+                else
+                    total += Number(menuItems['2-4 Topping Pizza']);
+            }
+            else
+                total += Number(menuItems[item]);
+        });
+        return total.toFixed(2);
+    }
     const renderItems = () => {
 
         return order.map((item) => {
@@ -88,13 +133,21 @@ function OrderList(props) {
                 return (<PizzaContent pizza={item} removeItem={() => removeItem(item)}/>);
             }
             else
-                return (<p onClick={() => removeItem(item)}>{item}</p>);
+                return (
+                <div onClick={() => removeItem(item)} className="price-tag-div">
+                    <p>{item}</p>
+                    <p>${menuItems[item]}</p>
+                    </div>
+                );
         });
     }
 
     return (
         <div className='cart-box-frame' style={{ 'height': '59.5%' }}>
-            <h2>Cart</h2>
+            <div className="price-tag-div">
+                <h2>Cart</h2>
+                <p>Total: ${totalPrice()}</p>
+            </div>
             <div className='cart-item-list'>
                 {
                     renderItems()

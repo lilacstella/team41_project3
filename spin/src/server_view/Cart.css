@@ -39,3 +39,9 @@
 .numform{
     width: 120px !important;
 }
+
+.price-tag-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
