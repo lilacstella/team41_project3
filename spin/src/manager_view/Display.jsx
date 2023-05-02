@@ -92,12 +92,22 @@ function Inventory() {
     inventoryItems.sort();
 
     const restockAll = () => {
+        /**
+         * A function to restock all items in the inventory.
+         * @function restockAll
+         * @returns {void}
+        */
         axios.post(HOST + 'inventory', {})
         setModalText('Restocked All Items!');
         setShowModal(true);
     };
 
     const setQuantity = () => {
+        /**
+         * A function to set the quantity of a selected item in the inventory.
+         * @function setQuantity
+         * @returns {void}
+        */
         axios.post(HOST + 'inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
         setModalText('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
         setShowModal(true);
@@ -193,6 +203,12 @@ function ZReport() {
 
 
     const handleReset = async () => {
+        /**
+         * Resets the sales data by sending a post request to the endpoint and displaying a success message.
+         * @function handleReset
+         * @async
+         * @returns {Promise<void>}
+         */
         // send post request
         axios.post(HOST + 'zreport', {});
 
@@ -266,6 +282,11 @@ function Prices() {
     }
 
     const handleNewPrice = async () => {
+        /**
+         * Handles changing the price of a menu item and shows a modal with the new price
+         * @async
+         * @function handleNewPrice
+        */
         // send post request
         axios.post(HOST + 'prices', 
         {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
@@ -275,6 +296,12 @@ function Prices() {
     };
 
     const handleNewMenu = async () => {
+        /**
+         * Handles adding a new menu item and shows a modal with the new item
+         * @async
+         * @function handleNewMenu
+         * @returns {Promise<void>}
+        */
         // send post request
         axios.post(HOST + 'prices', 
         {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
@@ -284,6 +311,12 @@ function Prices() {
     };
 
     const handleNewInventory = async () => {
+        /**
+         * Handles adding a new inventory item and shows a modal with the new item
+         * @async
+         * @function handleNewInventory
+         * @returns {Promise<void>}
+        */
         // send post request
         axios.post(HOST + 'prices', 
         {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
@@ -295,6 +328,14 @@ function Prices() {
     };
 
     const handleNewImage = async () => {
+        /**
+         * A function that sends a post request to add a new image for a given inventory item, 
+         * updates the modal text to show the current inventory item name with a message indicating that the image has been changed,
+         * and displays the modal.
+         * @async
+         * @function handleNewImage
+         * @returns {Promise<void>}
+*/
         // send post request
         axios.post(HOST + 'prices', 
         {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
@@ -443,6 +484,9 @@ function SalesReport() {
 
     // handles the button click
     const handleClick = () => {
+        /**
+         * Handles the button click and sets the dates for the sales report.
+        */
         setDates({
             "fromDate": document.querySelector('#fromDate').value,
             "toDate": document.querySelector('#toDate').value
@@ -514,6 +558,11 @@ function ExcessReport() {
 
     // handles the button click
     const handleClick = () => {
+        /**
+         * Handles the button click and sets the dates for the excess report.
+         * @function handleClick
+         * @returns {void}
+        */
         setDates({
             "date": document.querySelector('#date').value,
         });
@@ -624,6 +673,9 @@ function WhatSells() {
 
     // handles the button click
     const handleClick = () => {
+        /**
+         * Handles the button click event.
+        */
         setDates({
             "fromDate": document.querySelector('#fromDate').value,
             "toDate": document.querySelector('#toDate').value

@@ -18,16 +18,17 @@ import axios from 'axios';
 import { HOST, G_CLIENT_ID } from '..';
 import { useEffect } from 'react';
 
-/**
- * LoginModal function component.
- * @function
- * @param {object} props - Component properties.
- * @param {boolean} props.showLogin - Flag to show/hide modal.
- * @param {function} props.setShowLogin - Function to set showLogin flag.
- * @returns {JSX.Element} - Login modal component.
- */
+
 
 export default function LoginModal(props) {
+    /**
+     * LoginModal function component.
+     * @function
+     * @param {object} props - Component properties.
+     * @param {boolean} props.showLogin - Flag to show/hide modal.
+     * @param {function} props.setShowLogin - Function to set showLogin flag.
+     * @returns {JSX.Element} - Login modal component.
+    */
     const { showLogin, setShowLogin } = props;
     return (
         <Modal show={showLogin} onHide={() => setShowLogin(false)}>
@@ -54,15 +55,14 @@ export default function LoginModal(props) {
     )
 }
 
-/**
- * LoginButton function component.
- * @function
- * @param {object} props - Component properties.
- * @param {function} props.setShowLogin - Function to set showLogin flag.
- * @returns {JSX.Element} - Login button component.
- */
-
 function LoginButton(props) {
+    /**
+     * LoginButton function component.
+     * @function
+     * @param {object} props - Component properties.
+     * @param {function} props.setShowLogin - Function to set showLogin flag.
+     * @returns {JSX.Element} - Login button component.
+    */
     function handleCallback(response) {
         axios.post(HOST + 'auth', { 'email': jwt_decode(response.credential).email })
             .then(res => {
