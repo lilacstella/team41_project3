@@ -1,9 +1,35 @@
+"""
+This module provides user login functionality and interacts with a PostgreSQL database using the psycopg2 library.
+
+Dependencies:
+- psycopg2
+- stone (importing SQL_CREDS constant)
+
+Functions:
+- user_login(data)
+
+Example Usage:
+
+data = {'email': 'example@gmail.com', 'pin': '2024'}
+user = user_login(data)
+print(user) # {'id': 11, 'permission': 'manager'}
+
+"""
 import psycopg2
 
 from stone import SQL_CREDS
 
 
 def user_login(data):
+    """
+    Function to authenticate a user and return their id and permission level
+    
+    Parameters:
+    - data (dict): A dictionary containing user data, including their email and pin.
+
+    Returns:
+    - dict: A dictionary containing the user's ID and permission level.
+    """
     if 'pin' in data:
         if data['pin'] == '2025':
             return {'id': 10, 'permission': 'server'}
