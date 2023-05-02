@@ -1,3 +1,16 @@
+
+/**
+ * Module representing the purchase view.
+ * @module PurchaseView
+ * @requires react
+ * @requires react-bootstrap
+ * @requires ./Gallery
+ * @requires axios
+ * @requires ./Cart
+ * @requires ../
+ * @requires swr
+*/
+
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import MenuGallery from './Gallery';
@@ -7,10 +20,22 @@ import './PurchaseView.css';
 import { HOST } from '..';
 import useSWR from 'swr';
 
+/**
+ * Fetches data from an API endpoint using axios.
+ * @function fetcher
+ * @param {string} url - The API endpoint to fetch data from.
+ * @returns {object} The data fetched from the API endpoint.
+*/
 const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 
 export default function PurchaseView(props) {
+    /**
+     * A view for purchasing pizzas.
+     * @function PurchaseView
+     * @param {object} props - The props passed to the component.
+     * @returns {JSX.Element} A JSX component that displays the purchase view.
+    */
     const [currView, setCurrView] = useState('sauce');
     const [pizza, setPizza] = useState({ 'topping': [] });
     const [order, setOrder] = useState([]);
@@ -20,6 +45,11 @@ export default function PurchaseView(props) {
     const [modalText, setModalText] = useState('test');
 
     const addToOrder = (item) => {
+        /**
+         * Adds an item to the order.
+         * @function addToOrder
+         * @param {string|object} item - The item to add to the order.
+        */
         // console.log(item + " " + currView);
         if (['sauce', 'cheese', 'dough', 'topping', 'drizzle'].includes(currView)) {
             if (currView === 'topping') {
@@ -38,6 +68,10 @@ export default function PurchaseView(props) {
     }
 
     const addPizzaToOrder = () => {
+        /**
+         * Adds a pizza to the order.
+         * @function addPizzaToOrder
+        */
         // if a pizza have no sauce and no cheese, not allowed
         if ((!('cheese' in pizza) || pizza['cheese'] === undefined) && (!('sauce' in pizza) && pizza['sauce'] === undefined)) {
             setModalText('Please add either cheese or sauce to your cheese pizza!');
@@ -50,6 +84,11 @@ export default function PurchaseView(props) {
     }
 
     const checkoutOrder = () => {
+        /**
+         * Checks out the current order.
+         * @function checkoutOrder
+         * @returns {null} Nothing is returned.
+        */
         // order validation
         if (order === undefined || (Array.isArray(order) && order.length === 0)) {
             setModalText('Invalid order, please add items');
@@ -62,6 +101,10 @@ export default function PurchaseView(props) {
     }
 
     const clearOrder = () => {
+        /**
+         * Clears the current order.
+         * @function clearOrder
+        */
         setOrder([]);
         setPizza({ 'topping': [] });
 
@@ -87,6 +130,16 @@ export default function PurchaseView(props) {
 }
 
 function CheckoutModal(props) {
+    /**
+     * CheckoutModal component for displaying checkout modal with payment options and recommendations for other items
+     * @param {Object} props - Object containing props passed to the component
+     * @param {Array} props.order - Array of items in the current order
+     * @param {function} props.setOrder - Function to update the current order
+     * @param {boolean} props.showCheckoutModal - Boolean to determine if the checkout modal should be shown
+     * @param {function} props.setShowCheckoutModal - Function to update the visibility of the checkout modal
+     * @param {string} props.modalText - Text to display in the modal header
+     * @returns {JSX.Element|null} - Returns checkout modal JSX.Element or null if loading or error occurred
+    */
     const { order, setOrder, showCheckoutModal, setShowCheckoutModal, modalText } = props;
     const { data, error, isLoading } = useSWR(`whatsells?date1=01-Jan-2023&date2=31-December-2023`, fetcher);
 
@@ -153,6 +206,13 @@ function CheckoutModal(props) {
 
 // can be hidden in server view
 function Navigation(props) {
+    /**
+     * Function component for Navigation, contains Tab components
+     * @function Navigation
+     * @param {Object} props - Props for Navigation component
+     * @param {function} props.handleClick - Callback function to handle click events on tabs
+     * @returns {JSX.Element} Navigation component
+    */
     // handling the click for each tab
     return (
         <div className="purchase-view-tab-frame">
@@ -168,6 +228,15 @@ function Navigation(props) {
 }
 
 function Tab(props) {
+    /**
+     * Function component for Tab, represents each tab in Navigation
+     * @function Tab
+     * @param {Object} props - Props for Tab component
+     * @param {string} props.name - Name of the tab
+     * @param {function} props.switchTab - Callback function to handle click events on the tab
+     * @param {string} [props.color] - Background color of the tab, default is not set
+     * @returns {JSX.Element} Tab component
+    */
     return (
         <div className="purchase-view-tab" style={{ backgroundColor: props.color }} onClick={() => props.switchTab(props.name.toLowerCase())}>
             <h2>{props.name}</h2>

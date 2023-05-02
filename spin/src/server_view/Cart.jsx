@@ -1,3 +1,15 @@
+/**
+ * A module representing a Pizza Builder cart.
+ * @module Cart
+ * @requires swr
+ * @requires react
+ * @requires bootstrap/dist/css/bootstrap.min.css
+ * @requires react-bootstrap/Button
+ * @requires react-bootstrap/Form
+ * @requires axios
+ * @requires '..' {HOST}
+ * @requires './Cart.css'
+*/
 import useSWR from 'swr';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,9 +19,28 @@ import axios from 'axios';
 import { HOST } from '..';
 import './Cart.css';
 
+/**
+ * Fetches the data from an API endpoint using axios.
+ * @function fetcher
+ * @param {string} url - API endpoint URL
+ * @returns {Promise} Promise object representing the response data
+*/
 const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 export default function Cart(props) {
+    /**
+     * A functional component representing a pizza builder cart.
+     * @function Cart
+     * @param {Object} props - React props
+     * @param {Object} props.pizza - Current pizza in the cart
+     * @param {Function} props.add - Adds a new pizza to the cart
+     * @param {Function} props.setPizza - Updates the current pizza in the cart
+     * @param {Array} props.order - List of items in the cart
+     * @param {Function} props.checkout - Callback function for checking out
+     * @param {Function} props.clear - Callback function for clearing the cart
+     * @param {Function} props.setOrder - Updates the current list of items in the cart
+     * @returns {JSX.Element} A JSX element representing the pizza builder cart
+    */
     return (
         <div className="cart-frame">
             <PizzaBuilder pizza={props.pizza} add={props.add} setPizza={props.setPizza} />
@@ -19,6 +50,14 @@ export default function Cart(props) {
 }
 
 function PizzaContent(props) {
+    /**
+     * A functional component representing the pizza content section of the cart.
+     * @function PizzaContent
+     * @param {Object} props - React props
+     * @param {Object} props.pizza - Current pizza in the cart
+     * @param {Function} props.removeItem - Callback function for removing an item from the cart
+     * @returns {JSX.Element} A JSX element representing the pizza content section of the cart
+    */
     const { data, loading, error } = useSWR('menu', fetcher);
     const { pizza, removeItem } = props;
 
@@ -69,8 +108,21 @@ function PizzaContent(props) {
 
 
 function PizzaBuilder(props) {
+    /**
+     * Represents the PizzaBuilder component
+     * @param {Object} props - The props object
+     * @param {Object} props.pizza - The pizza object
+     * @param {function} props.add - The add function
+     * @param {function} props.setPizza - The setPizza function
+     * @returns {JSX.Element} - The PizzaBuilder component
+    */
     const { pizza, add, setPizza } = props;
     const removeItem = (item) => {
+        /**
+         * Removes an item from the pizza object
+         * @function removeItem
+         * @param {string} item - The item to be removed
+        */
         if (item === 'topping')
             setPizza({ ...pizza, [item]: pizza[item].slice(0, -1) });
         else
@@ -93,10 +145,24 @@ function PizzaBuilder(props) {
 
 
 function OrderList(props) {
+    /**
+     * Represents the OrderList component
+     * @param {Object} props - The props object
+     * @param {Array} props.order - The order array
+     * @param {function} props.setOrder - The setOrder function
+     * @param {function} props.checkout - The checkout function
+     * @param {function} props.clear - The clear function
+     * @returns {JSX.Element} - The OrderList component
+    */
     const { order } = props;
     const { data, loading, error } = useSWR('prices', fetcher);
 
     const removeItem = (item) => {
+        /**
+         * Removes an item from the order array
+         * @function removeItem
+         * @param {string|Object} item - The item to be removed
+        */
         console.log('removing' + item);
         const index = order.indexOf(item);
         if (index !== -1)
@@ -111,6 +177,11 @@ function OrderList(props) {
         menuItems[item.menu_item_name] = item.current_price
     ));
     const totalPrice = () => {
+        /**
+         * Calculates the total price of the order
+         * @function totalPrice
+         * @returns {string} - The total price of the order
+        */
         var total = 0;
         order.forEach((item) => {
             if (typeof item === 'object') {
@@ -127,6 +198,11 @@ function OrderList(props) {
         return total.toFixed(2);
     }
     const renderItems = () => {
+        /**
+         * Renders the items in the order array
+         * @function renderItems
+         * @returns {JSX.Element} - The list of items in the order
+        */
 
         return order.map((item) => {
             if (typeof item === 'object') {

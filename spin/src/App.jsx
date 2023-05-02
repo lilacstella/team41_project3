@@ -1,3 +1,14 @@
+/**
+ * The main application component of the Spin N' Stone pizza ordering system.
+ * @module App
+ * @requires react
+ * @requires Nav
+ * @requires ManagerView
+ * @requires PurchaseView
+ * @requires MenuView
+ * @requires ServerView
+ * @requires LoginModal
+*/
 import { useState, useEffect } from 'react';
 import Nav from './Nav';
 import ManagerView from './manager_view/ManagerView';
@@ -7,6 +18,11 @@ import ServerView from './server_view/ServerView';
 import LoginModal from './login_view/Login';
 
 function App() {
+    /**
+     * The main App component which manages the entire pizza ordering system.
+     * @function App
+     * @returns {JSX.Element} The App component as a JSX Element.
+    */
     const perms = localStorage.getItem('employee_permission');
     if (!perms) {
         localStorage.setItem('employee_permission', 'customer');
@@ -18,6 +34,11 @@ function App() {
     const [menuView, setMenuView] = useState(false);
 
     const backToCustomer = () => {
+        /**
+         * The function that sets the view back to customer and updates the employee permissions in local storage.
+         * @function backToCustomer
+         * @returns {void}
+        */
         localStorage.setItem('employee_permission', 'customer');
         localStorage.setItem('employee_id', 0);
         setView('customer');
@@ -32,6 +53,9 @@ function App() {
     };
     
     useEffect(() => {
+        /**
+         * The effect hook that updates the view state when the permissions change.
+        */
         setView(perms);
     }, [perms]);
 
