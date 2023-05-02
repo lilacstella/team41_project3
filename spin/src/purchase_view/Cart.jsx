@@ -114,6 +114,10 @@ function PizzaBuilder(props) {
     */
     const { pizza, add, setPizza } = props;
     const removeItem = (item) => {
+        /**
+         * Function to remove an item from the pizza being built
+         * @param {string} item - The item to remove
+        */
         if (item === 'topping')
             setPizza({ ...pizza, [item]: pizza[item].slice(0, -1) });
         else
@@ -146,6 +150,10 @@ function OrderList(props) {
     const { data, loading, error } = useSWR('prices', fetcher);
 
     const removeItem = (item) => {
+        /**
+         * Function to remove an item from the order
+         * @param {string} item - The item to remove
+        */
         console.log('removing' + item);
         const index = order.indexOf(item);
         if (index !== -1)
@@ -160,6 +168,10 @@ function OrderList(props) {
         menuItems[item.menu_item_name] = item.current_price
     ));
     const totalPrice = () => {
+        /**
+         * Function to calculate the total price of the order
+         * @returns {number} The total price of the order
+        */
         var total = 0;
         order.forEach((item) => {
             if (typeof item === 'object') {
@@ -176,6 +188,10 @@ function OrderList(props) {
         return total.toFixed(2);
     }
     const renderItems = () => {
+        /**
+         * Function to render the items in the order
+         * @returns {JSX.Element} A React JSX element with the items in the order
+        */
 
         return order.map((item) => {
             if (typeof item === 'object') {
