@@ -1,8 +1,3 @@
-import requests
-import json
-import functools
-
-from stone import WEATHER_API_KEY
 
 """
 This module defines a function to retrieve the current weather data of a specified location using the Weatherstack API.
@@ -21,6 +16,11 @@ Example Usage:
 mydatabase.get_weather()
 The temperature in College Station is 75 degrees Farenheit and the weather is Partly cloudy.
 """
+import requests
+import json
+import functools
+
+from stone import WEATHER_API_KEY
 
 @functools.cache
 def get_weather():

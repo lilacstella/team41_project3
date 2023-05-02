@@ -1,8 +1,3 @@
-import psycopg2
-import json
-
-from stone import SQL_CREDS
-
 """
 This module provides functions to retrieve data from a PostgreSQL database and return it as a JSON string. The module depends on the psycopg2 and json modules, as well as the SQL_CREDS credentials and WEATHER_API_KEY key provided in the stone module.
 
@@ -15,6 +10,11 @@ Example usage:
 mydatabase.get_what_sells("2020-01-01", "2020-01-31")
 [{"item1": "item1", "item2": "item2", "order_count": 1}, {"item1": "item1", "item2": "item3", "order_count": 1}, {"item1": "item2", "item2": "item3", "order_count": 1}]
 """
+
+import psycopg2
+import json
+
+from stone import SQL_CREDS
 
 def get_what_sells(date1, date2):
     """
