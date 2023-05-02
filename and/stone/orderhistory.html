@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module orderhistory</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>orderhistory</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/anatj/OneDrive%20-%20Texas%20A%26M%20University/Documents/Junior%20Yr/Spring%20Semester/csce%20315/project3/team41_proj3/stone/orderhistory.py">/mnt/c/Users/anatj/OneDrive - Texas A&M University/Documents/Junior Yr/Spring Semester/csce 315/project3/team41_proj3/stone/orderhistory.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;interacts&nbsp;with&nbsp;a&nbsp;PostgreSQL&nbsp;database&nbsp;to&nbsp;retrieve&nbsp;order&nbsp;information&nbsp;and&nbsp;delete&nbsp;orders.<br>
+&nbsp;<br>
+Dependencies:<br>
+-&nbsp;psycopg2<br>
+-&nbsp;json<br>
+-&nbsp;stone&nbsp;(contains&nbsp;SQL&nbsp;credentials)<br>
+&nbsp;<br>
+Functions:<br>
+-&nbsp;<a href="#-get_orders">get_orders</a>(date)<br>
+-&nbsp;<a href="#-remove_order">remove_order</a>(json_file)<br>
+&nbsp;<br>
+Example&nbsp;Usage:<br>
+&nbsp;<br>
+To&nbsp;retrieve&nbsp;all&nbsp;orders&nbsp;from&nbsp;April&nbsp;1st,&nbsp;2023:<br>
+orders&nbsp;=&nbsp;<a href="#-get_orders">get_orders</a>('2023-04-01')<br>
+print(orders)<br>
+&nbsp;<br>
+To&nbsp;remove&nbsp;an&nbsp;order&nbsp;with&nbsp;the&nbsp;order&nbsp;number&nbsp;'1234':<br>
+order_info&nbsp;=&nbsp;{'ordernumber':&nbsp;'1234'}<br>
+<a href="#-remove_order">remove_order</a>(order_info)</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-get_orders"><strong>get_orders</strong></a>(date)</dt><dd><tt>Retrieves&nbsp;all&nbsp;orders&nbsp;from&nbsp;the&nbsp;order_history&nbsp;table&nbsp;that&nbsp;were&nbsp;ordered&nbsp;on&nbsp;the&nbsp;specified&nbsp;date.<br>
+Parameters:<br>
+-&nbsp;date&nbsp;(str):&nbsp;Date&nbsp;in&nbsp;format&nbsp;'YYYY-MM-DD'&nbsp;for&nbsp;which&nbsp;orders&nbsp;should&nbsp;be&nbsp;retrieved.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;list&nbsp;of&nbsp;dictionaries:&nbsp;Each&nbsp;dictionary&nbsp;contains&nbsp;information&nbsp;for&nbsp;a&nbsp;single&nbsp;order,&nbsp;including&nbsp;Order&nbsp;#,&nbsp;Total,<br>
+Time,&nbsp;Employee,&nbsp;and&nbsp;Payment&nbsp;Form.<br>
+&nbsp;<br>
+Example&nbsp;Usage:<br>
+&nbsp;<br>
+<a href="#-get_orders">get_orders</a>('2022-01-01')<br>
+&nbsp;<br>
+[{'Order&nbsp;#':&nbsp;1,&nbsp;'Total':&nbsp;10.0,&nbsp;'Time':&nbsp;datetime.datetime(2022,&nbsp;1,&nbsp;1,&nbsp;12,&nbsp;0),&nbsp;'Employee':&nbsp;'John&nbsp;Smith',&nbsp;'Payment&nbsp;Form':&nbsp;'Credit&nbsp;Card'},&nbsp;<br>
+{'Order&nbsp;#':&nbsp;2,&nbsp;'Total':&nbsp;15.0,&nbsp;'Time':&nbsp;datetime.datetime(2022,&nbsp;1,&nbsp;1,&nbsp;13,&nbsp;0),&nbsp;'Employee':&nbsp;'Jane&nbsp;Doe',&nbsp;'Payment&nbsp;Form':&nbsp;'Cash'}]</tt></dd></dl>
+ <dl><dt><a name="-remove_order"><strong>remove_order</strong></a>(json_file)</dt><dd><tt>Deletes&nbsp;the&nbsp;order&nbsp;and&nbsp;all&nbsp;associated&nbsp;items&nbsp;from&nbsp;the&nbsp;order_history&nbsp;and&nbsp;orderitem_t&nbsp;tables.<br>
+&nbsp;<br>
+Parameters:<br>
+-&nbsp;json_file&nbsp;(dictionary):&nbsp;Contains&nbsp;the&nbsp;order&nbsp;number&nbsp;to&nbsp;be&nbsp;deleted.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;bool:&nbsp;True&nbsp;if&nbsp;the&nbsp;order&nbsp;was&nbsp;successfully&nbsp;deleted,&nbsp;False&nbsp;otherwise.&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+Example&nbsp;Usage:<br>
+&nbsp;<br>
+<a href="#-remove_order">remove_order</a>(order_data)<br>
+&nbsp;<br>
+True</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>SQL_CREDS</strong> = {'database': 'csce315331_team_41', 'host': 'csce-315-db.engr.tamu.edu', 'password': 'goldfishwithnuts', 'user': 'csce315331_team_41_master'}</td></tr></table>
+</body></html>

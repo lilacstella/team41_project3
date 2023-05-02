@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module menu</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>menu</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/anatj/OneDrive%20-%20Texas%20A%26M%20University/Documents/Junior%20Yr/Spring%20Semester/csce%20315/project3/team41_proj3/stone/menu.py">/mnt/c/Users/anatj/OneDrive - Texas A&M University/Documents/Junior Yr/Spring Semester/csce 315/project3/team41_proj3/stone/menu.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;contains&nbsp;functions&nbsp;related&nbsp;to&nbsp;retrieving&nbsp;employee&nbsp;and&nbsp;menu&nbsp;data&nbsp;from&nbsp;a&nbsp;PostgreSQL&nbsp;database.<br>
+&nbsp;<br>
+Dependencies:<br>
+-&nbsp;json<br>
+-&nbsp;psycopg2<br>
+-&nbsp;stone<br>
+&nbsp;<br>
+Functions:<br>
+-&nbsp;<a href="#-get_employees">get_employees</a>():&nbsp;Retrieves&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;employees&nbsp;from&nbsp;the&nbsp;'employee_t'&nbsp;table&nbsp;in&nbsp;the&nbsp;PostgreSQL&nbsp;database&nbsp;and&nbsp;returns&nbsp;them&nbsp;as&nbsp;a&nbsp;JSON&nbsp;formatted&nbsp;string.<br>
+-&nbsp;<a href="#-get_menus">get_menus</a>():&nbsp;Retrieves&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;menu&nbsp;items&nbsp;from&nbsp;the&nbsp;PostgreSQL&nbsp;database&nbsp;and&nbsp;returns&nbsp;them&nbsp;as&nbsp;a&nbsp;dictionary.&nbsp;The&nbsp;dictionary&nbsp;has&nbsp;keys&nbsp;'sauce',&nbsp;'cheese',&nbsp;'topping',&nbsp;'drizzle',&nbsp;'drink',&nbsp;'dough',&nbsp;and&nbsp;'seasonal'.&nbsp;Each&nbsp;key's&nbsp;value&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;dictionaries&nbsp;containing&nbsp;information&nbsp;about&nbsp;each&nbsp;item.<br>
+-&nbsp;<a href="#-process_order">process_order</a>(order_json):&nbsp;Processes&nbsp;an&nbsp;order&nbsp;and&nbsp;updates&nbsp;the&nbsp;inventory&nbsp;accordingly.<br>
+&nbsp;<br>
+Example&nbsp;Usage:<br>
+&nbsp;<br>
+get&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;employees<br>
+employees_data&nbsp;=&nbsp;inventory.<a href="#-get_employees">get_employees</a>()<br>
+&nbsp;<br>
+get&nbsp;the&nbsp;current&nbsp;menu<br>
+menu_data&nbsp;=&nbsp;inventory.<a href="#-get_menus">get_menus</a>()<br>
+&nbsp;<br>
+process&nbsp;an&nbsp;order<br>
+order_data&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"OrderID":&nbsp;"1",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"OrderDate":&nbsp;"2020-04-01&nbsp;12:00:00",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"OrderItems":&nbsp;[<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ItemName":&nbsp;"Pepperoni&nbsp;Pizza",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Quantity":&nbsp;"1"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ItemName":&nbsp;"Cheese&nbsp;Pizza",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Quantity":&nbsp;"1"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+}<br>
+inventory.<a href="#-process_order">process_order</a>(order_data)<br>
+&nbsp;<br>
+Note:<br>
+&nbsp;<br>
+The&nbsp;SQL&nbsp;credentials&nbsp;are&nbsp;obtained&nbsp;from&nbsp;the&nbsp;stone&nbsp;module.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+</td><td width="25%" valign=top><a href="psycopg2.sql.html">psycopg2.sql</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-get_employees"><strong>get_employees</strong></a>()</dt><dd><tt>Retrieves&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;employees&nbsp;from&nbsp;the&nbsp;'employee_t'&nbsp;table&nbsp;in&nbsp;the&nbsp;PostgreSQL&nbsp;database.<br>
+&nbsp;<br>
+Returns:<br>
+str:&nbsp;A&nbsp;JSON&nbsp;formatted&nbsp;string&nbsp;containing&nbsp;employee&nbsp;data.&nbsp;The&nbsp;data&nbsp;is&nbsp;formatted&nbsp;as&nbsp;a&nbsp;list&nbsp;of&nbsp;dictionaries&nbsp;with&nbsp;keys&nbsp;'employeeid',&nbsp;'employee&nbsp;name',&nbsp;and&nbsp;'manager'.</tt></dd></dl>
+ <dl><dt><a name="-get_menus"><strong>get_menus</strong></a>()</dt><dd><tt>Retrieves&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;menu&nbsp;items&nbsp;from&nbsp;the&nbsp;PostgreSQL&nbsp;database&nbsp;and&nbsp;returns&nbsp;them&nbsp;as&nbsp;a&nbsp;dictionary.<br>
+&nbsp;<br>
+Returns:<br>
+dict:&nbsp;A&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;menu&nbsp;items&nbsp;grouped&nbsp;by&nbsp;category.&nbsp;The&nbsp;dictionary&nbsp;has&nbsp;keys&nbsp;'sauce',&nbsp;'cheese',&nbsp;'topping',&nbsp;'drizzle',&nbsp;'drink',&nbsp;'dough',&nbsp;and&nbsp;'seasonal'.&nbsp;Each&nbsp;key's&nbsp;value&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;dictionaries&nbsp;containing&nbsp;information&nbsp;about&nbsp;each&nbsp;item.</tt></dd></dl>
+ <dl><dt><a name="-process_order"><strong>process_order</strong></a>(json_data)</dt><dd><tt>Processes&nbsp;a&nbsp;JSON&nbsp;object&nbsp;containing&nbsp;an&nbsp;order,&nbsp;updates&nbsp;the&nbsp;order&nbsp;history&nbsp;and&nbsp;inventory,&nbsp;and&nbsp;computes&nbsp;the&nbsp;total&nbsp;cost&nbsp;of&nbsp;the&nbsp;order.<br>
+&nbsp;<br>
+Parameters:<br>
+json_data&nbsp;(dict):&nbsp;A&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;order&nbsp;information,&nbsp;including&nbsp;employee_id,&nbsp;payment_form,&nbsp;and&nbsp;an&nbsp;order&nbsp;list&nbsp;with&nbsp;strings&nbsp;and&nbsp;dictionaries&nbsp;representing&nbsp;the&nbsp;order&nbsp;items.<br>
+&nbsp;<br>
+Returns:<br>
+None</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>SQL_CREDS</strong> = {'database': 'csce315331_team_41', 'host': 'csce-315-db.engr.tamu.edu', 'password': 'goldfishwithnuts', 'user': 'csce315331_team_41_master'}</td></tr></table>
+</body></html>

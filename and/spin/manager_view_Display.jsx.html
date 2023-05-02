@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: manager_view/Display.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: manager_view/Display.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Module representing the Display component for the Manager view in a web app.
+ * @module Display
+ * @requires React
+ * @requires react-bootstrap/Modal
+ * @requires react-bootstrap/Button
+ * @requires swr
+ * @requires axios
+ * @requires react-bootstrap/Dropdown
+ * @requires react-bootstrap/DropdownButton
+ * @requires react-bootstrap/Form
+ * @requires ../HOST
+*/
+
+import React, { useState } from 'react';
+import './Display.css';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import useSWR from 'swr';
+import axios from 'axios';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Form from "react-bootstrap/Form";
+
+import { HOST } from '..';
+
+/**
+ * Fetches data from a specified URL using axios.
+ * @function fetcher
+ * @param {string} url - The URL to fetch data from.
+ * @returns {Promise} A promise that resolves to the data fetched from the URL.
+*/
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
+
+export default function Display(props) {
+    /**
+     * A functional component that renders the Manager view display.
+     * @function Display
+     * @param {object} props - The props object that contains the current view to render.
+     * @returns {JSX.Element} A React component that renders the specified view.
+    */
+    return (
+        &lt;div className="manager-view-display-frame">
+            {props.view === 'inventory' ? (
+                &lt;Inventory />
+            ) : props.view === 'x-report' ? (
+                &lt;XReport />
+            ) : props.view === 'z-report' ? (
+                &lt;ZReport />
+            ) : props.view === 'prices' ? (
+                &lt;Prices />
+            ) : props.view === 'sales-report' ? (
+                &lt;SalesReport />
+            ) : props.view === 'excess-report' ? (
+                &lt;ExcessReport />
+            ) : props.view === 'restock-report' ? (
+                &lt;RestockReport />
+            ) : props.view === 'what-sells' ? (
+                &lt;WhatSells />
+            ) : (
+                &lt;h1>Welcome Manager, click a button to get started!&lt;/h1>
+            )}
+        &lt;/div>
+    );
+}
+
+function Inventory() {
+    /**
+     * A functional component that renders the Inventory view.
+     * @function Inventory
+     * @returns {JSX.Element} A React component that renders the Inventory view.
+    */
+    const [currItem, setCurrItem] = useState("Select Item");
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
+
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('inventory', fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    const processedData = JSON.parse(data);
+    // console.log(processedData);
+
+    let inventoryItems = [];
+    processedData.map(item => inventoryItems.push(item["Inventory Item"]));
+    inventoryItems.sort();
+
+    const restockAll = () => {
+        /**
+         * A function to restock all items in the inventory.
+         * @function restockAll
+         * @returns {void}
+        */
+        axios.post(HOST + 'inventory', {})
+        setModalText('Restocked All Items!');
+        setShowModal(true);
+    };
+
+    const setQuantity = () => {
+        /**
+         * A function to set the quantity of a selected item in the inventory.
+         * @function setQuantity
+         * @returns {void}
+        */
+        axios.post(HOST + 'inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
+        setModalText('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
+        setShowModal(true);
+    };
+
+    return (
+        &lt;div className='inventory-frame'>
+            &lt;h1>Inventory&lt;/h1>
+            &lt;div className="manager-view-table-row">
+                &lt;DataTable processedData={processedData} />
+            &lt;/div>
+            &lt;div className="buttons-frame">
+                &lt;Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All&lt;/Button>
+                &lt;DropdownButton style={{"margin-left": "20px"}} title={currItem} onSelect={name => setCurrItem(name)}>
+                    &lt;div className="dropdownmenu">
+                        {inventoryItems.map(name => (
+                            &lt;Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            &lt;/Dropdown.Item>
+                        ))}
+                    &lt;/div>
+                &lt;/DropdownButton>
+                &lt;Form.Control className="numforms" id="restockAmount" type="number" placeholder="Quantity" />
+                &lt;Button variant="outline-primary" className="inventory-button" onClick={setQuantity}>Set Quantity&lt;/Button>
+            &lt;/div>
+
+            &lt;Modal show={showModal} onHide={() => setShowModal(false)}>
+                &lt;Modal.Header closeButton>
+                    &lt;Modal.Title>{modalText}&lt;/Modal.Title>
+                &lt;/Modal.Header>
+            &lt;/Modal>
+        &lt;/div>
+    )
+}
+
+function XReport() {
+    /**
+    * Returns the X Report component, which displays the daily sales data
+    * @function XReport
+    * @returns {JSX.Element} - The X Report component
+    */
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('xreport', fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    // checks for empty queries and doesn't display table
+    if (data.salesdata.length === 0) {
+        return (
+            &lt;div>
+                &lt;h1>X Report&lt;/h1>
+                &lt;h2>There are no data for today.&lt;/h2>
+            &lt;/div>
+        )
+    }
+    // console.log(data);
+
+    return (
+        &lt;div>
+            &lt;h1>X Report&lt;/h1>
+                &lt;div className="manager-view-table-row">
+                    &lt;DataTable processedData={data.salesdata} />
+                &lt;/div>
+            &lt;h2>Total: ${data.total}&lt;/h2>
+        &lt;/div>
+    )
+}
+
+
+function ZReport() {
+    /**
+     * Returns the Z Report component, which displays the sales data for the day and allows the user to reset the sales data
+     * @function ZReport
+     * @returns {JSX.Element} - The Z Report component
+     */
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('zreport', fetcher);
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
+
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+
+    const handleReset = async () => {
+        /**
+         * Resets the sales data by sending a post request to the endpoint and displaying a success message.
+         * @function handleReset
+         * @async
+         * @returns {Promise&lt;void>}
+         */
+        // send post request
+        axios.post(HOST + 'zreport', {});
+
+        setModalText('Reseted Z Report!');
+        setShowModal(true);
+    };
+
+    // checks for empty queries and doesn't display table
+    if (data.salesdata.length === 0) {
+        return (
+            &lt;div>
+                &lt;h1>Z Report&lt;/h1>
+                &lt;h2>There are no data for today.&lt;/h2>
+            &lt;/div>
+        )
+    }
+    // console.log(data);
+    // console.log(data.salesdata[0]);
+
+    return (
+        &lt;div>
+            &lt;h1>Z Report&lt;/h1>
+            &lt;div className="manager-view-table-row">
+                &lt;DataTable processedData={data.salesdata}/>
+            &lt;/div>
+            &lt;h2>Total: ${data.total}&lt;/h2>
+            &lt;button className="reset-button" onClick={handleReset}>Reset Sales&lt;/button>
+
+            &lt;Modal show={showModal} onHide={() => setShowModal(false)}>
+                &lt;Modal.Header closeButton>
+                    &lt;Modal.Title>{modalText}&lt;/Modal.Title>
+                &lt;/Modal.Header>
+            &lt;/Modal>
+        &lt;/div>
+    )
+}
+
+function Prices() {
+    /**
+     * Returns the Prices component, which displays the menu items, inventory items, and allows the user to change prices, add menu items and inventory items, and change inventory item images
+     * @function Prices
+     * @returns {JSX.Element} - The Prices component
+     */
+    const [currPrice, setCurrPrice] = useState("0.00");
+    const [currItem, setCurrItem] = useState("Select Item");
+    const [category, setCategory] = useState("Item Type");
+    const [storage, setStorage] = useState("Item Storage");
+    const [currInvItem, setInvItem] = useState("Select Item");
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
+
+    const { data:menuData, error:error1, isLoading:isLoading1 } = useSWR('prices', fetcher);
+
+    const { data:inventoryData, error:error2, isLoading:isLoading2 } = useSWR('inventory', fetcher);
+
+    if (error1) {
+        console.error(error1);
+    }
+
+    if (isLoading1 || error1 || menuData === undefined) {
+        return;
+    }
+
+    if (error2) {
+        console.error(error2);
+    }
+
+    if (isLoading2 || error2 || inventoryData === undefined) {
+        return;
+    }
+
+    const handleNewPrice = async () => {
+        /**
+         * Handles changing the price of a menu item and shows a modal with the new price
+         * @async
+         * @function handleNewPrice
+        */
+        // send post request
+        axios.post(HOST + 'prices', 
+        {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
+        
+        setModalText(currItem + "'s Price has been changed to $" + document.getElementById('newPrice').value);
+        setShowModal(true);
+    };
+
+    const handleNewMenu = async () => {
+        /**
+         * Handles adding a new menu item and shows a modal with the new item
+         * @async
+         * @function handleNewMenu
+         * @returns {Promise&lt;void>}
+        */
+        // send post request
+        axios.post(HOST + 'prices', 
+        {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
+        
+        setModalText('New Menu Item: ' + document.getElementById('newMenuItemName').value + ' added with price: $' + document.getElementById('newMenuItemPrice').value);
+        setShowModal(true);
+    };
+
+    const handleNewInventory = async () => {
+        /**
+         * Handles adding a new inventory item and shows a modal with the new item
+         * @async
+         * @function handleNewInventory
+         * @returns {Promise&lt;void>}
+        */
+        // send post request
+        axios.post(HOST + 'prices', 
+        {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
+         'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
+         'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
+        
+        setModalText('New Inventory Item: ' + document.getElementById('newInventoryItemName').value + ' added.');
+        setShowModal(true);
+    };
+
+    const handleNewImage = async () => {
+        /**
+         * A function that sends a post request to add a new image for a given inventory item, 
+         * updates the modal text to show the current inventory item name with a message indicating that the image has been changed,
+         * and displays the modal.
+         * @async
+         * @function handleNewImage
+         * @returns {Promise&lt;void>}
+*/
+        // send post request
+        axios.post(HOST + 'prices', 
+        {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
+
+        setModalText('Image changed for: ' + currInvItem);
+        setShowModal(true);
+    };
+
+    // console.log(menuData);
+
+    var menuItems = {};
+    menuData.menuitems.map(item => (
+        menuItems[item.menu_item_name] = item.current_price
+    ));
+    const sortedMenu = Object.entries(menuItems)
+    .sort(([key1], [key2]) => key1.localeCompare(key2))
+    .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+    let inventoryItems = [];
+    JSON.parse(inventoryData).map(item => inventoryItems.push(item['Inventory Item']));
+    inventoryItems.sort();
+    // console.log(menuItems);
+    
+    return (
+        &lt;div className="prices-page">
+            &lt;h1>Prices&lt;/h1>
+            &lt;div className="prices-container">
+                &lt;label>Item to Change: &lt;/label>
+                &lt;DropdownButton className="selectBox" title={currItem} id="changePriceName" onSelect={name => {setCurrItem(name); setCurrPrice(menuItems[name])}}>
+                    &lt;div className="dropdownmenu">
+                        {Object.keys(sortedMenu).map(name => (
+                            &lt;Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            &lt;/Dropdown.Item>
+                        ))}
+                    &lt;/div>
+                &lt;/DropdownButton>
+                &lt;label>Curr Price: ${currPrice}&lt;/label>
+                &lt;Form.Control className="numforms" id="newPrice" type="number" placeholder="New Price">&lt;/Form.Control>
+                &lt;Button variant="outline-success" onClick={handleNewPrice}>Submit&lt;/Button>
+            &lt;/div>
+
+            &lt;div className="prices-container">
+                &lt;label>New Menu Item: &lt;/label>
+                &lt;Form.Control className="forms" id="newMenuItemName" placeholder="Item Name">&lt;/Form.Control>
+                &lt;Form.Control className="numforms" id="newMenuItemPrice" type="number" placeholder="Price">&lt;/Form.Control>
+                &lt;Button variant="outline-success" onClick={handleNewMenu}>Submit&lt;/Button>
+            &lt;/div>
+
+            &lt;div className="prices-container">
+                &lt;label>New Inventory Item: &lt;/label>
+                &lt;Form.Control className="forms" id="newInventoryItemName" placeholder="Item Name">&lt;/Form.Control>
+                &lt;DropdownButton className="selectBox" title={category} onSelect={name => setCategory(name)}>
+                    &lt;div className="dropdownmenu">
+                        {menuData.categories.sort().map(name => (
+                            &lt;Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            &lt;/Dropdown.Item>
+                        ))}
+                    &lt;/div>
+                &lt;/DropdownButton>
+                &lt;DropdownButton className="selectBox" title={storage} onSelect={name => setStorage(name)}>
+                    &lt;div className="dropdownmenu">
+                        {menuData.storage.sort().map(name => (
+                            &lt;Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            &lt;/Dropdown.Item>
+                        ))}
+                    &lt;/div>
+                &lt;/DropdownButton>
+                &lt;Form.Control className="numforms" id="newInventoryItemAmount" type="number" placeholder="Amount">&lt;/Form.Control>
+                &lt;Form.Control className="forms" id="newInventoryItemUnits" placeholder="Units">&lt;/Form.Control>
+                &lt;Button variant="outline-success" onClick={handleNewInventory}>Submit&lt;/Button>
+            &lt;/div>
+            
+            &lt;div className="prices-container">
+                &lt;label>Upload Image: &lt;/label>
+                &lt;DropdownButton className="selectBox" title={currInvItem} id="changeImage" onSelect={name => setInvItem(name)}>
+                    &lt;div className="dropdownmenu">
+                        {inventoryItems.map(name => (
+                            &lt;Dropdown.Item key={name} eventKey={name}>
+                                {name}
+                            &lt;/Dropdown.Item>
+                        ))}
+                    &lt;/div>
+                &lt;/DropdownButton>
+                &lt;Form.Control className="linkforms" id="newInventoryItemLink" placeholder="Link">&lt;/Form.Control>
+                &lt;Button variant="outline-success" onClick={handleNewImage}>Submit&lt;/Button>
+            &lt;/div>
+            
+            &lt;Modal show={showModal} onHide={() => setShowModal(false)}>
+                &lt;Modal.Header closeButton>
+                    &lt;Modal.Title>{modalText}&lt;/Modal.Title>
+                &lt;/Modal.Header>
+            &lt;/Modal>
+        &lt;/div>
+    )
+}
+
+// setting up the table for SalesReport
+function SalesReportTable(props) {
+    /**
+     * Displays a table of sales report data.
+     * @param {Object} props - The props passed down to the component.
+     * @param {string} props.fromDate - The start date of the sales report.
+     * @param {string} props.toDate - The end date of the sales report.
+     * @returns {JSX.Element} - The SalesReportTable component JSX.Element.
+    */
+    const { data, error, isLoading } = useSWR(`salesreport?date1=${props.fromDate}&amp;date2=${props.toDate}`, fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    if (data.salesreport.length === 0) {
+        return (
+            &lt;div>
+                &lt;h2>No data for this time.&lt;/h2>
+            &lt;/div>
+        )
+    }
+
+    // console.log(data);
+    return (
+        &lt;div>
+            &lt;div className="manager-view-table-row">
+                &lt;DataTable processedData={data.salesreport} />
+            &lt;/div>
+            &lt;h2>total: ${data.totalsales}&lt;/h2>
+        &lt;/div>
+
+    )
+}
+
+function SalesReport() {
+    /**
+     * Displays a sales report table with the selected date range.
+     * @returns {JSX.Element} - The SalesReport component JSX.Element.
+    */
+    // use states so that variables get updated thoughout
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+
+    // handles the button click
+    const handleClick = () => {
+        /**
+         * Handles the button click and sets the dates for the sales report.
+        */
+        setDates({
+            "fromDate": document.querySelector('#fromDate').value,
+            "toDate": document.querySelector('#toDate').value
+        });
+
+        setDisplayTable(true);
+    }
+
+    return (
+        &lt;div>
+            &lt;h1>Sales Report&lt;/h1>
+            &lt;div class="sales-container">
+                from: &lt;Form.Control className="forms" id="fromDate" type="date">&lt;/Form.Control>
+                to: &lt;Form.Control className="forms" id="toDate" type="date">&lt;/Form.Control>
+                &lt;Button variant="outline-success" onClick={handleClick}>Submit&lt;/Button>
+            &lt;/div>
+            {displayTable ? &lt;SalesReportTable fromDate={encodeURIComponent(dates.fromDate)}
+                toDate={encodeURIComponent(dates.toDate)} /> : null}
+        &lt;/div>
+
+
+    )
+}
+
+function ExcessReportTable(props) {
+    /**
+     * Displays a table of excess report data.
+     * @param {Object} props - The props passed down to the component.
+     * @param {string} props.date - The date of the excess report.
+     * @returns {JSX.Element} - The ExcessReportTable component JSX.Element.
+    */
+    const { data, error, isLoading } = useSWR(`excessreport?date=${props.date}`, fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined || data.length === 0) {
+        return;
+    }
+
+    const processedData = JSON.parse(data);
+    // console.log(processedData.excessdata);
+
+    if (processedData.excessdata === undefined || processedData.excessdata.length === 0) {
+        return (
+            &lt;div>
+                &lt;h2>No data for this time.&lt;/h2>
+            &lt;/div>
+        )
+    }
+    
+    return (
+        &lt;div className='manager-view-table-row'>
+            &lt;DataTable processedData={processedData.excessdata}/>
+        &lt;/div>
+
+    )
+}
+
+function ExcessReport() {
+    /**
+     * Function that renders the Excess Report component.
+     * @function ExcessReport
+     * @returns {JSX.Element} JSX.Element representing the Excess Report component.
+    */
+    // use states so that variables get updated thoughout
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+
+    // handles the button click
+    const handleClick = () => {
+        /**
+         * Handles the button click and sets the dates for the excess report.
+         * @function handleClick
+         * @returns {void}
+        */
+        setDates({
+            "date": document.querySelector('#date').value,
+        });
+
+        setDisplayTable(true);
+    }
+
+    return (
+        &lt;div>
+            &lt;h1>Excess Report&lt;/h1>
+            &lt;div class="sales-container">
+                from: &lt;Form.Control className="forms" id="date" type="date">&lt;/Form.Control>
+                &lt;Button variant="outline-success" onClick={handleClick}>Submit&lt;/Button>
+            &lt;/div>
+            {displayTable ? &lt;ExcessReportTable date={encodeURIComponent(dates.date)} /> : null}
+        &lt;/div>
+
+
+    )
+}
+
+function RestockReport() {
+    /**
+     * Function that renders the Restock Report component.
+     * @returns {JSX.Element} JSX.Element representing the Restock Report component.
+    */
+    // fetch information from endpoint
+    const { data, error, isLoading } = useSWR('restockreport', fetcher);
+    if (error) {
+        console.error(error);
+    }
+
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    const processedData = JSON.parse(data)
+    // console.log(processedData);
+
+    // checks for empty queries and doesn't display table
+    if (processedData.length === 0) {
+        return (
+            &lt;div>
+                &lt;h1>Restock Report&lt;/h1>
+                &lt;h2>There are no data for today.&lt;/h2>
+            &lt;/div>
+        )
+    }
+    
+
+    return (
+        &lt;div>
+            &lt;h1>Restock Report&lt;/h1>
+            &lt;div className="manager-view-table-row">
+                &lt;DataTable processedData={processedData}/>  
+            &lt;/div>
+        &lt;/div>
+    )
+}
+
+function WhatSellsTable(props) {
+    /**
+     * Function that renders the What Sells Table component.
+     * @param {Object} props - The props passed to the component.
+     * @param {string} props.fromDate - The start date of the report.
+     * @param {string} props.toDate - The end date of the report.
+     * @returns {JSX.Element} JSX.Element representing the What Sells Table component.
+    */
+    const { data, error, isLoading } = useSWR(`whatsells?date1=${props.fromDate}&amp;date2=${props.toDate}`, fetcher);
+    if (error) {
+        console.error(error);
+    }
+    
+    if (isLoading || error || data === undefined) {
+        return;
+    }
+
+    const processedData = JSON.parse(data);
+
+    // checks for empty query
+    if (processedData.length === 0) {
+        return (
+            &lt;div>
+                &lt;h2>No data for this time.&lt;/h2>
+            &lt;/div>
+        )
+    }
+
+    // console.log(JSON.parse(data));
+
+    return (
+        &lt;div className="manager-view-table-row">
+            &lt;div className="manager-view-table-row">
+                &lt;DataTable processedData={processedData} />
+            &lt;/div>
+        &lt;/div>
+    )
+}
+
+function WhatSells() {
+    /**
+     * Function that renders the What Sells component.
+     * @returns {JSX.Element} JSX.Element representing the What Sells component.
+    */
+    // use states so that variables get updated thoughout
+    const [displayTable, setDisplayTable] = useState(false);
+    const [dates, setDates] = useState({});
+
+    // handles the button click
+    const handleClick = () => {
+        /**
+         * Handles the button click event.
+        */
+        setDates({
+            "fromDate": document.querySelector('#fromDate').value,
+            "toDate": document.querySelector('#toDate').value
+        });
+
+        setDisplayTable(true);
+    }
+
+    // console.log(dates.fromDate);
+    // console.log(dates.toDate);
+
+    return (
+        &lt;div>
+            &lt;h1>What Sells&lt;/h1>
+            &lt;div class="sales-container">
+                from: &lt;Form.Control className="forms" id="fromDate" type="date">&lt;/Form.Control>
+                to: &lt;Form.Control className="forms" id="toDate" type="date">&lt;/Form.Control>
+                &lt;Button variant="outline-success" onClick={handleClick}>Submit&lt;/Button>
+            &lt;/div>
+            {displayTable ? &lt;WhatSellsTable fromDate={encodeURIComponent(dates.fromDate)}
+                toDate={encodeURIComponent(dates.toDate)} /> : null}
+        &lt;/div>
+
+
+    )
+}
+
+function DataTable(props) {
+    /**
+     * DataTable component that renders a table with the provided data.
+     * @param {Object} props - The props object for DataTable component.
+     * @param {Array&lt;Object>} props.processedData - The processed data to be displayed in the table.
+     * @returns {JSX.Element} The DataTable component.
+    */
+    return (
+        &lt;div className='table-container'>
+            &lt;table-md className="striped bordered hover">
+                &lt;thead>
+                    &lt;tr>
+                        {Object.keys(props.processedData[0]).map((key) => (
+                            &lt;th key={key}>{key}&lt;/th>
+                        ))}
+                    &lt;/tr>
+                &lt;/thead>
+                &lt;tbody>
+                    {props.processedData.sort().map((item, index) => (
+                        &lt;tr key={index}>
+                            {Object.keys(item).map((key) => (
+                                &lt;td key={key}>{item[key]}&lt;/td>
+                            ))}
+                        &lt;/tr>
+                    ))}
+                &lt;/tbody>
+            &lt;/table-md>
+        &lt;/div>
+    )
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-Button.html">Button</a></li><li><a href="module-Cart.html">Cart</a></li><li><a href="module-Display.html">Display</a></li><li><a href="module-LoginModal.html">LoginModal</a></li><li><a href="module-ManagerView.html">ManagerView</a></li><li><a href="module-MenuGallery.html">MenuGallery</a></li><li><a href="module-MenuView.html">MenuView</a></li><li><a href="module-Nav.html">Nav</a></li><li><a href="module-PurchaseView.html">PurchaseView</a></li><li><a href="module-ServerView.html">ServerView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 13:21:44 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

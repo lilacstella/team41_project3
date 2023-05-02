@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module what_sells</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>what_sells</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/anatj/OneDrive%20-%20Texas%20A%26M%20University/Documents/Junior%20Yr/Spring%20Semester/csce%20315/project3/team41_proj3/stone/what_sells.py">/mnt/c/Users/anatj/OneDrive - Texas A&M University/Documents/Junior Yr/Spring Semester/csce 315/project3/team41_proj3/stone/what_sells.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;provides&nbsp;functions&nbsp;to&nbsp;retrieve&nbsp;data&nbsp;from&nbsp;a&nbsp;PostgreSQL&nbsp;database&nbsp;and&nbsp;return&nbsp;it&nbsp;as&nbsp;a&nbsp;JSON&nbsp;string.&nbsp;The&nbsp;module&nbsp;depends&nbsp;on&nbsp;the&nbsp;psycopg2&nbsp;and&nbsp;json&nbsp;modules,&nbsp;as&nbsp;well&nbsp;as&nbsp;the&nbsp;SQL_CREDS&nbsp;credentials&nbsp;and&nbsp;WEATHER_API_KEY&nbsp;key&nbsp;provided&nbsp;in&nbsp;the&nbsp;stone&nbsp;module.<br>
+&nbsp;<br>
+Functions:<br>
+-&nbsp;<a href="#-get_what_sells">get_what_sells</a>(date1,&nbsp;date2)<br>
+-&nbsp;get_weather()<br>
+&nbsp;<br>
+Example&nbsp;usage:<br>
+&nbsp;<br>
+mydatabase.<a href="#-get_what_sells">get_what_sells</a>("2020-01-01",&nbsp;"2020-01-31")<br>
+[{"item1":&nbsp;"item1",&nbsp;"item2":&nbsp;"item2",&nbsp;"order_count":&nbsp;1},&nbsp;{"item1":&nbsp;"item1",&nbsp;"item2":&nbsp;"item3",&nbsp;"order_count":&nbsp;1},&nbsp;{"item1":&nbsp;"item2",&nbsp;"item2":&nbsp;"item3",&nbsp;"order_count":&nbsp;1}]</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-get_what_sells"><strong>get_what_sells</strong></a>(date1, date2)</dt><dd><tt>Returns&nbsp;pairs&nbsp;of&nbsp;menu&nbsp;items&nbsp;that&nbsp;have&nbsp;been&nbsp;ordered&nbsp;together&nbsp;within&nbsp;the&nbsp;specified&nbsp;date&nbsp;range.<br>
+&nbsp;<br>
+Args:<br>
+-&nbsp;date1&nbsp;(str):&nbsp;Start&nbsp;date&nbsp;of&nbsp;the&nbsp;date&nbsp;range&nbsp;in&nbsp;"YYYY-MM-DD"&nbsp;format.<br>
+-&nbsp;date2&nbsp;(str):&nbsp;End&nbsp;date&nbsp;of&nbsp;the&nbsp;date&nbsp;range&nbsp;in&nbsp;"YYYY-MM-DD"&nbsp;format.<br>
+&nbsp;<br>
+Returns:<br>
+(str):&nbsp;JSON-encoded&nbsp;list&nbsp;of&nbsp;dictionaries&nbsp;containing&nbsp;item&nbsp;pairs&nbsp;and&nbsp;the&nbsp;count&nbsp;of&nbsp;orders&nbsp;in&nbsp;which&nbsp;they&nbsp;were&nbsp;ordered&nbsp;together.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>SQL_CREDS</strong> = {'database': 'csce315331_team_41', 'host': 'csce-315-db.engr.tamu.edu', 'password': 'goldfishwithnuts', 'user': 'csce315331_team_41_master'}</td></tr></table>
+</body></html>

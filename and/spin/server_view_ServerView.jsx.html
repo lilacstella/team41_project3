@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: server_view/ServerView.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: server_view/ServerView.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * ServerView module is responsible for rendering the server view page that allows
+ * the user to view and add items to their order, and complete the checkout process.
+ * @module ServerView
+ * @requires react
+ * @requires ./Gallery
+ * @requires axios
+ * @requires ./Cart
+ * @requires .. {HOST}
+ * 
+*/
+import React, { useState } from 'react';
+import MenuGallery, {OrderHistory} from './Gallery';
+import axios from 'axios';
+import Cart from './Cart';
+import './ServerView.css';
+import { HOST } from '..';
+
+export default function ServerView(props) {
+    /**
+     * The ServerView function is the main component that renders the server view page.
+     * @function ServerView
+     * @param {Object} props - The props object contains the setMenuView function.
+     * @returns {JSX.Element} - Returns the JSX elements for the server view page.
+    */
+    const [currView, setCurrView] = useState('sauce');
+    const [pizza, setPizza] = useState({'topping': []});
+    const [order, setOrder] = useState([]);
+
+    const addToOrder = (item) => {
+        /**
+         * The addToOrder function is responsible for adding an item to the order list.
+         * @function addToOrder
+         * @param {Object} item - The item to be added to the order list.
+         * @returns {void}
+        */
+        // console.log(item + " " + currView);
+        if (['sauce', 'cheese', 'dough', 'topping', 'drizzle'].includes(currView)) {
+            if (currView === 'topping') {
+                if (pizza['topping'].length >= 4)
+                    return;
+                else
+                    setPizza({...pizza, 'topping' : [...pizza['topping'], item]});
+            }
+            else
+                setPizza({ ...pizza, [currView]: item });
+        } else {
+            setOrder([...order, item]);
+        }
+        // console.log(order);
+        // console.log(pizza);
+    }
+
+    const addPizzaToOrder = () => {
+        /**
+         * The addPizzaToOrder function is responsible for adding a pizza to the order list.
+         * @function addPizzaToOrder
+         * @returns {void}
+        */
+        // if a pizza have no sauce and no cheese, not allowed
+        if ((!('cheese' in pizza) || pizza['cheese'] === undefined) &amp;&amp; (!('sauce' in pizza) &amp;&amp; pizza['sauce'] === undefined)){
+            return;
+        }
+
+        var pizzaArr = []
+        for (var i = 0; i &lt; document.getElementById('pizzaBuilderNum').value; i++){
+            pizzaArr.push(pizza);
+        }
+        // prevent adding pizza here
+        setOrder([...order, ...pizzaArr]);
+        setPizza({'topping': []});
+    }
+
+    const checkoutOrder = (payment_form) => {
+        /**
+         * The checkoutOrder function is responsible for submitting the order for checkout.
+         * @function checkoutOrder
+         * @param {string} payment_form - The payment form to be used for the order.
+         * @returns {void}
+        */
+        // formatting order
+        // console.log(order);
+        /* 
+        {
+            "order": ["Gatorade", {"sauce": "Zesty Red", "drizzle": "Ranch"}],
+            "employee_id": 1,
+            "payment_form": "cash",
+        }
+
+        */
+
+        // order validation
+        if (order === undefined || (Array.isArray(order) &amp;&amp; order.length === 0)){
+            return;
+        }
+
+        axios.post(HOST + 'menu', {"payment_form": payment_form, "employee_id": localStorage.getItem('employee_id'), "order": order});
+        setOrder([]);
+    }
+
+    const clearOrder = () => {
+        /**
+         * The clearOrder function is responsible for clearing the order list and the pizza builder.
+         * @function clearOrder
+         * @returns {void}
+        */
+        setOrder([]);
+        setPizza({'topping': []});
+    }
+
+    return (
+        &lt;div className="server-frame">
+            &lt;Navigation handleClick={setCurrView} setMenuView={props.setMenuView}/>
+            {currView === 'order history' ? &lt;OrderHistory /> : &lt;MenuGallery view={currView} order={order} addToOrder={addToOrder} pizza={pizza}/>}
+            &lt;Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder} clear={clearOrder} setOrder={setOrder} setPizza={setPizza}/>
+        &lt;/div>
+    )
+}
+
+// can be hidden in server view
+function Navigation(props) {
+    /**
+     * Renders a navigation bar for the Server View page.
+     * @param {Object} props - The props object containing the handleClick and setMenuView functions.
+     * @returns {JSX.Element} The navigation bar component.
+    */
+    // handling the click for each tab
+    return (
+        &lt;div className="server-view-tab-frame">
+            &lt;Tab name="Sauce" switchTab={props.handleClick} />
+            &lt;Tab name="Cheese" switchTab={props.handleClick} />
+            &lt;Tab name="Topping" switchTab={props.handleClick} />
+            &lt;Tab name="Drizzle" switchTab={props.handleClick} />
+            &lt;Tab name="Drink" switchTab={props.handleClick} />
+            &lt;Tab name="Dough" switchTab={props.handleClick} />
+            &lt;Tab name="Seasonal" switchTab={props.handleClick} />
+            &lt;Tab name="Order History" switchTab={props.handleClick} />
+            &lt;Tab name="Menu View" switchTab={props.setMenuView} />
+        &lt;/div>
+    );
+}
+
+function Tab(props) {
+    /**
+     * Renders a single tab in the navigation bar.
+     * @param {Object} props - The props object containing the name, color, and switchTab function.
+     * @returns {JSX.Element} The tab component.
+    */
+    return (
+        &lt;div className="server-view-tab" style={{ backgroundColor: props.color }} onClick={() => props.switchTab(props.name.toLowerCase())}>
+            &lt;h2>{props.name}&lt;/h2>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-Button.html">Button</a></li><li><a href="module-Cart.html">Cart</a></li><li><a href="module-Display.html">Display</a></li><li><a href="module-LoginModal.html">LoginModal</a></li><li><a href="module-ManagerView.html">ManagerView</a></li><li><a href="module-MenuGallery.html">MenuGallery</a></li><li><a href="module-MenuView.html">MenuView</a></li><li><a href="module-Nav.html">Nav</a></li><li><a href="module-PurchaseView.html">PurchaseView</a></li><li><a href="module-ServerView.html">ServerView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 13:21:44 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
