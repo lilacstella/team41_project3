@@ -1,11 +1,3 @@
-import json
-from datetime import datetime
-
-import psycopg2
-from psycopg2 import sql
-
-from stone import SQL_CREDS
-
 """
 This module contains functions related to retrieving employee and menu data from a PostgreSQL database.
 
@@ -48,6 +40,14 @@ Note:
 
 The SQL credentials are obtained from the stone module.
 """
+import json
+from datetime import datetime
+
+import psycopg2
+from psycopg2 import sql
+
+from stone import SQL_CREDS
+
 def get_employees():
     """
     Retrieves a list of all employees from the 'employee_t' table in the PostgreSQL database.

@@ -1,7 +1,3 @@
-import psycopg2
-
-from stone import SQL_CREDS
-
 """
 This module provides functions to interact with a PostgreSQL database containing menu and inventory information for a restaurant.
 
@@ -41,6 +37,10 @@ img_info = {"item_name": "Pepperoni Pizza", "img_url": "https://example.com/pepp
 added_or_updated = restaurant_db.add_img(json.dumps(img_info))
 print(added_or_updated)
 """
+
+import psycopg2
+
+from stone import SQL_CREDS
 
 def get_prices():
     """

@@ -1,27 +1,17 @@
+"""
+This module provides a function for generating a Z report from a PostgreSQL database.
+
+Dependencies:
+- datetime
+- psycopg2
+- SQL_CREDS variable imported from the stone module
+
+"""
 from datetime import datetime
 
 import psycopg2
 
 from stone import SQL_CREDS
-
-"""
-This module provides a function for generating a Z report from a PostgreSQL database.
-
-Dependencies:
-- datetime module
-- psycopg2 module
-- SQL_CREDS variable imported from the stone module
-
-Example usage:
-
-mydatabase.get_zreport()
-{'salesdata': [{'itemname': 'item1', 'numbersold': 1, 'sales': '100.00'}, {'itemname': 'item2', 'numbersold': 2, 'sales': '200.00'}], 'paymentdata': [{'paymenttype': 'cash', 'sales': '300.00'}], 'total': '300.00'}
-
-mydatabase.post_eodinv()
-True
-
-
-"""
 
 def get_zreport():
     """
