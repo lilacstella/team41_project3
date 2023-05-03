@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module sales_report</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>sales_report</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/anatj/OneDrive%20-%20Texas%20A%26M%20University/Documents/Junior%20Yr/Spring%20Semester/csce%20315/project3/team41_proj3/stone/sales_report.py">/mnt/c/Users/anatj/OneDrive - Texas A&M University/Documents/Junior Yr/Spring Semester/csce 315/project3/team41_proj3/stone/sales_report.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;provides&nbsp;functions&nbsp;to&nbsp;retrieve&nbsp;sales&nbsp;and&nbsp;inventory&nbsp;data&nbsp;from&nbsp;a&nbsp;PostgreSQL&nbsp;database.<br>
+&nbsp;<br>
+Dependencies:<br>
+-&nbsp;psycopg2<br>
+-&nbsp;stone&nbsp;(SQL_CREDS&nbsp;constant)<br>
+&nbsp;<br>
+Functions:<br>
+-&nbsp;<a href="#-get_sales">get_sales</a>(date1,&nbsp;date2)<br>
+&nbsp;<br>
+Example&nbsp;Usage:<br>
+&nbsp;<br>
+mydatabase.<a href="#-get_sales">get_sales</a>("2020-01-01",&nbsp;"2020-01-31")<br>
+{'salesreport':&nbsp;[{'itemname':&nbsp;'item1',&nbsp;'itemsales':&nbsp;'100.00'},&nbsp;{'itemname':&nbsp;'item2',&nbsp;'itemsales':&nbsp;'200.00'}],&nbsp;'totalsales':&nbsp;'300.00'}</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-get_sales"><strong>get_sales</strong></a>(date1, date2)</dt><dd><tt>Retrieves&nbsp;sales&nbsp;report&nbsp;data&nbsp;from&nbsp;the&nbsp;database&nbsp;for&nbsp;a&nbsp;specified&nbsp;date&nbsp;range.<br>
+&nbsp;<br>
+Args:<br>
+-&nbsp;date1&nbsp;(str):&nbsp;A&nbsp;string&nbsp;representing&nbsp;the&nbsp;start&nbsp;date&nbsp;for&nbsp;the&nbsp;sales&nbsp;report&nbsp;(formatted&nbsp;as&nbsp;"YYYY-MM-DD").<br>
+-&nbsp;date2&nbsp;(str):&nbsp;A&nbsp;string&nbsp;representing&nbsp;the&nbsp;end&nbsp;date&nbsp;for&nbsp;the&nbsp;sales&nbsp;report&nbsp;(formatted&nbsp;as&nbsp;"YYYY-MM-DD").<br>
+&nbsp;<br>
+Returns:<br>
+A&nbsp;dictionary&nbsp;with&nbsp;two&nbsp;keys:<br>
+-&nbsp;"salesreport":&nbsp;A&nbsp;list&nbsp;of&nbsp;dictionaries,&nbsp;where&nbsp;each&nbsp;dictionary&nbsp;contains&nbsp;an&nbsp;item&nbsp;name&nbsp;and&nbsp;its&nbsp;total&nbsp;sales&nbsp;within&nbsp;the&nbsp;date&nbsp;range.<br>
+-&nbsp;"totalsales":&nbsp;A&nbsp;string&nbsp;representing&nbsp;the&nbsp;total&nbsp;sales&nbsp;for&nbsp;all&nbsp;items&nbsp;within&nbsp;the&nbsp;date&nbsp;range.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>SQL_CREDS</strong> = {'database': 'csce315331_team_41', 'host': 'csce-315-db.engr.tamu.edu', 'password': 'goldfishwithnuts', 'user': 'csce315331_team_41_master'}</td></tr></table>
+</body></html>

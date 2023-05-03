@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module __main__</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>__main__</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/anatj/OneDrive%20-%20Texas%20A%26M%20University/Documents/Junior%20Yr/Spring%20Semester/csce%20315/project3/team41_proj3/stone/__main__.py">/mnt/c/Users/anatj/OneDrive - Texas A&M University/Documents/Junior Yr/Spring Semester/csce 315/project3/team41_proj3/stone/__main__.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;is&nbsp;the&nbsp;main&nbsp;file&nbsp;for&nbsp;the&nbsp;Stone&nbsp;Point&nbsp;of&nbsp;Sale&nbsp;system.<br>
+&nbsp;<br>
+It&nbsp;contains&nbsp;routes&nbsp;for&nbsp;handling&nbsp;menu,&nbsp;inventory,&nbsp;weather,&nbsp;sales,&nbsp;restock,&nbsp;and&nbsp;price-related&nbsp;requests.<br>
+&nbsp;<br>
+Dependencies:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;flask<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;flask_cors<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;stone<br>
+&nbsp;<br>
+Routes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/menu&nbsp;(GET/POST):&nbsp;Returns&nbsp;the&nbsp;menu&nbsp;or&nbsp;processes&nbsp;an&nbsp;order.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/inventory&nbsp;(GET/POST):&nbsp;Returns&nbsp;the&nbsp;current&nbsp;inventory&nbsp;or&nbsp;restocks&nbsp;items.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/weather&nbsp;(GET):&nbsp;Returns&nbsp;the&nbsp;weather&nbsp;forecast.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/whatsells&nbsp;(GET):&nbsp;Returns&nbsp;a&nbsp;report&nbsp;on&nbsp;what&nbsp;has&nbsp;been&nbsp;selling&nbsp;between&nbsp;two&nbsp;dates.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/xreport&nbsp;(GET):&nbsp;Returns&nbsp;the&nbsp;X&nbsp;report&nbsp;for&nbsp;the&nbsp;current&nbsp;day.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/zreport&nbsp;(GET/POST):&nbsp;Returns&nbsp;the&nbsp;Z&nbsp;report&nbsp;for&nbsp;the&nbsp;current&nbsp;day&nbsp;or&nbsp;posts&nbsp;the&nbsp;end&nbsp;of&nbsp;day&nbsp;inventory.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/salesreport&nbsp;(GET):&nbsp;Returns&nbsp;a&nbsp;report&nbsp;on&nbsp;sales&nbsp;between&nbsp;two&nbsp;dates.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/restockreport&nbsp;(GET):&nbsp;Returns&nbsp;a&nbsp;report&nbsp;on&nbsp;low&nbsp;inventory.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/excessreport&nbsp;(GET):&nbsp;Returns&nbsp;a&nbsp;report&nbsp;on&nbsp;excess&nbsp;inventory&nbsp;for&nbsp;a&nbsp;specific&nbsp;date.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;/prices&nbsp;(GET/POST):&nbsp;Returns&nbsp;the&nbsp;current&nbsp;prices&nbsp;or&nbsp;adds/changes&nbsp;items&nbsp;in&nbsp;the&nbsp;menu&nbsp;or&nbsp;inventory.<br>
+&nbsp;<br>
+Example&nbsp;Usage:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;python&nbsp;__main__.py<br>
+&nbsp;<br>
+Note:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Debug&nbsp;mode&nbsp;is&nbsp;enabled&nbsp;for&nbsp;development&nbsp;purposes.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-auth"><strong>auth</strong></a>()</dt></dl>
+ <dl><dt><a name="-excessreport"><strong>excessreport</strong></a>()</dt><dd><tt>Route&nbsp;to&nbsp;get&nbsp;the&nbsp;excess&nbsp;report&nbsp;data.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;excess&nbsp;report&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-inventory"><strong>inventory</strong></a>()</dt><dd><tt>Returns&nbsp;the&nbsp;current&nbsp;inventory&nbsp;or&nbsp;restocks&nbsp;items.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;JSON:&nbsp;The&nbsp;current&nbsp;inventory&nbsp;if&nbsp;the&nbsp;request&nbsp;method&nbsp;is&nbsp;GET,&nbsp;or&nbsp;a&nbsp;success&nbsp;message&nbsp;if&nbsp;the&nbsp;request&nbsp;method&nbsp;is&nbsp;POST.</tt></dd></dl>
+ <dl><dt><a name="-menu"><strong>menu</strong></a>()</dt><dd><tt>Returns&nbsp;the&nbsp;menu&nbsp;or&nbsp;processes&nbsp;an&nbsp;order.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;JSON:&nbsp;The&nbsp;menu&nbsp;if&nbsp;the&nbsp;request&nbsp;method&nbsp;is&nbsp;GET,&nbsp;or&nbsp;a&nbsp;success&nbsp;message&nbsp;if&nbsp;the&nbsp;request&nbsp;method&nbsp;is&nbsp;POST.</tt></dd></dl>
+ <dl><dt><a name="-orderhistory"><strong>orderhistory</strong></a>()</dt></dl>
+ <dl><dt><a name="-prices"><strong>prices</strong></a>()</dt><dd><tt>Route&nbsp;to&nbsp;get&nbsp;or&nbsp;post&nbsp;the&nbsp;prices&nbsp;data.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;prices&nbsp;data&nbsp;if&nbsp;the&nbsp;method&nbsp;is&nbsp;GET.<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;success&nbsp;message&nbsp;if&nbsp;the&nbsp;method&nbsp;is&nbsp;POST.</tt></dd></dl>
+ <dl><dt><a name="-restockreport"><strong>restockreport</strong></a>()</dt><dd><tt>Route&nbsp;to&nbsp;get&nbsp;the&nbsp;restock&nbsp;report&nbsp;data.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;low&nbsp;inventory&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-salesreport"><strong>salesreport</strong></a>()</dt><dd><tt>Route&nbsp;to&nbsp;get&nbsp;the&nbsp;sales&nbsp;report&nbsp;data.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;sales&nbsp;report&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-weather"><strong>weather</strong></a>()</dt><dd><tt>Endpoint&nbsp;to&nbsp;get&nbsp;the&nbsp;current&nbsp;weather.<br>
+&nbsp;<br>
+GET&nbsp;method:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;current&nbsp;weather&nbsp;as&nbsp;a&nbsp;JSON&nbsp;object.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;JSON&nbsp;object&nbsp;with&nbsp;the&nbsp;requested&nbsp;information.</tt></dd></dl>
+ <dl><dt><a name="-whatsells"><strong>whatsells</strong></a>()</dt><dd><tt>Endpoint&nbsp;to&nbsp;get&nbsp;what&nbsp;sells&nbsp;between&nbsp;two&nbsp;dates.<br>
+&nbsp;<br>
+GET&nbsp;method:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Expects&nbsp;two&nbsp;query&nbsp;parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date1:&nbsp;The&nbsp;start&nbsp;date&nbsp;in&nbsp;YYYY-MM-DD&nbsp;format.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date2:&nbsp;The&nbsp;end&nbsp;date&nbsp;in&nbsp;YYYY-MM-DD&nbsp;format.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;what&nbsp;sold&nbsp;between&nbsp;those&nbsp;two&nbsp;dates&nbsp;as&nbsp;a&nbsp;JSON&nbsp;object.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;JSON&nbsp;object&nbsp;with&nbsp;the&nbsp;requested&nbsp;information.</tt></dd></dl>
+ <dl><dt><a name="-xreport"><strong>xreport</strong></a>()</dt><dd><tt>Route&nbsp;to&nbsp;get&nbsp;the&nbsp;x&nbsp;report&nbsp;data.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;x&nbsp;report&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-zreport"><strong>zreport</strong></a>()</dt><dd><tt>Route&nbsp;to&nbsp;get&nbsp;the&nbsp;z&nbsp;report&nbsp;data&nbsp;or&nbsp;post&nbsp;end&nbsp;of&nbsp;day&nbsp;inventory.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;z&nbsp;report&nbsp;data&nbsp;if&nbsp;the&nbsp;method&nbsp;is&nbsp;GET.<br>
+-&nbsp;JSON&nbsp;data&nbsp;with&nbsp;success&nbsp;message&nbsp;if&nbsp;the&nbsp;method&nbsp;is&nbsp;POST.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>HOST_IP</strong> = 'localhost'<br>
+<strong>HOST_PORT</strong> = 5000<br>
+<strong>TOKEN_URI</strong> = 'https://oauth2.googleapis.com/token'<br>
+<strong>app</strong> = &lt;Flask '__main__'&gt;<br>
+<strong>cors</strong> = &lt;flask_cors.extension.CORS object&gt;<br>
+<strong>request</strong> = &lt;LocalProxy unbound&gt;</td></tr></table>
+</body></html>

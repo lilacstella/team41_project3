@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: purchase_view/PurchaseView.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: purchase_view/PurchaseView.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * Module representing the purchase view.
+ * @module PurchaseView
+ * @requires react
+ * @requires react-bootstrap
+ * @requires ./Gallery
+ * @requires axios
+ * @requires ./Cart
+ * @requires ../
+ * @requires swr
+*/
+
+import React, { useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import MenuGallery from './Gallery';
+import axios from 'axios';
+import Cart from './Cart';
+import './PurchaseView.css';
+import { HOST } from '..';
+import useSWR from 'swr';
+
+/**
+ * Fetches data from an API endpoint using axios.
+ * @function fetcher
+ * @param {string} url - The API endpoint to fetch data from.
+ * @returns {object} The data fetched from the API endpoint.
+*/
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
+
+
+export default function PurchaseView(props) {
+    /**
+     * A view for purchasing pizzas.
+     * @function PurchaseView
+     * @param {object} props - The props passed to the component.
+     * @returns {JSX.Element} A JSX component that displays the purchase view.
+    */
+    const [currView, setCurrView] = useState('sauce');
+    const [pizza, setPizza] = useState({ 'topping': [] });
+    const [order, setOrder] = useState([]);
+
+    const [showModal, setShowModal] = useState(false);
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [modalText, setModalText] = useState('test');
+
+    const addToOrder = (item) => {
+        /**
+         * Adds an item to the order.
+         * @function addToOrder
+         * @param {string|object} item - The item to add to the order.
+        */
+        // console.log(item + " " + currView);
+        if (['sauce', 'cheese', 'dough', 'topping', 'drizzle'].includes(currView)) {
+            if (currView === 'topping') {
+                if (pizza['topping'].length >= 4)
+                    return;
+                else
+                    setPizza({ ...pizza, 'topping': [...pizza['topping'], item] });
+            }
+            else
+                setPizza({ ...pizza, [currView]: item });
+        } else {
+            setOrder([...order, item]);
+        }
+        // console.log(order);
+        // console.log(pizza);
+    }
+
+    const addPizzaToOrder = () => {
+        /**
+         * Adds a pizza to the order.
+         * @function addPizzaToOrder
+        */
+        // if a pizza have no sauce and no cheese, not allowed
+        if ((!('cheese' in pizza) || pizza['cheese'] === undefined) &amp;&amp; (!('sauce' in pizza) &amp;&amp; pizza['sauce'] === undefined)) {
+            setModalText('Please add either cheese or sauce to your cheese pizza!');
+            setShowModal(true);
+            return;
+        }
+
+        setOrder([...order, pizza]);
+        setPizza({ 'topping': [] });
+    }
+
+    const checkoutOrder = () => {
+        /**
+         * Checks out the current order.
+         * @function checkoutOrder
+         * @returns {null} Nothing is returned.
+        */
+        // order validation
+        if (order === undefined || (Array.isArray(order) &amp;&amp; order.length === 0)) {
+            setModalText('Invalid order, please add items');
+            setShowModal(true);
+            return null;
+        }
+
+        setModalText('Select payment method');
+        setShowCheckoutModal(true);
+    }
+
+    const clearOrder = () => {
+        /**
+         * Clears the current order.
+         * @function clearOrder
+        */
+        setOrder([]);
+        setPizza({ 'topping': [] });
+
+        setModalText('Order cleared!');
+        setShowModal(true);
+    }
+
+    return (
+        &lt;div className="purchase-frame">
+            &lt;Navigation handleClick={setCurrView} setMenuView={props.setMenuView} />
+            &lt;MenuGallery view={currView} order={order} addToOrder={addToOrder} pizza={pizza} />
+            &lt;Cart order={order} pizza={pizza} add={addPizzaToOrder} checkout={checkoutOrder} clear={clearOrder} setOrder={setOrder} setPizza={setPizza} />
+
+            &lt;Modal show={showModal} onHide={() => setShowModal(false)}>
+                &lt;Modal.Header closeButton>
+                    &lt;Modal.Title>{modalText}&lt;/Modal.Title>
+                &lt;/Modal.Header>
+            &lt;/Modal>
+
+            &lt;CheckoutModal order={order} setOrder={setOrder} showCheckoutModal={showCheckoutModal} setShowCheckoutModal={setShowCheckoutModal} modalText={modalText} />
+        &lt;/div>
+    )
+}
+
+function CheckoutModal(props) {
+    /**
+     * CheckoutModal component for displaying checkout modal with payment options and recommendations for other items
+     * @param {Object} props - Object containing props passed to the component
+     * @param {Array} props.order - Array of items in the current order
+     * @param {function} props.setOrder - Function to update the current order
+     * @param {boolean} props.showCheckoutModal - Boolean to determine if the checkout modal should be shown
+     * @param {function} props.setShowCheckoutModal - Function to update the visibility of the checkout modal
+     * @param {string} props.modalText - Text to display in the modal header
+     * @returns {JSX.Element|null} - Returns checkout modal JSX.Element or null if loading or error occurred
+    */
+    const { order, setOrder, showCheckoutModal, setShowCheckoutModal, modalText } = props;
+    const { data, error, isLoading } = useSWR(`whatsells?date1=01-Jan-2023&amp;date2=31-December-2023`, fetcher);
+
+    if (isLoading || error)
+        return null;
+
+    const submitCashOrder = () => {
+        axios.post(HOST + 'menu', { "payment_form": "cash", "employee_id": localStorage.getItem('employee_id'), "order": order });
+        setOrder([]);
+        setShowCheckoutModal(false);
+    }
+
+    const submitCreditOrder = () => {
+        axios.post(HOST + 'menu', { "payment_form": "credit", "employee_id": localStorage.getItem('employee_id'), "order": order });
+        setOrder([]);
+        setShowCheckoutModal(false);
+    }
+
+    const submitDebitOrder = () => {
+        axios.post(HOST + 'menu', { "payment_form": "debit", "employee_id": localStorage.getItem('employee_id'), "order": order });
+        setOrder([]);
+        setShowCheckoutModal(false);
+    }
+
+    var recommendations = [];
+    for (var item of order) {
+        if (typeof item !== 'string') {
+
+            if (item.topping === undefined || item.topping.length === 0)
+                item = 'Original Cheese Pizza';
+            else if (item.topping.length === 1)
+                item = '1 Topping Pizza';
+            else
+                item = '2-4 Topping Pizza';
+         }
+
+        for (const pair of JSON.parse(data))
+            if (Object.values(pair).includes(item)) {
+                const other_item = Object.values(pair).find(val => val !== item);
+                if (!recommendations.includes(other_item) &amp;&amp; !['Original Cheese Pizza', '1 Topping Pizza', '2-4 Topping Pizza'].includes(other_item))
+                    recommendations.push(other_item);
+            }
+    }
+
+    console.log(recommendations);
+    return (
+        &lt;Modal show={showCheckoutModal} onHide={() => setShowCheckoutModal(false)}>
+            &lt;Modal.Header closeButton>
+                &lt;Modal.Title>{modalText}&lt;/Modal.Title>
+            &lt;/Modal.Header>
+            &lt;Modal.Body>
+                {recommendations.length > 0 &amp;&amp; &lt;h4>Other people like you also enjoy: &lt;/h4>}
+                {recommendations.length > 0 &amp;&amp; recommendations.map(item => (&lt;p>{item}&lt;/p>))}
+            &lt;/Modal.Body>
+            
+            &lt;Modal.Footer>
+                &lt;Button variant="secondary" onClick={submitCashOrder}>Cash&lt;/Button>
+                &lt;Button variant="secondary" onClick={submitCreditOrder}>Credit&lt;/Button>
+                &lt;Button variant="secondary" onClick={submitDebitOrder}>Debit&lt;/Button>
+            &lt;/Modal.Footer>
+        &lt;/Modal>
+    )
+}
+
+// can be hidden in server view
+function Navigation(props) {
+    /**
+     * Function component for Navigation, contains Tab components
+     * @function Navigation
+     * @param {Object} props - Props for Navigation component
+     * @param {function} props.handleClick - Callback function to handle click events on tabs
+     * @returns {JSX.Element} Navigation component
+    */
+    // handling the click for each tab
+    return (
+        &lt;div className="purchase-view-tab-frame">
+            &lt;Tab name="Sauce" switchTab={props.handleClick} />
+            &lt;Tab name="Cheese" switchTab={props.handleClick} />
+            &lt;Tab name="Topping" switchTab={props.handleClick} />
+            &lt;Tab name="Drizzle" switchTab={props.handleClick} />
+            &lt;Tab name="Drink" switchTab={props.handleClick} />
+            &lt;Tab name="Dough" switchTab={props.handleClick} />
+            &lt;Tab name="Seasonal" switchTab={props.handleClick} />
+        &lt;/div>
+    );
+}
+
+function Tab(props) {
+    /**
+     * Function component for Tab, represents each tab in Navigation
+     * @function Tab
+     * @param {Object} props - Props for Tab component
+     * @param {string} props.name - Name of the tab
+     * @param {function} props.switchTab - Callback function to handle click events on the tab
+     * @param {string} [props.color] - Background color of the tab, default is not set
+     * @returns {JSX.Element} Tab component
+    */
+    return (
+        &lt;div className="purchase-view-tab" style={{ backgroundColor: props.color }} onClick={() => props.switchTab(props.name.toLowerCase())}>
+            &lt;h2>{props.name}&lt;/h2>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-Button.html">Button</a></li><li><a href="module-Cart.html">Cart</a></li><li><a href="module-Display.html">Display</a></li><li><a href="module-LoginModal.html">LoginModal</a></li><li><a href="module-ManagerView.html">ManagerView</a></li><li><a href="module-MenuGallery.html">MenuGallery</a></li><li><a href="module-MenuView.html">MenuView</a></li><li><a href="module-Nav.html">Nav</a></li><li><a href="module-PurchaseView.html">PurchaseView</a></li><li><a href="module-ServerView.html">ServerView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 13:21:44 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

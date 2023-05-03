@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: server_view/Cart.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: server_view/Cart.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A module representing a Pizza Builder cart.
+ * @module Cart
+ * @requires swr
+ * @requires react
+ * @requires bootstrap/dist/css/bootstrap.min.css
+ * @requires react-bootstrap/Button
+ * @requires react-bootstrap/Form
+ * @requires axios
+ * @requires '..' {HOST}
+ * @requires './Cart.css'
+*/
+import useSWR from 'swr';
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+import Form from "react-bootstrap/Form";
+import axios from 'axios';
+import { HOST } from '..';
+import './Cart.css';
+
+/**
+ * Fetches the data from an API endpoint using axios.
+ * @function fetcher
+ * @param {string} url - API endpoint URL
+ * @returns {Promise} Promise object representing the response data
+*/
+const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
+
+export default function Cart(props) {
+    /**
+     * A functional component representing a pizza builder cart.
+     * @function Cart
+     * @param {Object} props - React props
+     * @param {Object} props.pizza - Current pizza in the cart
+     * @param {Function} props.add - Adds a new pizza to the cart
+     * @param {Function} props.setPizza - Updates the current pizza in the cart
+     * @param {Array} props.order - List of items in the cart
+     * @param {Function} props.checkout - Callback function for checking out
+     * @param {Function} props.clear - Callback function for clearing the cart
+     * @param {Function} props.setOrder - Updates the current list of items in the cart
+     * @returns {JSX.Element} A JSX element representing the pizza builder cart
+    */
+    return (
+        &lt;div className="cart-frame">
+            &lt;PizzaBuilder pizza={props.pizza} add={props.add} setPizza={props.setPizza} />
+            &lt;OrderList order={props.order} checkout={props.checkout} clear={props.clear} setOrder={props.setOrder} />
+        &lt;/div>
+    );
+}
+
+function PizzaContent(props) {
+    /**
+     * A functional component representing the pizza content section of the cart.
+     * @function PizzaContent
+     * @param {Object} props - React props
+     * @param {Object} props.pizza - Current pizza in the cart
+     * @param {Function} props.removeItem - Callback function for removing an item from the cart
+     * @returns {JSX.Element} A JSX element representing the pizza content section of the cart
+    */
+    const { data, loading, error } = useSWR('menu', fetcher);
+    const { pizza, removeItem } = props;
+
+
+    if (loading || error || data === undefined)
+        return null;
+
+    var pizzaType;
+    var pizzaCost;
+    if (pizza.topping === undefined || pizza.topping.length === 0) {
+        pizzaType = 'Original Cheese Pizza';
+        pizzaCost = data['cheese-pizza-price']['price'];
+    }
+    else if (pizza.topping.length === 1) {
+        pizzaType = '1 Topping Pizza';
+        pizzaCost = data['one-topping-pizza-price']['price'];
+    }
+    else {
+        pizzaType = '2-4 Topping Pizza';
+        pizzaCost = data['multi-topping-pizza-price']['price'];
+    }
+
+
+    return (
+        &lt;div>
+            &lt;div className="price-tag-div">
+                &lt;h4>{pizzaType}&lt;/h4>
+                &lt;p>${pizzaCost}&lt;/p>
+            &lt;/div>
+            {
+                Object.keys(pizza).map(key => {
+                    const value = pizza[key];
+                    if (Array.isArray(value)) {
+                        if (value.length === 0)
+                            return null;
+                        else
+                            return &lt;p onClick={() => removeItem('topping')}>&amp;emsp;&amp;emsp;Topping: {value.join(', ')}&lt;/p>;
+                    } else if (value !== undefined &amp;&amp; value !== null) {
+                        return &lt;p onClick={() => removeItem(key)}>&amp;emsp;&amp;emsp;{key.charAt(0).toUpperCase() + key.slice(1)}: {value}&lt;/p>;
+                    } else {
+                        return null;
+                    }
+                })
+            }
+        &lt;/div>
+    );
+}
+
+
+function PizzaBuilder(props) {
+    /**
+     * Represents the PizzaBuilder component
+     * @param {Object} props - The props object
+     * @param {Object} props.pizza - The pizza object
+     * @param {function} props.add - The add function
+     * @param {function} props.setPizza - The setPizza function
+     * @returns {JSX.Element} - The PizzaBuilder component
+    */
+    const { pizza, add, setPizza } = props;
+    const removeItem = (item) => {
+        /**
+         * Removes an item from the pizza object
+         * @function removeItem
+         * @param {string} item - The item to be removed
+        */
+        if (item === 'topping')
+            setPizza({ ...pizza, [item]: pizza[item].slice(0, -1) });
+        else
+            setPizza({ ...pizza, [item]: undefined });
+    }
+
+    return (
+        &lt;div className='cart-box-frame builder'>
+            &lt;h2>Pizza Builder&lt;/h2>
+            &lt;div className="cart-item-list">
+                &lt;PizzaContent pizza={pizza} removeItem={removeItem} />
+            &lt;/div>
+            &lt;div className='pizza-builder-buttons'>
+                &lt;Form.Control className='numform' id='pizzaBuilderNum' defaultValue={1} type='number'/>
+                &lt;Button variant="outline-success" onClick={add}>Add&lt;/Button>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+
+
+function OrderList(props) {
+    /**
+     * Represents the OrderList component
+     * @param {Object} props - The props object
+     * @param {Array} props.order - The order array
+     * @param {function} props.setOrder - The setOrder function
+     * @param {function} props.checkout - The checkout function
+     * @param {function} props.clear - The clear function
+     * @returns {JSX.Element} - The OrderList component
+    */
+    const { order } = props;
+    const { data, loading, error } = useSWR('prices', fetcher);
+
+    const removeItem = (item) => {
+        /**
+         * Removes an item from the order array
+         * @function removeItem
+         * @param {string|Object} item - The item to be removed
+        */
+        console.log('removing' + item);
+        const index = order.indexOf(item);
+        if (index !== -1)
+            props.setOrder([...order.slice(0, index), ...order.slice(index + 1)]);
+    }
+
+    if (loading || error || data === undefined)
+        return null;
+
+    const menuItems = {};
+    data.menuitems.map(item => (
+        menuItems[item.menu_item_name] = item.current_price
+    ));
+    const totalPrice = () => {
+        /**
+         * Calculates the total price of the order
+         * @function totalPrice
+         * @returns {string} - The total price of the order
+        */
+        var total = 0;
+        order.forEach((item) => {
+            if (typeof item === 'object') {
+                if (item.topping === undefined || item.topping.length === 0)
+                    total += Number(menuItems['Original Cheese Pizza']);
+                else if (item.topping.length === 1)
+                    total += Number(menuItems['1 Topping Pizza']);
+                else
+                    total += Number(menuItems['2-4 Topping Pizza']);
+            }
+            else
+                total += Number(menuItems[item]);
+        });
+        return total.toFixed(2);
+    }
+    const renderItems = () => {
+        /**
+         * Renders the items in the order array
+         * @function renderItems
+         * @returns {JSX.Element} - The list of items in the order
+        */
+
+        return order.map((item) => {
+            if (typeof item === 'object') {
+                return (&lt;PizzaContent pizza={item} removeItem={() => removeItem(item)}/>);
+            }
+            else
+                return (
+                &lt;div onClick={() => removeItem(item)} className="price-tag-div">
+                    &lt;p>{item}&lt;/p>
+                    &lt;p>${menuItems[item]}&lt;/p>
+                    &lt;/div>
+                );
+        });
+    }
+
+    return (
+        &lt;div className='cart-box-frame' style={{ 'height': '59.5%' }}>
+            &lt;div className="price-tag-div">
+                &lt;h2>Cart&lt;/h2>
+                &lt;p>Total: ${totalPrice()}&lt;/p>
+            &lt;/div>
+            &lt;div className='cart-item-list'>
+                {
+                    renderItems()
+                }
+            &lt;/div>
+            &lt;div style={{ 'display': 'flex', 'flexDirection': 'column' }}>
+                &lt;div style={{'display': 'flex', 'flexDirection': 'column'}}>
+                    &lt;Button variant="outline-primary" onClick={() => props.checkout('Cash')}>Cash&lt;/Button>
+                    &lt;Button variant="outline-primary" onClick={() => props.checkout('Credit')}>Credit&lt;/Button>
+                    &lt;Button variant="outline-primary" onClick={() => props.checkout('Debit')}>Debit&lt;/Button>
+                &lt;/div>
+                &lt;Button variant="outline-danger" onClick={props.clear}>Clear&lt;/Button>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-Button.html">Button</a></li><li><a href="module-Cart.html">Cart</a></li><li><a href="module-Display.html">Display</a></li><li><a href="module-LoginModal.html">LoginModal</a></li><li><a href="module-ManagerView.html">ManagerView</a></li><li><a href="module-MenuGallery.html">MenuGallery</a></li><li><a href="module-MenuView.html">MenuView</a></li><li><a href="module-Nav.html">Nav</a></li><li><a href="module-PurchaseView.html">PurchaseView</a></li><li><a href="module-ServerView.html">ServerView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 13:21:44 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

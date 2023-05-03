@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module prices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>prices</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/anatj/OneDrive%20-%20Texas%20A%26M%20University/Documents/Junior%20Yr/Spring%20Semester/csce%20315/project3/team41_proj3/stone/prices.py">/mnt/c/Users/anatj/OneDrive - Texas A&M University/Documents/Junior Yr/Spring Semester/csce 315/project3/team41_proj3/stone/prices.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;provides&nbsp;functions&nbsp;to&nbsp;interact&nbsp;with&nbsp;a&nbsp;PostgreSQL&nbsp;database&nbsp;containing&nbsp;menu&nbsp;and&nbsp;inventory&nbsp;information&nbsp;for&nbsp;a&nbsp;restaurant.<br>
+&nbsp;<br>
+Dependencies:<br>
+-&nbsp;psycopg2:&nbsp;PostgreSQL&nbsp;adapter&nbsp;for&nbsp;Python<br>
+&nbsp;<br>
+Functions:<br>
+-&nbsp;<a href="#-get_prices">get_prices</a>():&nbsp;Retrieve&nbsp;prices&nbsp;of&nbsp;menu&nbsp;items,&nbsp;categories,&nbsp;storage&nbsp;locations,&nbsp;and&nbsp;items&nbsp;without&nbsp;images.<br>
+-&nbsp;<a href="#-add_menu_item">add_menu_item</a>(json_file):&nbsp;Add&nbsp;a&nbsp;menu&nbsp;item&nbsp;and&nbsp;its&nbsp;price&nbsp;to&nbsp;the&nbsp;database.<br>
+-&nbsp;<a href="#-add_inv_item">add_inv_item</a>(json_file):&nbsp;Add&nbsp;an&nbsp;inventory&nbsp;item&nbsp;and&nbsp;its&nbsp;details&nbsp;to&nbsp;the&nbsp;database.<br>
+-&nbsp;<a href="#-change_price">change_price</a>(json_file):&nbsp;Change&nbsp;the&nbsp;price&nbsp;of&nbsp;a&nbsp;menu&nbsp;item&nbsp;in&nbsp;the&nbsp;database.<br>
+-&nbsp;<a href="#-add_img">add_img</a>(json_file):&nbsp;Add&nbsp;or&nbsp;update&nbsp;the&nbsp;image&nbsp;URL&nbsp;for&nbsp;a&nbsp;menu&nbsp;item&nbsp;in&nbsp;the&nbsp;database.<br>
+&nbsp;<br>
+Example&nbsp;usage:<br>
+&nbsp;<br>
+Retrieve&nbsp;prices<br>
+prices&nbsp;=&nbsp;restaurant_db.<a href="#-get_prices">get_prices</a>()<br>
+print(prices)<br>
+&nbsp;<br>
+Add&nbsp;a&nbsp;menu&nbsp;item<br>
+menu_item&nbsp;=&nbsp;{"menuitem":&nbsp;"Pepperoni&nbsp;Pizza",&nbsp;"price":&nbsp;12.99}<br>
+added&nbsp;=&nbsp;restaurant_db.<a href="#-add_menu_item">add_menu_item</a>(json.dumps(menu_item))<br>
+print(added)<br>
+&nbsp;<br>
+Add&nbsp;an&nbsp;inventory&nbsp;item<br>
+inv_item&nbsp;=&nbsp;{"inventoryitem":&nbsp;"Pepperoni",&nbsp;"category":&nbsp;"Topping-Meat",&nbsp;"quantity":&nbsp;10,&nbsp;"units":&nbsp;"oz",&nbsp;"storagelocation":&nbsp;"Fridge"}<br>
+added&nbsp;=&nbsp;restaurant_db.<a href="#-add_inv_item">add_inv_item</a>(json.dumps(inv_item))<br>
+print(added)<br>
+&nbsp;<br>
+Change&nbsp;the&nbsp;price&nbsp;of&nbsp;a&nbsp;menu&nbsp;item<br>
+new_price&nbsp;=&nbsp;{"menuitem":&nbsp;"Pepperoni&nbsp;Pizza",&nbsp;"price":&nbsp;13.99}<br>
+changed&nbsp;=&nbsp;restaurant_db.<a href="#-change_price">change_price</a>(json.dumps(new_price))<br>
+print(changed)<br>
+&nbsp;<br>
+Add&nbsp;or&nbsp;update&nbsp;the&nbsp;image&nbsp;URL&nbsp;for&nbsp;a&nbsp;menu&nbsp;item<br>
+img_info&nbsp;=&nbsp;{"item_name":&nbsp;"Pepperoni&nbsp;Pizza",&nbsp;"img_url":&nbsp;"<a href="https://example.com/pepperoni.jpg">https://example.com/pepperoni.jpg</a>"}<br>
+added_or_updated&nbsp;=&nbsp;restaurant_db.<a href="#-add_img">add_img</a>(json.dumps(img_info))<br>
+print(added_or_updated)</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-add_img"><strong>add_img</strong></a>(json_file)</dt><dd><tt>Adds&nbsp;or&nbsp;updates&nbsp;an&nbsp;image&nbsp;URL&nbsp;for&nbsp;an&nbsp;item&nbsp;in&nbsp;the&nbsp;database.<br>
+&nbsp;<br>
+Args:<br>
+-&nbsp;json_file:&nbsp;a&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;item&nbsp;name&nbsp;and&nbsp;its&nbsp;image&nbsp;URL.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;True&nbsp;if&nbsp;the&nbsp;insertion/update&nbsp;is&nbsp;successful.</tt></dd></dl>
+ <dl><dt><a name="-add_inv_item"><strong>add_inv_item</strong></a>(json_file)</dt><dd><tt>Adds&nbsp;a&nbsp;new&nbsp;inventory&nbsp;item&nbsp;to&nbsp;the&nbsp;database.<br>
+&nbsp;<br>
+Args:<br>
+-&nbsp;json_file:&nbsp;a&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;inventory&nbsp;item,&nbsp;its&nbsp;category,&nbsp;quantity,&nbsp;units&nbsp;and&nbsp;storage&nbsp;location.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;True&nbsp;if&nbsp;the&nbsp;insertion&nbsp;is&nbsp;successful.</tt></dd></dl>
+ <dl><dt><a name="-add_menu_item"><strong>add_menu_item</strong></a>(json_file)</dt><dd><tt>Adds&nbsp;a&nbsp;new&nbsp;menu&nbsp;item&nbsp;to&nbsp;the&nbsp;database.<br>
+&nbsp;<br>
+Args:<br>
+-&nbsp;json_file:&nbsp;a&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;menu&nbsp;item&nbsp;and&nbsp;its&nbsp;price.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;True&nbsp;if&nbsp;the&nbsp;insertion&nbsp;is&nbsp;successful.</tt></dd></dl>
+ <dl><dt><a name="-change_price"><strong>change_price</strong></a>(json_file)</dt><dd><tt>Changes&nbsp;the&nbsp;price&nbsp;of&nbsp;a&nbsp;menu&nbsp;item.<br>
+&nbsp;<br>
+Args:<br>
+-&nbsp;json_file:&nbsp;a&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;menu&nbsp;item&nbsp;and&nbsp;its&nbsp;new&nbsp;price.<br>
+&nbsp;<br>
+Returns:<br>
+-&nbsp;True&nbsp;if&nbsp;the&nbsp;update&nbsp;is&nbsp;successful.</tt></dd></dl>
+ <dl><dt><a name="-get_prices"><strong>get_prices</strong></a>()</dt><dd><tt>Retrieve&nbsp;prices&nbsp;of&nbsp;menu&nbsp;items,&nbsp;categories,&nbsp;storage&nbsp;locations,&nbsp;and&nbsp;items&nbsp;without&nbsp;images.<br>
+&nbsp;<br>
+Returns:<br>
+A&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;following&nbsp;keys:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;menuitems:&nbsp;a&nbsp;list&nbsp;of&nbsp;dictionaries,&nbsp;each&nbsp;representing&nbsp;a&nbsp;menu&nbsp;item&nbsp;and&nbsp;its&nbsp;current&nbsp;price.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;categories:&nbsp;a&nbsp;list&nbsp;of&nbsp;strings,&nbsp;each&nbsp;representing&nbsp;a&nbsp;category&nbsp;of&nbsp;inventory&nbsp;items.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;storage:&nbsp;a&nbsp;list&nbsp;of&nbsp;strings,&nbsp;each&nbsp;representing&nbsp;a&nbsp;storage&nbsp;location&nbsp;for&nbsp;inventory&nbsp;items.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;no-img:&nbsp;a&nbsp;list&nbsp;of&nbsp;strings,&nbsp;each&nbsp;representing&nbsp;an&nbsp;inventory&nbsp;item&nbsp;that&nbsp;does&nbsp;not&nbsp;have&nbsp;an&nbsp;image&nbsp;in&nbsp;the&nbsp;database.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>SQL_CREDS</strong> = {'database': 'csce315331_team_41', 'host': 'csce-315-db.engr.tamu.edu', 'password': 'goldfishwithnuts', 'user': 'csce315331_team_41_master'}</td></tr></table>
+</body></html>
