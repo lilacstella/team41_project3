@@ -3,6 +3,7 @@ print(f"Spin N' Stone Pizza POS Back End")
 ORIGIN = "http://localhost:3000"
 HOST_IP = "localhost"
 HOST_PORT = 5000
+context = ('cert.pem', 'key.pem')
 
 G_CLIENT_ID = '1092009506771-l85k3kgcjh70r9fnn665hjmhma1bd67v.apps.googleusercontent.com'
 G_CLIENT_SECRET = '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'

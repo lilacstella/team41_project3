@@ -30,7 +30,7 @@ Note:
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from stone import HOST_IP, HOST_PORT
+from stone import HOST_IP, HOST_PORT, context
 from stone.employees import user_login
 from stone.excess_report import get_excess
 from stone.inventory import get_current_inventory, restock_all, restock_items
@@ -231,10 +231,10 @@ def orderhistory():
         print(date)
         return jsonify(get_orders(date))
     elif request.method == 'POST':
-        if (remove_order(request.get_json())):
+        if remove_order(request.get_json()):
             return jsonify({'success': True})
         return jsonify({'success': False})
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host=HOST_IP, port=HOST_PORT)
+    app.run(debug=True, host=HOST_IP, port=HOST_PORT, ssl_context=context)
