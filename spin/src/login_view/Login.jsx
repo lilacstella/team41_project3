@@ -2,8 +2,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import jwt_decode from 'jwt-decode';
-import axios from 'axios';
-import { HOST, G_CLIENT_ID } from '..';
+import { sender, G_CLIENT_ID } from '..';
 import { useEffect } from 'react';
 
 export default function LoginModal(props) {
@@ -18,7 +17,7 @@ export default function LoginModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="success" onClick={() => {
-                    axios.post(HOST + 'auth', { 'pin': document.getElementById('loginPin').value })
+                    sender('auth', { 'pin': document.getElementById('loginPin').value })
                         .then(res => {
                             localStorage.setItem('employee_id', res.data.id);
                             localStorage.setItem('employee_permission', res.data.permission);
@@ -37,7 +36,7 @@ export default function LoginModal(props) {
 
 function LoginButton(props) {
     function handleCallback(response) {
-        axios.post(HOST + 'auth', { 'email': jwt_decode(response.credential).email })
+        sender('auth', { 'email': jwt_decode(response.credential).email })
             .then(res => {
                 localStorage.setItem('employee_id', res.data.id);
                 localStorage.setItem('employee_permission', res.data.permission);

@@ -3,14 +3,10 @@ import './Display.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
-import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from "react-bootstrap/Form";
-
-import { HOST } from '..';
-
-const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
+import { fetcher, sender } from '..';
 
 export default function Display(props) {
     return (
@@ -61,13 +57,13 @@ function Inventory() {
     inventoryItems.sort();
 
     const restockAll = () => {
-        axios.post(HOST + 'inventory', {})
+        sender('inventory', {});
         setModalText('Restocked All Items!');
         setShowModal(true);
     };
 
     const setQuantity = () => {
-        axios.post(HOST + 'inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value})
+        sender('inventory', { 'InventoryItem': currItem, 'Quantity': document.getElementById('restockAmount').value });
         setModalText('Set ' + currItem + " to " + Math.abs(parseInt(document.getElementById('restockAmount').value)));
         setShowModal(true);
     };
@@ -80,7 +76,7 @@ function Inventory() {
             </div>
             <div className="buttons-frame">
                 <Button variant="outline-success" className="inventory-button" onClick={restockAll}>Restock All</Button>
-                <DropdownButton style={{"margin-left": "20px"}} title={currItem} onSelect={name => setCurrItem(name)}>
+                <DropdownButton style={{ "margin-left": "20px" }} title={currItem} onSelect={name => setCurrItem(name)}>
                     <div className="dropdownmenu">
                         {inventoryItems.map(name => (
                             <Dropdown.Item key={name} eventKey={name}>
@@ -127,9 +123,9 @@ function XReport() {
     return (
         <div>
             <h1>X Report</h1>
-                <div className="manager-view-table-row">
-                    <DataTable processedData={data.salesdata} />
-                </div>
+            <div className="manager-view-table-row">
+                <DataTable processedData={data.salesdata} />
+            </div>
             <h2>Total: ${data.total}</h2>
         </div>
     )
@@ -153,7 +149,7 @@ function ZReport() {
 
     const handleReset = async () => {
         // send post request
-        axios.post(HOST + 'zreport', {});
+        sender('zreport', {});
 
         setModalText('Reseted Z Report!');
         setShowModal(true);
@@ -175,7 +171,7 @@ function ZReport() {
         <div>
             <h1>Z Report</h1>
             <div className="manager-view-table-row">
-                <DataTable processedData={data.salesdata}/>
+                <DataTable processedData={data.salesdata} />
             </div>
             <h2>Total: ${data.total}</h2>
             <button className="reset-button" onClick={handleReset}>Reset Sales</button>
@@ -199,9 +195,9 @@ function Prices() {
     const [showModal, setShowModal] = useState(false);
     const [modalText, setModalText] = useState('test');
 
-    const { data:menuData, error:error1, isLoading:isLoading1 } = useSWR('prices', fetcher);
+    const { data: menuData, error: error1, isLoading: isLoading1 } = useSWR('prices', fetcher);
 
-    const { data:inventoryData, error:error2, isLoading:isLoading2 } = useSWR('inventory', fetcher);
+    const { data: inventoryData, error: error2, isLoading: isLoading2 } = useSWR('inventory', fetcher);
 
     if (error1) {
         console.error(error1);
@@ -221,37 +217,34 @@ function Prices() {
 
     const handleNewPrice = async () => {
         // send post request
-        axios.post(HOST + 'prices', 
-        {'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem});
-        
+        sender('prices', { 'action': 'change_price', 'price': document.getElementById('newPrice').value, 'menuitem': currItem });
+
         setModalText(currItem + "'s Price has been changed to $" + document.getElementById('newPrice').value);
         setShowModal(true);
     };
 
     const handleNewMenu = async () => {
         // send post request
-        axios.post(HOST + 'prices', 
-        {'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value});
-        
+        sender('prices', { 'action': 'add_menu_item', 'menuitem': document.getElementById('newMenuItemName').value, 'price': document.getElementById('newMenuItemPrice').value });
+
         setModalText('New Menu Item: ' + document.getElementById('newMenuItemName').value + ' added with price: $' + document.getElementById('newMenuItemPrice').value);
         setShowModal(true);
     };
 
     const handleNewInventory = async () => {
         // send post request
-        axios.post(HOST + 'prices', 
-        {'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value, 
-         'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value, 
-         'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage});
-        
+        sender('prices', {
+            'action': 'add_inv_item', 'inventoryitem': document.getElementById('newInventoryItemName').value,
+            'category': category, 'quantity': document.getElementById('newInventoryItemAmount').value,
+            'units': document.getElementById('newInventoryItemUnits').value, 'storagelocation': storage
+        });
         setModalText('New Inventory Item: ' + document.getElementById('newInventoryItemName').value + ' added.');
         setShowModal(true);
     };
 
     const handleNewImage = async () => {
         // send post request
-        axios.post(HOST + 'prices', 
-        {'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value});
+        sender('prices', { 'action': 'add_image', 'item_name': currInvItem, 'img_url': document.getElementById('newInventoryItemLink').value });
 
         setModalText('Image changed for: ' + currInvItem);
         setShowModal(true);
@@ -264,20 +257,20 @@ function Prices() {
         menuItems[item.menu_item_name] = item.current_price
     ));
     const sortedMenu = Object.entries(menuItems)
-    .sort(([key1], [key2]) => key1.localeCompare(key2))
-    .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+        .sort(([key1], [key2]) => key1.localeCompare(key2))
+        .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
 
     let inventoryItems = [];
     JSON.parse(inventoryData).map(item => inventoryItems.push(item['Inventory Item']));
     inventoryItems.sort();
     // console.log(menuItems);
-    
+
     return (
         <div className="prices-page">
             <h1>Prices</h1>
             <div className="prices-container">
                 <label>Item to Change: </label>
-                <DropdownButton className="selectBox" title={currItem} id="changePriceName" onSelect={name => {setCurrItem(name); setCurrPrice(menuItems[name])}}>
+                <DropdownButton className="selectBox" title={currItem} id="changePriceName" onSelect={name => { setCurrItem(name); setCurrPrice(menuItems[name]) }}>
                     <div className="dropdownmenu">
                         {Object.keys(sortedMenu).map(name => (
                             <Dropdown.Item key={name} eventKey={name}>
@@ -323,7 +316,7 @@ function Prices() {
                 <Form.Control className="forms" id="newInventoryItemUnits" placeholder="Units"></Form.Control>
                 <Button variant="outline-success" onClick={handleNewInventory}>Submit</Button>
             </div>
-            
+
             <div className="prices-container">
                 <label>Upload Image: </label>
                 <DropdownButton className="selectBox" title={currInvItem} id="changeImage" onSelect={name => setInvItem(name)}>
@@ -338,7 +331,7 @@ function Prices() {
                 <Form.Control className="linkforms" id="newInventoryItemLink" placeholder="Link"></Form.Control>
                 <Button variant="outline-success" onClick={handleNewImage}>Submit</Button>
             </div>
-            
+
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{modalText}</Modal.Title>
@@ -430,10 +423,10 @@ function ExcessReportTable(props) {
             </div>
         )
     }
-    
+
     return (
         <div className='manager-view-table-row'>
-            <DataTable processedData={processedData.excessdata}/>
+            <DataTable processedData={processedData.excessdata} />
         </div>
 
     )
@@ -490,13 +483,13 @@ function RestockReport() {
             </div>
         )
     }
-    
+
 
     return (
         <div>
             <h1>Restock Report</h1>
             <div className="manager-view-table-row">
-                <DataTable processedData={processedData}/>  
+                <DataTable processedData={processedData} />
             </div>
         </div>
     )
@@ -507,7 +500,7 @@ function WhatSellsTable(props) {
     if (error) {
         console.error(error);
     }
-    
+
     if (isLoading || error || data === undefined) {
         return;
     }

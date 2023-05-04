@@ -1,9 +1,6 @@
 import './MenuView.css'
 import useSWR from 'swr';
-import axios from 'axios';
-import { HOST } from '..';
-
-const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
+import { fetcher } from '..';
 
 export default function MenuView() {
     const { data, error, isLoading } = useSWR('menu', fetcher);

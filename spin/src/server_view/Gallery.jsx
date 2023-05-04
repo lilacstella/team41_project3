@@ -1,14 +1,10 @@
 import React from 'react';
 import useSWR from 'swr';
-import axios from 'axios';
 import './Gallery.css';
 import '../manager_view/Display.css';
-import { HOST } from '..';
+import { fetcher, sender } from '..';
 import { useState } from 'react';
 import { Button, Form, Dropdown, DropdownButton, Modal} from 'react-bootstrap';
-
-
-const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 const ItemBox = (props) => {
     // highlight item if it is in the order
@@ -96,7 +92,7 @@ function OrderHistoryTable(props){
             setShowModal(true);
             return;
         }
-        axios.post(HOST + 'orderhistory', {'ordernumber': currNum})
+        sender('orderhistory', {'ordernumber': currNum})
         setModalText("Order Deleted");
         setShowModal(true);
     };

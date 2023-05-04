@@ -35,6 +35,7 @@ from stone.employees import user_login
 from stone.excess_report import get_excess
 from stone.inventory import get_current_inventory, restock_all, restock_items
 from stone.menu import get_menus, process_order
+from stone.orderhistory import get_orders, remove_order
 from stone.prices import get_prices, change_price, add_inv_item, add_menu_item, add_img
 from stone.restock_report import get_low_inventory
 from stone.sales_report import get_sales
@@ -42,10 +43,9 @@ from stone.weather import get_weather
 from stone.what_sells import get_what_sells
 from stone.x_report import get_xreport
 from stone.z_report import get_zreport, post_eodinv
-from stone.orderhistory import get_orders, remove_order
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app, resources={r"/*": {"origins": ["https://pizza-nr5v.onrender.com/", "http://localhost:3000"]}})
 
 TOKEN_URI = 'https://oauth2.googleapis.com/token'
 
@@ -56,7 +56,6 @@ def auth():
 
 
 @app.route('/menu', methods=['GET', 'POST'])
-# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def menu():
     """
     Returns the menu or processes an order.
@@ -75,7 +74,6 @@ def menu():
 
 
 @app.route('/inventory', methods=['GET', 'POST'])
-# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def inventory():
     """
     Returns the current inventory or restocks items.
@@ -96,7 +94,6 @@ def inventory():
 
 
 @app.route('/weather', methods=['GET'])
-# @cross_origin(origins=ORIGIN, methods=["GET"])
 def weather():
     """
     Endpoint to get the current weather.
@@ -112,7 +109,6 @@ def weather():
 
 
 @app.route('/whatsells', methods=['GET'])
-# @cross_origin(origins=ORIGIN, methods=["GET"])
 def whatsells():
     """
     Endpoint to get what sells between two dates.
@@ -133,7 +129,6 @@ def whatsells():
 
 
 @app.route('/xreport', methods=['GET'])
-# @cross_origin(origins=ORIGIN, methods=["GET"])
 def xreport():
     """
     Route to get the x report data.
@@ -146,7 +141,6 @@ def xreport():
 
 
 @app.route('/zreport', methods=['GET', 'POST'])
-# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def zreport():
     """
     Route to get the z report data or post end of day inventory.
@@ -165,7 +159,6 @@ def zreport():
 
 
 @app.route('/salesreport', methods=['GET'])
-# @cross_origin(origins=ORIGIN, methods=["GET"])
 def salesreport():
     """
     Route to get the sales report data.
@@ -180,7 +173,6 @@ def salesreport():
 
 
 @app.route('/restockreport', methods=['GET'])
-# @cross_origin(origins=ORIGIN, methods=["GET"])
 def restockreport():
     """
     Route to get the restock report data.
@@ -193,7 +185,6 @@ def restockreport():
 
 
 @app.route('/excessreport', methods=['GET'])
-# @cross_origin(origins=ORIGIN, methods=["GET"])
 def excessreport():
     """
     Route to get the excess report data.
@@ -207,7 +198,6 @@ def excessreport():
 
 
 @app.route('/prices', methods=['GET', 'POST'])
-# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def prices():
     """
     Route to get or post the prices data.
@@ -233,8 +223,8 @@ def prices():
             result = False
         return jsonify({"success": result})
 
+
 @app.route('/orderhistory', methods=['GET', 'POST'])
-# @cross_origin(origins=ORIGIN, methods=["GET", "POST"])
 def orderhistory():
     if request.method == 'GET':
         date = request.args.get('date')
@@ -244,6 +234,7 @@ def orderhistory():
         if (remove_order(request.get_json())):
             return jsonify({'success': True})
         return jsonify({'success': False})
+
 
 if __name__ == '__main__':
     app.run(debug=True, host=HOST_IP, port=HOST_PORT)

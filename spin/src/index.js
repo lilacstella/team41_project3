@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import axios from 'axios';
 import App from './App';
+import './index.css';
 // import reportWebVitals from './reportWebVitals';
+
 
 export const HOST = 'https://pizzapos.sytes.net:5000/';
 export const G_CLIENT_ID = '257525904215-rj4iugd6avdihsnv7p0iuadsv8c91lgj.apps.googleusercontent.com';
+export const fetcher = (url) => axios.get(HOST + url).then(response => response.data);
+export const sender = (url, body) => axios.post(HOST + url, body);
+
 
 // Add a script tag to the document to load the Google Translate API
 const script = document.createElement("script");

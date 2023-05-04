@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import MenuGallery, {OrderHistory} from './Gallery';
-import axios from 'axios';
 import Cart from './Cart';
 import './ServerView.css';
-import { HOST } from '..';
+import { sender } from '..';
 
 export default function ServerView(props) {
     const [currView, setCurrView] = useState('sauce');
@@ -60,7 +59,7 @@ export default function ServerView(props) {
             return;
         }
 
-        axios.post(HOST + 'menu', {"payment_form": payment_form, "employee_id": localStorage.getItem('employee_id'), "order": order});
+        sender('menu', {"payment_form": payment_form, "employee_id": localStorage.getItem('employee_id'), "order": order});
         setOrder([]);
     }
 

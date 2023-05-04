@@ -1,10 +1,7 @@
 import React from 'react';
 import useSWR from 'swr';
-import axios from 'axios';
 import './Nav.css';
-import { HOST } from '.';
-
-const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
+import { fetcher } from '.';
 
 /* navbar includes login */
 export default function Nav(props) {

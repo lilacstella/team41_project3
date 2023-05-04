@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import MenuGallery from './Gallery';
-import axios from 'axios';
 import Cart from './Cart';
 import './PurchaseView.css';
-import { HOST } from '..';
+import { fetcher, sender } from '..';
 import useSWR from 'swr';
-
-const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 
 export default function PurchaseView(props) {
@@ -94,19 +91,19 @@ function CheckoutModal(props) {
         return null;
 
     const submitCashOrder = () => {
-        axios.post(HOST + 'menu', { "payment_form": "cash", "employee_id": localStorage.getItem('employee_id'), "order": order });
+        sender('menu', { "payment_form": "cash", "employee_id": localStorage.getItem('employee_id'), "order": order });
         setOrder([]);
         setShowCheckoutModal(false);
     }
 
     const submitCreditOrder = () => {
-        axios.post(HOST + 'menu', { "payment_form": "credit", "employee_id": localStorage.getItem('employee_id'), "order": order });
+        sender('menu', { "payment_form": "credit", "employee_id": localStorage.getItem('employee_id'), "order": order });
         setOrder([]);
         setShowCheckoutModal(false);
     }
 
     const submitDebitOrder = () => {
-        axios.post(HOST + 'menu', { "payment_form": "debit", "employee_id": localStorage.getItem('employee_id'), "order": order });
+        sender('menu', { "payment_form": "debit", "employee_id": localStorage.getItem('employee_id'), "order": order });
         setOrder([]);
         setShowCheckoutModal(false);
     }

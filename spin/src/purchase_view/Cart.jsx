@@ -2,11 +2,8 @@ import useSWR from 'swr';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
-import { HOST } from '..';
+import { fetcher } from '..';
 import './Cart.css';
-
-const fetcher = (url) => axios.get(HOST + url).then(res => res.data);
 
 export default function Cart(props) {
     return (
