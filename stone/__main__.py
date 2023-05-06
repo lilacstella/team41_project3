@@ -45,7 +45,7 @@ from stone.x_report import get_xreport
 from stone.z_report import get_zreport, post_eodinv
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["https://pizza-nr5v.onrender.com/", "http://localhost:3000"]}})
+CORS(app)
 
 TOKEN_URI = 'https://oauth2.googleapis.com/token'
 
@@ -237,4 +237,4 @@ def orderhistory():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host=HOST_IP, port=HOST_PORT, ssl_context=context)
+    app.run(debug=True, host=HOST_IP, port=HOST_PORT)
